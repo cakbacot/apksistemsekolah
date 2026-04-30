@@ -86,7 +86,6 @@ private DefaultTableModel tabmode;
         txtnowali = new javax.swing.JTextField();
         cbjurusan = new javax.swing.JComboBox<>();
         cbkls = new javax.swing.JComboBox<>();
-        dctgl = new com.toedter.calendar.JDateChooser();
         bsimpan = new javax.swing.JButton();
         bubah = new javax.swing.JButton();
         bhapus = new javax.swing.JButton();
@@ -201,8 +200,7 @@ private DefaultTableModel tabmode;
                                 .addComponent(txtnowali))
                             .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
                                 .addComponent(cbjurusan, javax.swing.GroupLayout.Alignment.LEADING, 0, 164, Short.MAX_VALUE)
-                                .addComponent(cbkls, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(dctgl, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(cbkls, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
             .addGroup(layout.createSequentialGroup()
@@ -239,10 +237,8 @@ private DefaultTableModel tabmode;
                     .addComponent(jLabel3)
                     .addComponent(txtnm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel4)
-                    .addComponent(dctgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
+                .addComponent(jLabel4)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 27, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel12)
@@ -284,7 +280,6 @@ private DefaultTableModel tabmode;
                             .addComponent(bhapus)
                             .addComponent(bbatal)
                             .addComponent(bkeluar))))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel13)
                 .addGap(1, 1, 1)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -343,7 +338,6 @@ private DefaultTableModel tabmode;
     private javax.swing.JComboBox<String> cbjk;
     private javax.swing.JComboBox<String> cbjurusan;
     private javax.swing.JComboBox<String> cbkls;
-    private com.toedter.calendar.JDateChooser dctgl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
