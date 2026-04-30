@@ -269,6 +269,11 @@
       </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtNIsn">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Times New Roman" size="13" style="0"/>
+        </Property>
+      </Properties>
     </Component>
     <Component class="javax.swing.JTextField" name="txtnm">
     </Component>

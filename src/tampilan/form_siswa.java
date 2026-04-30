@@ -141,6 +141,8 @@ private DefaultTableModel tabmode;
 
         jLabel11.setText("Kelas");
 
+        txtNIsn.setFont(new java.awt.Font("Times New Roman", 0, 13)); // NOI18N
+
         jLabel12.setText("Alamat");
 
         txtalamat.setColumns(20);
