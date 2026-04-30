@@ -106,6 +106,8 @@ public class dashboardtu extends javax.swing.JFrame {
                 .addContainerGap())
         );
 
+        jDesktopPane1.setBackground(new java.awt.Color(255, 153, 153));
+
         javax.swing.GroupLayout jDesktopPane1Layout = new javax.swing.GroupLayout(jDesktopPane1);
         jDesktopPane1.setLayout(jDesktopPane1Layout);
         jDesktopPane1Layout.setHorizontalGroup(
