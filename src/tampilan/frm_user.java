@@ -335,13 +335,12 @@ public class frm_user extends javax.swing.JFrame {
         String status = cbstatus.getSelectedItem().toString();
         String level = cblvl.getSelectedItem().toString();
         try {
-            String sql = "update user set nama=?, password=?, status=?,where nip='"+txtnip.getText()+"'";
+            String sql = "update user set nama=?, password=?, status=?, lvl=? where nip='"+txtnip.getText()+"'";
             PreparedStatement stat = conn.prepareStatement(sql);
-            stat.setString(1, txtnip.getText());
-            stat.setString(2, txtnm.getText());
-            stat.setString(3, txtpw.getText());
-            stat.setString(4, level);
-            stat.setString(5, status);
+            stat.setString(1, txtnm.getText());
+            stat.setString(2, txtpw.getText());
+            stat.setString(3, level);
+            stat.setString(4, status);
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "data berhasil diubah");
             kosong();
