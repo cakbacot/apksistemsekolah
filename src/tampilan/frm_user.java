@@ -319,8 +319,8 @@ public class frm_user extends javax.swing.JFrame {
             stat.setString(1, txtnip.getText());
             stat.setString(2, txtnm.getText());
             stat.setString(3, txtpw.getText());
-            stat.setString(5, status);
-            stat.setString(4, level);       
+            stat.setString(4, status);
+            stat.setString(5, level);       
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "data berhasil disimpan");
             kosong();
@@ -339,8 +339,8 @@ public class frm_user extends javax.swing.JFrame {
             PreparedStatement stat = conn.prepareStatement(sql);
             stat.setString(1, txtnm.getText());
             stat.setString(2, txtpw.getText());
-            stat.setString(3, level);
-            stat.setString(4, status);
+            stat.setString(3, status);
+            stat.setString(4, level);
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "data berhasil diubah");
             kosong();
