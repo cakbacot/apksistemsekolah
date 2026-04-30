@@ -38,7 +38,7 @@ private DefaultTableModel tabmode;
         txtkode.setText("");
         txtnm.setText("");
         txtpass.setText("");
-        txttanggal.setText("");
+        dctgl.setDate(null);
         txttelp.setText("");
         txtalamat.setText("");
         txtcari.setText("");
