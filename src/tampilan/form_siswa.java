@@ -4,20 +4,51 @@
  * and open the template in the editor.
  */
 package tampilan;
-
+import java.sql.*;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import java.awt.event.KeyEvent;
+import koneksi.koneksi;
 /**
  *
  * @author ACER NITRO 5
  */
 public class form_siswa extends javax.swing.JFrame {
-
+private Connection con = koneksi.getConnection();
+private DefaultTableModel tabmode;
     /**
      * Creates new form form_siswa
      */
     public form_siswa() {
         initComponents();
+        kosong();
+        aktif();
+        datatable();
+    }   
+    protected void aktif(){
+        txtNIsn.requestFocus();
     }
-
+    protected void kosong(){
+        txtNIsn.setText("");
+        txtnm.setText("");
+        dctgl.setDate(null);
+        txtalamat.setText("");
+        txtalamat.setText("");
+        txttelp.setText("");
+        cbjk.setSelectedIndex(0);
+        txtangkatan.setText("");
+        txtnmwali.setText("");
+        txtnowali.setText("");
+        txtcari.setText("");
+        cbjurusan.setSelectedIndex(0);
+        cbkls.setSelectedIndex(0);
+    }
+    protected void datatable(){
+    Object[] Baris = {"NISN","Nama Siswa","Tanggal Lahir","Alamat","No. Telepon","Jenis Kelamin","Angkatan","Nama Wali","Jurusan","Kelas"};
+    tabmode = new DefaultTableModel(null, Baris);
+    String cariitem = txtcari.getText();
+    
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -43,7 +74,7 @@ public class form_siswa extends javax.swing.JFrame {
         jLabel9 = new javax.swing.JLabel();
         jLabel10 = new javax.swing.JLabel();
         jLabel11 = new javax.swing.JLabel();
-        txtNisn = new javax.swing.JTextField();
+        txtNIsn = new javax.swing.JTextField();
         txtnm = new javax.swing.JTextField();
         jLabel12 = new javax.swing.JLabel();
         jScrollPane2 = new javax.swing.JScrollPane();
@@ -55,7 +86,15 @@ public class form_siswa extends javax.swing.JFrame {
         txtnowali = new javax.swing.JTextField();
         cbjurusan = new javax.swing.JComboBox<>();
         cbkls = new javax.swing.JComboBox<>();
-        jDateChooser2 = new com.toedter.calendar.JDateChooser();
+        dctgl = new com.toedter.calendar.JDateChooser();
+        bsimpan = new javax.swing.JButton();
+        bubah = new javax.swing.JButton();
+        bhapus = new javax.swing.JButton();
+        bbatal = new javax.swing.JButton();
+        bkeluar = new javax.swing.JButton();
+        jLabel13 = new javax.swing.JLabel();
+        txtcari = new javax.swing.JTextField();
+        bcari = new javax.swing.JButton();
 
         jTextField3.setText("jTextField3");
 
@@ -110,9 +149,23 @@ public class form_siswa extends javax.swing.JFrame {
 
         cbjk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Jenis Kelamin", "Laki-Laki", "Perempuan" }));
 
-        cbjurusan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbjurusan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Jurusan", "TKJ", "DKV" }));
 
-        cbkls.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
+        cbkls.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Kelas", "Kelas 10", "Kelas 11", "Kelas 12" }));
+
+        bsimpan.setText("Simpan");
+
+        bubah.setText("Ubah");
+
+        bhapus.setText("Hapus");
+
+        bbatal.setText("Batal");
+
+        bkeluar.setText("Keluar");
+
+        jLabel13.setText(" Data Siswa");
+
+        bcari.setText("Cari");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -122,33 +175,56 @@ public class form_siswa extends javax.swing.JFrame {
             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 610, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel2)
-                    .addComponent(jLabel3)
-                    .addComponent(jLabel4)
-                    .addComponent(jLabel12)
-                    .addComponent(jLabel5)
-                    .addComponent(jLabel6)
-                    .addComponent(jLabel7)
-                    .addComponent(jLabel8)
-                    .addComponent(jLabel9)
-                    .addComponent(jLabel10)
-                    .addComponent(jLabel11))
-                .addGap(28, 28, 28)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                        .addComponent(txtNisn)
-                        .addComponent(txtnm)
-                        .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
-                        .addComponent(txttelp)
-                        .addComponent(cbjk, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(txtangkatan)
-                        .addComponent(txtnmwali)
-                        .addComponent(txtnowali))
-                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                        .addComponent(cbjurusan, javax.swing.GroupLayout.Alignment.LEADING, 0, 164, Short.MAX_VALUE)
-                        .addComponent(cbkls, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jLabel2)
+                            .addComponent(jLabel3)
+                            .addComponent(jLabel4)
+                            .addComponent(jLabel12)
+                            .addComponent(jLabel5)
+                            .addComponent(jLabel6)
+                            .addComponent(jLabel7)
+                            .addComponent(jLabel8)
+                            .addComponent(jLabel9)
+                            .addComponent(jLabel10)
+                            .addComponent(jLabel11))
+                        .addGap(28, 28, 28)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(txtNIsn)
+                                .addComponent(txtnm)
+                                .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 347, Short.MAX_VALUE)
+                                .addComponent(txttelp)
+                                .addComponent(cbjk, javax.swing.GroupLayout.PREFERRED_SIZE, 159, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(txtangkatan)
+                                .addComponent(txtnmwali)
+                                .addComponent(txtnowali))
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                                .addComponent(cbjurusan, javax.swing.GroupLayout.Alignment.LEADING, 0, 164, Short.MAX_VALUE)
+                                .addComponent(cbkls, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                            .addComponent(dctgl, javax.swing.GroupLayout.PREFERRED_SIZE, 185, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addComponent(jLabel13, javax.swing.GroupLayout.PREFERRED_SIZE, 122, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(0, 0, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                    .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addComponent(txtcari))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(59, 59, 59)
+                        .addComponent(bsimpan)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bubah)))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(bhapus)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bbatal)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bkeluar))
+                    .addComponent(bcari))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -157,7 +233,7 @@ public class form_siswa extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(txtNisn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtNIsn, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
@@ -165,8 +241,8 @@ public class form_siswa extends javax.swing.JFrame {
                 .addGap(9, 9, 9)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jLabel4)
-                    .addComponent(jDateChooser2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 13, Short.MAX_VALUE)
+                    .addComponent(dctgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 18, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jLabel12)
@@ -174,7 +250,7 @@ public class form_siswa extends javax.swing.JFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel6)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                        .addGap(19, 19, 19)
                         .addComponent(jLabel7)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel8)
@@ -184,7 +260,7 @@ public class form_siswa extends javax.swing.JFrame {
                         .addComponent(jLabel10)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jLabel11)
-                        .addGap(109, 109, 109))
+                        .addGap(38, 38, 38))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -201,7 +277,20 @@ public class form_siswa extends javax.swing.JFrame {
                         .addComponent(cbjurusan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(cbkls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(104, 104, 104)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(bsimpan)
+                            .addComponent(bubah)
+                            .addComponent(bhapus)
+                            .addComponent(bbatal)
+                            .addComponent(bkeluar))))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jLabel13)
+                .addGap(1, 1, 1)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bcari))
+                .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
@@ -245,14 +334,21 @@ public class form_siswa extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bbatal;
+    private javax.swing.JButton bcari;
+    private javax.swing.JButton bhapus;
+    private javax.swing.JButton bkeluar;
+    private javax.swing.JButton bsimpan;
+    private javax.swing.JButton bubah;
     private javax.swing.JComboBox<String> cbjk;
     private javax.swing.JComboBox<String> cbjurusan;
     private javax.swing.JComboBox<String> cbkls;
-    private com.toedter.calendar.JDateChooser jDateChooser2;
+    private com.toedter.calendar.JDateChooser dctgl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
     private javax.swing.JLabel jLabel12;
+    private javax.swing.JLabel jLabel13;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
@@ -267,9 +363,10 @@ public class form_siswa extends javax.swing.JFrame {
     private javax.swing.JTextField jTextField3;
     private javax.swing.JTextField jTextField6;
     private javax.swing.JTable tbldatasiswa;
-    private javax.swing.JTextField txtNisn;
+    private javax.swing.JTextField txtNIsn;
     private javax.swing.JTextArea txtalamat;
     private javax.swing.JTextField txtangkatan;
+    private javax.swing.JTextField txtcari;
     private javax.swing.JTextField txtnm;
     private javax.swing.JTextField txtnmwali;
     private javax.swing.JTextField txtnowali;
