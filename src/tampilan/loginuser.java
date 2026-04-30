@@ -98,7 +98,8 @@ public class loginuser extends javax.swing.JFrame {
             if (rs.next()){
                 if(nip.getText().equals(rs.getString("nip"))&&pass.getText().equals(rs.getString("password"))){
                     JOptionPane.showMessageDialog(null, "berhasil login");
-                    this.setVisible(false);
+                    dashboardkajur pindah = new dashboardkajur();
+                    pindah.setVisible(true);
                 }
             } else{
                 JOptionPane.showMessageDialog(null, "password salah");
