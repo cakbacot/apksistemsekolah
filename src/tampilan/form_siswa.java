@@ -24,6 +24,8 @@ private DefaultTableModel tabmode;
         kosong();
         aktif();
         datatable();
+        loadKelas();
+        loadJurusan();
     }   
     protected void aktif(){
         txtnisn.requestFocus();
@@ -80,6 +82,41 @@ private DefaultTableModel tabmode;
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Data gagal dipanggil: " + e);
+    }
+}
+   private void loadKelas() {
+    try {
+        String sql = "SELECT kelas FROM tbl_kelas"; // ambil kolom kelas
+
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        cbkls.removeAllItems();
+        cbkls.addItem("-- Pilih Kelas --");
+
+        while (rs.next()) {
+            cbkls.addItem(rs.getString("kelas"));
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Gagal load kelas: " + e);
+    }
+}
+   private void loadJurusan() {
+    try {
+        String sql = "SELECT nama_jurusan FROM tbl_jurusan";
+        PreparedStatement pst = con.prepareStatement(sql);
+        ResultSet rs = pst.executeQuery();
+
+        cbjurusan.removeAllItems();
+        cbjurusan.addItem("-- Pilih Jurusan --");
+
+        while (rs.next()) {
+            cbjurusan.addItem(rs.getString("nama_jurusan"));
+        }
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Gagal load jurusan: " + e);
     }
 }
     /**
@@ -214,7 +251,6 @@ private DefaultTableModel tabmode;
         txtnowali.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
         cbjurusan.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        cbjurusan.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Jurusan", "RPL", "TBG" }));
         cbjurusan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 cbjurusanActionPerformed(evt);
@@ -222,7 +258,6 @@ private DefaultTableModel tabmode;
         });
 
         cbkls.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        cbkls.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Kelas", "10-RPL", "11-TBG" }));
 
         bsimpan.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bsimpan.setText("Simpan");
@@ -340,9 +375,8 @@ private DefaultTableModel tabmode;
                                     .addComponent(jScrollPane2, javax.swing.GroupLayout.DEFAULT_SIZE, 448, Short.MAX_VALUE)
                                     .addComponent(txttelp)
                                     .addComponent(cbjk, javax.swing.GroupLayout.PREFERRED_SIZE, 277, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(cbkls, javax.swing.GroupLayout.Alignment.LEADING, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(cbjurusan, javax.swing.GroupLayout.Alignment.LEADING, 0, 275, Short.MAX_VALUE)))))
+                                    .addComponent(cbkls, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                    .addComponent(cbjurusan, 0, 448, Short.MAX_VALUE))))
                         .addContainerGap(207, Short.MAX_VALUE))))
         );
         layout.setVerticalGroup(
@@ -390,9 +424,9 @@ private DefaultTableModel tabmode;
                     .addComponent(jLabel9)
                     .addComponent(txtnowali, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel10)
-                    .addComponent(cbjurusan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(cbjurusan, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jLabel10))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(cbkls, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -469,10 +503,11 @@ private DefaultTableModel tabmode;
         String sql = "UPDATE tbl_siswa SET nama=?, tgl_lahir=?, alamat=?, notelp=?, jkel=?, angkatan=?, nama_wali=?, no_wali=?, jurusan=?, kelas=? WHERE nisn=?";
         PreparedStatement stat = con.prepareStatement(sql);
 
-        java.sql.Date sqlDate = new java.sql.Date(dctgl.getDate().getTime());
-
+        if (dctgl.getDate() == null) {
+    JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
+    return;
+}
         stat.setString(1, txtnm.getText());
-        stat.setDate(2, sqlDate);
         stat.setString(3, txtalamat.getText());
         stat.setString(4, txttelp.getText());
         stat.setString(5, cbjk.getSelectedItem().toString());
@@ -573,17 +608,6 @@ if (ok == JOptionPane.YES_OPTION) {
 
     private void cbjurusanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbjurusanActionPerformed
         // TODO add your handling code here:
-    String jurusan = cbjurusan.getSelectedItem().toString();
-
-    cbkls.removeAllItems(); // reset dulu
-
-    if (jurusan.equals("RPL")) {
-        cbkls.addItem("10-RPL");
-    } else if (jurusan.equals("TBG")) {
-        cbkls.addItem("11-TBG");
-    } else {
-        cbkls.addItem("Pilih Kelas");
-    }
     }//GEN-LAST:event_cbjurusanActionPerformed
 
     /**
