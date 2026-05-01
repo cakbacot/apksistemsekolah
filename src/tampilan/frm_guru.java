@@ -246,7 +246,7 @@ private DefaultTableModel tabmode;
             }
         });
 
-        bcari.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        bcari.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         bcari.setText("CARI");
         bcari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -378,7 +378,7 @@ private DefaultTableModel tabmode;
                     .addComponent(bcari))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(166, Short.MAX_VALUE))
+                .addContainerGap(168, Short.MAX_VALUE))
         );
 
         pack();
