@@ -46,26 +46,24 @@
                                   <Component id="jLabel10" alignment="0" min="-2" max="-2" attributes="0"/>
                               </Group>
                               <EmptySpace min="-2" pref="82" max="-2" attributes="0"/>
-                              <Group type="103" groupAlignment="0" attributes="0">
-                                  <Component id="cbkeahlian" alignment="0" min="-2" pref="287" max="-2" attributes="0"/>
-                                  <Component id="dctgl" alignment="0" min="-2" pref="189" max="-2" attributes="0"/>
+                              <Group type="103" groupAlignment="0" max="-2" attributes="0">
+                                  <Component id="cbkeahlian" alignment="0" pref="287" max="32767" attributes="0"/>
                                   <Group type="102" alignment="0" attributes="0">
                                       <Component id="rlaki" min="-2" max="-2" attributes="0"/>
                                       <EmptySpace min="-2" pref="30" max="-2" attributes="0"/>
                                       <Component id="rperempuan" min="-2" max="-2" attributes="0"/>
                                   </Group>
-                                  <Group type="103" alignment="0" groupAlignment="1" max="-2" attributes="0">
-                                      <Component id="txtnip" alignment="0" pref="287" max="32767" attributes="0"/>
-                                      <Component id="txtnm" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txttelp" alignment="0" pref="287" max="32767" attributes="0"/>
-                                      <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
-                                      <Component id="txtpass" alignment="0" min="-2" pref="170" max="-2" attributes="0"/>
-                                      <Group type="102" alignment="0" attributes="0">
-                                          <Component id="txkg" min="-2" pref="149" max="-2" attributes="0"/>
-                                          <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
-                                          <Component id="btn_cguru" min="-2" max="-2" attributes="0"/>
-                                      </Group>
+                                  <Component id="txtnip" alignment="0" pref="287" max="32767" attributes="0"/>
+                                  <Component id="txtnm" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txttelp" alignment="0" pref="287" max="32767" attributes="0"/>
+                                  <Component id="jScrollPane1" alignment="0" max="32767" attributes="0"/>
+                                  <Component id="txtpass" alignment="0" min="-2" pref="170" max="-2" attributes="0"/>
+                                  <Group type="102" alignment="0" attributes="0">
+                                      <Component id="txkg" min="-2" pref="149" max="-2" attributes="0"/>
+                                      <EmptySpace min="-2" pref="41" max="-2" attributes="0"/>
+                                      <Component id="btn_cguru" min="-2" max="-2" attributes="0"/>
                                   </Group>
+                                  <Component id="dctgl" alignment="0" max="32767" attributes="0"/>
                               </Group>
                           </Group>
                           <Component id="jScrollPane2" alignment="0" min="-2" max="-2" attributes="0"/>
@@ -122,7 +120,7 @@
                   <Component id="txtpass" alignment="3" min="-2" pref="22" max="-2" attributes="0"/>
               </Group>
               <EmptySpace type="separate" max="-2" attributes="0"/>
-              <Group type="103" groupAlignment="0" attributes="0">
+              <Group type="103" groupAlignment="1" attributes="0">
                   <Component id="jLabel6" min="-2" max="-2" attributes="0"/>
                   <Component id="dctgl" min="-2" max="-2" attributes="0"/>
               </Group>
@@ -421,8 +419,6 @@
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bcariActionPerformed"/>
       </Events>
     </Component>
-    <Component class="com.toedter.calendar.JDateChooser" name="dctgl">
-    </Component>
     <Component class="javax.swing.JButton" name="btn_cguru">
       <Properties>
         <Property name="text" type="java.lang.String" value="Cari"/>
@@ -430,6 +426,8 @@
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btn_cguruActionPerformed"/>
       </Events>
+    </Component>
+    <Component class="com.toedter.calendar.JDateChooser" name="dctgl">
     </Component>
   </SubComponents>
 </Form>

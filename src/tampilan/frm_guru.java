@@ -53,14 +53,14 @@ private DefaultTableModel tabmode;
             ResultSet hasil = stat.executeQuery(sql);
             while (hasil.next()) {
                 tabmode.addRow(new Object[]{
-                    hasil.getString("nip"),        
-                    hasil.getString("kd_guru"),      // Kolom 2: Kode Guru
-                    hasil.getString("nama"),         // Kolom 3: Nama
-                    hasil.getString("tgl_lahir"),    // Kolom 4: Tanggal Lahir (Password dilewati)
-                    hasil.getString("alamat"),       // Kolom 5: Alamat
-                    hasil.getString("no_telp"),      // Kolom 6: No Telp
-                    hasil.getString("jenkel"),       // Kolom 7: Jenis Kelamin
-                    hasil.getString("keahlian")      // Kolom 8: Keahlian
+                    hasil.getString(1),        
+                    hasil.getString(2),      
+                    hasil.getString(3),         
+                    hasil.getString(4),    
+                    hasil.getString(5),       
+                    hasil.getString(6),      
+                    hasil.getString(7),       
+                    hasil.getString(8)      
                 });
             }
             tblguru.setModel(tabmode);
@@ -111,8 +111,8 @@ private DefaultTableModel tabmode;
         bhapus = new javax.swing.JButton();
         bkeluar = new javax.swing.JButton();
         bcari = new javax.swing.JButton();
-        dctgl = new com.toedter.calendar.JDateChooser();
         btn_cguru = new javax.swing.JButton();
+        dctgl = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -283,23 +283,22 @@ private DefaultTableModel tabmode;
                                     .addComponent(jLabel9)
                                     .addComponent(jLabel10))
                                 .addGap(82, 82, 82)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(cbkeahlian, javax.swing.GroupLayout.PREFERRED_SIZE, 287, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(dctgl, javax.swing.GroupLayout.PREFERRED_SIZE, 189, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                    .addComponent(cbkeahlian, 0, 287, Short.MAX_VALUE)
                                     .addGroup(layout.createSequentialGroup()
                                         .addComponent(rlaki)
                                         .addGap(30, 30, 30)
                                         .addComponent(rperempuan))
-                                    .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                                        .addComponent(txtnip, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                                        .addComponent(txtnm, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txttelp, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
-                                        .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.LEADING)
-                                        .addComponent(txtpass, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(javax.swing.GroupLayout.Alignment.LEADING, layout.createSequentialGroup()
-                                            .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(41, 41, 41)
-                                            .addComponent(btn_cguru)))))
+                                    .addComponent(txtnip, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                                    .addComponent(txtnm)
+                                    .addComponent(txttelp, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
+                                    .addComponent(jScrollPane1)
+                                    .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addGroup(layout.createSequentialGroup()
+                                        .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                        .addGap(41, 41, 41)
+                                        .addComponent(btn_cguru))
+                                    .addComponent(dctgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
                             .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(bsimpan)
@@ -342,7 +341,7 @@ private DefaultTableModel tabmode;
                     .addComponent(jLabel5)
                     .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, 22, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel6)
                     .addComponent(dctgl, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
