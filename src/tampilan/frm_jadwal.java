@@ -5,18 +5,94 @@
  */
 package tampilan;
 
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import javax.swing.JOptionPane;
+import javax.swing.JSpinner;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
+
 /**
  *
  * @author ACER
  */
 public class frm_jadwal extends javax.swing.JFrame {
-
+private Connection con = new koneksi().getConnection();
+private DefaultTableModel tabmode;
+PreparedStatement ps;
+ResultSet rs;
     /**
      * Creates new form frm_jadwal
      */
     public frm_jadwal() {
         initComponents();
+        kosong();
+        aktif();
+        datatable();
+        loadcombo();
+        JSpinner.DateEditor timeEditor = new JSpinner.DateEditor(kjam, "HH:mm");
+        kjam.setEditor(timeEditor);
+        kjam.setValue(new java.util.Date());
     }
+    protected void aktif(){
+        txidm.requestFocus();
+    }
+    
+    protected void kosong(){
+        txidm.setText("");
+        txmp.setText("");
+        txkg.setText("");
+        kjam.setValue(new java.util.Date());
+        ckelas.setSelectedIndex(-1);
+    }
+    
+    protected void datatable(){
+        Object[] Baris = {"Id Mapel","Mata Pelajaran","Kode Guru","Jam","Kelas"};
+            tabmode = new DefaultTableModel(null,Baris);
+            String cariitem = txcari.getText();
+            try{
+                String sql = "SELECT * FROM tbl_jadwal where id_mapel like '%"+cariitem+"%' or nama_mapel like '%"+cariitem+"%' order by id_mapel asc";
+                Statement stat = con.createStatement();
+                ResultSet hasil = stat.executeQuery(sql);
+                while (hasil.next()){
+                    tabmode.addRow(new Object[]{
+                        hasil.getString(1),
+                        hasil.getString(2),
+                        hasil.getString(3),
+                        hasil.getString(4),
+                        hasil.getString(5),
+                    });
+                }
+                tbl_jadwal.setModel(tabmode);
+            }catch (Exception e){
+                JOptionPane.showMessageDialog(null, "data gagal dipanggil"+e);
+            }
+    }
+    
+    private void loadcombo() {
+    try {
+        // 1. Query untuk mengambil data unik dari tabel kelas
+        String sql = "SELECT id_kelas FROM tbl_kelas";
+        
+        java.sql.Connection conn = (Connection)koneksi.getConnection();
+        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+        java.sql.ResultSet rs = pst.executeQuery();
+        
+        // 2. Bersihkan item lama agar tidak double
+        ckelas.removeAllItems(); 
+        ckelas.addItem("-- Pilih Kelas --"); // Item pertama sebagai petunjuk
+        
+        // 3. Masukkan hasil query ke dalam Combo Box
+        while(rs.next()) {
+            ckelas.addItem(rs.getString("id_kelas"));
+        }
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Gagal Load Kelas: " + e.getMessage());
+    }
+}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -33,22 +109,22 @@ public class frm_jadwal extends javax.swing.JFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel6 = new javax.swing.JLabel();
-        jTextField1 = new javax.swing.JTextField();
-        jTextField2 = new javax.swing.JTextField();
-        jTextField3 = new javax.swing.JTextField();
-        jTextField4 = new javax.swing.JTextField();
-        jTextField5 = new javax.swing.JTextField();
+        txidm = new javax.swing.JTextField();
+        txmp = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
-        jTextField6 = new javax.swing.JTextField();
-        jToggleButton7 = new javax.swing.JToggleButton();
+        txcari = new javax.swing.JTextField();
+        bcari = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
-        jTable1 = new javax.swing.JTable();
-        jToggleButton1 = new javax.swing.JToggleButton();
+        tbl_jadwal = new javax.swing.JTable();
+        bsimpan = new javax.swing.JToggleButton();
         jToggleButton2 = new javax.swing.JToggleButton();
         jToggleButton3 = new javax.swing.JToggleButton();
         jToggleButton4 = new javax.swing.JToggleButton();
         jToggleButton5 = new javax.swing.JToggleButton();
-        jToggleButton6 = new javax.swing.JToggleButton();
+        ckelas = new javax.swing.JComboBox<>();
+        kjam = new javax.swing.JSpinner();
+        txkg = new javax.swing.JTextField();
+        btn_cguru = new javax.swing.JToggleButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -70,24 +146,18 @@ public class frm_jadwal extends javax.swing.JFrame {
         jLabel6.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel6.setText("Kelas :");
 
-        jTextField1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        txidm.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
 
-        jTextField2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-
-        jTextField3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-
-        jTextField4.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-
-        jTextField5.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        txmp.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Table Jadwal"));
 
-        jToggleButton7.setBackground(new java.awt.Color(255, 255, 255));
-        jToggleButton7.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jToggleButton7.setForeground(new java.awt.Color(0, 204, 204));
-        jToggleButton7.setText("Cari");
+        bcari.setBackground(new java.awt.Color(255, 255, 255));
+        bcari.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        bcari.setForeground(new java.awt.Color(0, 204, 204));
+        bcari.setText("Cari");
 
-        jTable1.setModel(new javax.swing.table.DefaultTableModel(
+        tbl_jadwal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
                 {null, null, null, null},
@@ -98,7 +168,7 @@ public class frm_jadwal extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
-        jScrollPane1.setViewportView(jTable1);
+        jScrollPane1.setViewportView(tbl_jadwal);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -109,9 +179,9 @@ public class frm_jadwal extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 693, Short.MAX_VALUE)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
-                        .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -120,17 +190,22 @@ public class frm_jadwal extends javax.swing.JFrame {
             .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jTextField6, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jToggleButton1.setBackground(new java.awt.Color(51, 255, 102));
-        jToggleButton1.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jToggleButton1.setForeground(new java.awt.Color(255, 255, 255));
-        jToggleButton1.setText("Simpan");
+        bsimpan.setBackground(new java.awt.Color(51, 255, 102));
+        bsimpan.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        bsimpan.setForeground(new java.awt.Color(255, 255, 255));
+        bsimpan.setText("Simpan");
+        bsimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bsimpanActionPerformed(evt);
+            }
+        });
 
         jToggleButton2.setBackground(new java.awt.Color(255, 255, 51));
         jToggleButton2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -152,10 +227,16 @@ public class frm_jadwal extends javax.swing.JFrame {
         jToggleButton5.setForeground(new java.awt.Color(204, 51, 0));
         jToggleButton5.setText("Keluar");
 
-        jToggleButton6.setBackground(new java.awt.Color(255, 255, 255));
-        jToggleButton6.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jToggleButton6.setForeground(new java.awt.Color(0, 204, 204));
-        jToggleButton6.setText("Cari");
+        kjam.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.AM_PM));
+
+        txkg.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+
+        btn_cguru.setText("Cari");
+        btn_cguru.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btn_cguruActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -168,7 +249,7 @@ public class frm_jadwal extends javax.swing.JFrame {
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                             .addGroup(layout.createSequentialGroup()
-                                .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
                                 .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
@@ -188,14 +269,15 @@ public class frm_jadwal extends javax.swing.JFrame {
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 56, Short.MAX_VALUE)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
                             .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jTextField1)
-                            .addComponent(jTextField2, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField3, javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(jTextField4)
-                            .addComponent(jTextField5, javax.swing.GroupLayout.Alignment.TRAILING))
-                        .addGap(18, 18, 18)
-                        .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(164, 164, 164))))
+                            .addComponent(txidm)
+                            .addComponent(txmp, javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(ckelas, 0, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(kjam)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, 178, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(btn_cguru, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(293, 293, 293))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -205,27 +287,30 @@ public class frm_jadwal extends javax.swing.JFrame {
                 .addGap(53, 53, 53)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel2)
-                    .addComponent(jTextField1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txidm, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jTextField2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(38, 38, 38)
+                    .addComponent(txmp, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(39, 39, 39)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
-                    .addComponent(jTextField3, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton6, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(41, 41, 41)
+                    .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_cguru, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(49, 49, 49)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jLabel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(kjam))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(63, 63, 63)
+                        .addComponent(jLabel6))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(45, 45, 45)
+                        .addComponent(ckelas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel5)
-                    .addComponent(jTextField4, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(60, 60, 60)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jLabel6)
-                    .addComponent(jTextField5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(43, 43, 43)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jToggleButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -237,6 +322,37 @@ public class frm_jadwal extends javax.swing.JFrame {
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
+
+    private void btn_cguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cguruActionPerformed
+        pop_guru popup = new pop_guru(); 
+        popup.loadData();
+        popup.setLocationRelativeTo(this);
+        popup.setVisible(true);
+    }//GEN-LAST:event_btn_cguruActionPerformed
+
+    private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        String jamSimpan = sdf.format(kjam.getValue());
+        String kls = ckelas.getSelectedItem().toString();
+        String sql = "insert into tbl_jadwal values (?,?,?,?,?)";
+        try{
+            PreparedStatement stat = con.prepareStatement(sql);
+            stat.setString(1, txidm.getText());
+            stat.setString(2, txmp.getText());
+            stat.setString(3, txkg.getText());
+            stat.setString(4, jamSimpan);
+            stat.setString(5, kls);
+            
+            stat.executeUpdate();
+            JOptionPane.showMessageDialog(null, "data berhasil disimpan");
+            kosong();
+            txidm.requestFocus();
+        }catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "error" + e.getMessage());
+            e.printStackTrace();
+        }
+        datatable();
+    }//GEN-LAST:event_bsimpanActionPerformed
 
     /**
      * @param args the command line arguments
@@ -274,6 +390,10 @@ public class frm_jadwal extends javax.swing.JFrame {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton bcari;
+    private javax.swing.JToggleButton bsimpan;
+    private javax.swing.JToggleButton btn_cguru;
+    private javax.swing.JComboBox<String> ckelas;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel3;
@@ -282,19 +402,15 @@ public class frm_jadwal extends javax.swing.JFrame {
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable jTable1;
-    private javax.swing.JTextField jTextField1;
-    private javax.swing.JTextField jTextField2;
-    private javax.swing.JTextField jTextField3;
-    private javax.swing.JTextField jTextField4;
-    private javax.swing.JTextField jTextField5;
-    private javax.swing.JTextField jTextField6;
-    private javax.swing.JToggleButton jToggleButton1;
     private javax.swing.JToggleButton jToggleButton2;
     private javax.swing.JToggleButton jToggleButton3;
     private javax.swing.JToggleButton jToggleButton4;
     private javax.swing.JToggleButton jToggleButton5;
-    private javax.swing.JToggleButton jToggleButton6;
-    private javax.swing.JToggleButton jToggleButton7;
+    private javax.swing.JSpinner kjam;
+    private javax.swing.JTable tbl_jadwal;
+    private javax.swing.JTextField txcari;
+    private javax.swing.JTextField txidm;
+    public static javax.swing.JTextField txkg;
+    private javax.swing.JTextField txmp;
     // End of variables declaration//GEN-END:variables
 }
