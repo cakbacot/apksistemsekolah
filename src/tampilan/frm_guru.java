@@ -41,6 +41,7 @@ private DefaultTableModel tabmode;
         txttelp.setText("");
         txtalamat.setText("");
         txtcari.setText("");
+        txtskill.setText("");
         buttonGroup1.clearSelection();
     }
         protected void datatable(){
@@ -100,7 +101,6 @@ private DefaultTableModel tabmode;
         txttelp = new javax.swing.JTextField();
         rlaki = new javax.swing.JRadioButton();
         rperempuan = new javax.swing.JRadioButton();
-        cbkeahlian = new javax.swing.JComboBox<>();
         jScrollPane2 = new javax.swing.JScrollPane();
         tblguru = new javax.swing.JTable();
         jLabel11 = new javax.swing.JLabel();
@@ -112,6 +112,7 @@ private DefaultTableModel tabmode;
         bkeluar = new javax.swing.JButton();
         bcari = new javax.swing.JButton();
         dctgl = new com.toedter.calendar.JDateChooser();
+        txtskill = new javax.swing.JTextField();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -170,13 +171,6 @@ private DefaultTableModel tabmode;
         rperempuan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 rperempuanActionPerformed(evt);
-            }
-        });
-
-        cbkeahlian.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
-        cbkeahlian.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                cbkeahlianActionPerformed(evt);
             }
         });
 
@@ -291,7 +285,6 @@ private DefaultTableModel tabmode;
                                         .addComponent(jLabel10))
                                     .addGap(82, 82, 82)
                                     .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                        .addComponent(cbkeahlian, 0, 287, Short.MAX_VALUE)
                                         .addGroup(layout.createSequentialGroup()
                                             .addComponent(rlaki)
                                             .addGap(30, 30, 30)
@@ -302,7 +295,8 @@ private DefaultTableModel tabmode;
                                         .addComponent(jScrollPane1)
                                         .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
                                         .addComponent(dctgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                        .addComponent(txkg)))
+                                        .addComponent(txkg)
+                                        .addComponent(txtskill)))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(bsimpan)
                                     .addGap(18, 18, 18)
@@ -361,9 +355,9 @@ private DefaultTableModel tabmode;
                         .addComponent(rlaki)
                         .addComponent(rperempuan)))
                 .addGap(18, 18, 18)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jLabel10, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(cbkeahlian))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel10)
+                    .addComponent(txtskill, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsimpan)
@@ -379,7 +373,7 @@ private DefaultTableModel tabmode;
                     .addComponent(bcari))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(170, Short.MAX_VALUE))
+                .addContainerGap(169, Short.MAX_VALUE))
         );
 
         pack();
@@ -395,7 +389,7 @@ private DefaultTableModel tabmode;
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void bubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bubahActionPerformed
-        String skill=cbkeahlian.getSelectedItem().toString();
+
         String jenis = null;
       if (rlaki.isSelected()){
           jenis = "Laki - Laki";
@@ -416,7 +410,7 @@ private DefaultTableModel tabmode;
             stat.setDate(3, sqlDate);
             stat.setString(4, txtalamat.getText());
             stat.setString(5, txttelp.getText());
-            stat.setString(6, skill);
+            stat.setString(6, txtskill.getText());
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "data berhasil diubah");
             kosong();
@@ -427,10 +421,6 @@ private DefaultTableModel tabmode;
         datatable();
     
     }//GEN-LAST:event_bubahActionPerformed
-
-    private void cbkeahlianActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbkeahlianActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_cbkeahlianActionPerformed
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
         int ok = JOptionPane.showConfirmDialog(null, "hapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
@@ -458,7 +448,7 @@ private DefaultTableModel tabmode;
     }//GEN-LAST:event_bcariActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-      String skill = cbkeahlian.getSelectedItem().toString();
+    
     String jenis = null;
     if(rlaki.isSelected()){
         jenis = "Laki-Laki";
@@ -478,7 +468,7 @@ private DefaultTableModel tabmode;
         stat.setString(6, txtalamat.getText());
         stat.setString(7, txttelp.getText());
         stat.setString(8, jenis);
-        stat.setString(9, skill);
+        stat.setString(9, txtskill.getText());
         
         
         stat.executeUpdate();
@@ -547,7 +537,7 @@ if ("Laki-Laki".equals(g)) {
 } else {
     rperempuan.setSelected(true);
 }
-cbkeahlian.setSelectedItem(h);
+txtskill.setText(h);
     }//GEN-LAST:event_tblguruMouseClicked
 
     /**
@@ -593,7 +583,6 @@ cbkeahlian.setSelectedItem(h);
     private javax.swing.JButton bsimpan;
     private javax.swing.JButton bubah;
     private javax.swing.ButtonGroup buttonGroup1;
-    private javax.swing.JComboBox<String> cbkeahlian;
     private com.toedter.calendar.JDateChooser dctgl;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
@@ -617,6 +606,7 @@ cbkeahlian.setSelectedItem(h);
     private javax.swing.JTextField txtnip;
     private javax.swing.JTextField txtnm;
     private javax.swing.JPasswordField txtpass;
+    private javax.swing.JTextField txtskill;
     private javax.swing.JTextField txttelp;
     // End of variables declaration//GEN-END:variables
 }
