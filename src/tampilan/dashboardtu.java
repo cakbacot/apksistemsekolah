@@ -31,7 +31,7 @@ public class dashboardtu extends javax.swing.JFrame {
         menukelas = new javax.swing.JButton();
         menuguru = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
-        jButton9 = new javax.swing.JButton();
+        keluar = new javax.swing.JButton();
         menusiswa = new javax.swing.JButton();
         desktop = new javax.swing.JDesktopPane();
 
@@ -61,11 +61,11 @@ public class dashboardtu extends javax.swing.JFrame {
             }
         });
 
-        jButton9.setText("Logout");
-        jButton9.setToolTipText("");
-        jButton9.addActionListener(new java.awt.event.ActionListener() {
+        keluar.setText("Logout");
+        keluar.setToolTipText("");
+        keluar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton9ActionPerformed(evt);
+                keluarActionPerformed(evt);
             }
         });
 
@@ -90,7 +90,7 @@ public class dashboardtu extends javax.swing.JFrame {
                 .addGap(36, 36, 36)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
-                .addComponent(jButton9, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(keluar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(47, Short.MAX_VALUE))
         );
         jPanel2Layout.setVerticalGroup(
@@ -101,7 +101,7 @@ public class dashboardtu extends javax.swing.JFrame {
                     .addComponent(menukelas, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                     .addComponent(menuguru, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                    .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+                    .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                     .addComponent(menusiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
                 .addContainerGap())
         );
@@ -186,9 +186,9 @@ public class dashboardtu extends javax.swing.JFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_jButton8ActionPerformed
 
-    private void jButton9ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton9ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton9ActionPerformed
+    private void keluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keluarActionPerformed
+dispose();        // TODO add your handling code here:
+    }//GEN-LAST:event_keluarActionPerformed
 
     private void menusiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menusiswaActionPerformed
 // 1. Bersihkan area desktop agar tidak ada form yang tumpang tindih
@@ -234,8 +234,8 @@ public class dashboardtu extends javax.swing.JFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JButton jButton8;
-    private javax.swing.JButton jButton9;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton keluar;
     private javax.swing.JButton menuguru;
     private javax.swing.JButton menukelas;
     private javax.swing.JButton menusiswa;
