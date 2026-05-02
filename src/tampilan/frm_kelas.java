@@ -5,6 +5,7 @@
  */
 package tampilan;
 
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -132,9 +133,20 @@ public class frm_kelas extends javax.swing.JFrame {
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabel Kelas"));
 
+        txcari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txcariKeyPressed(evt);
+            }
+        });
+
         bcari.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bcari.setForeground(new java.awt.Color(0, 102, 204));
         bcari.setText("Cari");
+        bcari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcariActionPerformed(evt);
+            }
+        });
 
         tbl_kelas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -147,6 +159,11 @@ public class frm_kelas extends javax.swing.JFrame {
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbl_kelas.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_kelasMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_kelas);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -184,6 +201,11 @@ public class frm_kelas extends javax.swing.JFrame {
         bkeluar.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bkeluar.setForeground(new java.awt.Color(255, 51, 51));
         bkeluar.setText("Keluar");
+        bkeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bkeluarActionPerformed(evt);
+            }
+        });
 
         bubah.setBackground(new java.awt.Color(255, 255, 51));
         bubah.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
@@ -285,15 +307,42 @@ public class frm_kelas extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bubahActionPerformed
-        // TODO add your handling code here:
+        String sql = "update tbl_kelas set kelas=?, kd_guru=? where id_kelas='"+txidk.getText()+"'";
+        try {
+        PreparedStatement stat = conn.prepareStatement(sql);     
+        stat.setString(1, txkelas.getText());                  
+        stat.setString(2, txkg.getText());     
+        
+        stat.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Data berhasil diubah");
+        
+        kosong();
+        txidk.requestFocus();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        datatable(); 
     }//GEN-LAST:event_bubahActionPerformed
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
-        // TODO add your handling code here:
+      String sql = "delete from tbl_kelas where id_kelas='"+txidk.getText()+"'";
+        try{
+            PreparedStatement stat = conn.prepareStatement(sql);
+            stat.executeUpdate();
+            JOptionPane.showMessageDialog(null, "data berhasil dihapus");
+            kosong();
+            txidk.requestFocus();
+        }
+        catch (SQLException e){
+            JOptionPane.showMessageDialog(null, "data gagal dihapus"+e);
+        }
+        datatable();
     }//GEN-LAST:event_bhapusActionPerformed
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
-        // TODO add your handling code here:
+    kosong();
+    datatable();     
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void txkgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txkgActionPerformed
@@ -325,6 +374,32 @@ public class frm_kelas extends javax.swing.JFrame {
      }
      datatable();
     }//GEN-LAST:event_bsimpanActionPerformed
+
+    private void tbl_kelasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_kelasMouseClicked
+    int bar = tbl_kelas.getSelectedRow();
+    String a = tabmode.getValueAt(bar, 0).toString();
+    String b = tabmode.getValueAt(bar, 1).toString();
+    String c = tabmode.getValueAt(bar, 2).toString();
+
+    txidk.setText(a);
+    txkelas.setText(b);
+    txkg.setText(c);
+                        
+    }//GEN-LAST:event_tbl_kelasMouseClicked
+
+    private void bkeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkeluarActionPerformed
+    dispose();
+    }//GEN-LAST:event_bkeluarActionPerformed
+
+    private void bcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcariActionPerformed
+    datatable();
+    }//GEN-LAST:event_bcariActionPerformed
+
+    private void txcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txcariKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            datatable();
+        }      
+    }//GEN-LAST:event_txcariKeyPressed
 
     /**
      * @param args the command line arguments
