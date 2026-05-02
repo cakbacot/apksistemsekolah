@@ -50,9 +50,9 @@
           <Group type="103" groupAlignment="0" attributes="0">
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace min="-2" pref="45" max="-2" attributes="0"/>
-                  <Component id="jButton4" min="-2" pref="165" max="-2" attributes="0"/>
+                  <Component id="menukelas" min="-2" pref="165" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jButton10" min="-2" pref="165" max="-2" attributes="0"/>
+                  <Component id="menusiswa" min="-2" pref="165" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="jButton7" min="-2" pref="165" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
@@ -68,11 +68,11 @@
               <Group type="102" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
-                      <Component id="jButton4" alignment="3" pref="68" max="32767" attributes="0"/>
+                      <Component id="menukelas" alignment="3" pref="68" max="32767" attributes="0"/>
                       <Component id="jButton7" alignment="3" pref="68" max="32767" attributes="0"/>
                       <Component id="jButton8" alignment="3" pref="68" max="32767" attributes="0"/>
                       <Component id="jButton9" alignment="3" pref="68" max="32767" attributes="0"/>
-                      <Component id="jButton10" alignment="3" pref="68" max="32767" attributes="0"/>
+                      <Component id="menusiswa" alignment="3" pref="68" max="32767" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -80,12 +80,12 @@
         </DimensionLayout>
       </Layout>
       <SubComponents>
-        <Component class="javax.swing.JButton" name="jButton4">
+        <Component class="javax.swing.JButton" name="menukelas">
           <Properties>
             <Property name="text" type="java.lang.String" value="Kelas"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton4ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menukelasActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton7">
@@ -114,12 +114,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton9ActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton10">
+        <Component class="javax.swing.JButton" name="menusiswa">
           <Properties>
             <Property name="text" type="java.lang.String" value="Siswa"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton10ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menusiswaActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
