@@ -54,7 +54,7 @@
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
                   <Component id="menusiswa" min="-2" pref="165" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="32" max="-2" attributes="0"/>
-                  <Component id="jButton7" min="-2" pref="165" max="-2" attributes="0"/>
+                  <Component id="menuguru" min="-2" pref="165" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="36" max="-2" attributes="0"/>
                   <Component id="jButton8" min="-2" pref="165" max="-2" attributes="0"/>
                   <EmptySpace min="-2" pref="33" max="-2" attributes="0"/>
@@ -69,7 +69,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="3" attributes="0">
                       <Component id="menukelas" alignment="3" pref="68" max="32767" attributes="0"/>
-                      <Component id="jButton7" alignment="3" pref="68" max="32767" attributes="0"/>
+                      <Component id="menuguru" alignment="3" pref="68" max="32767" attributes="0"/>
                       <Component id="jButton8" alignment="3" pref="68" max="32767" attributes="0"/>
                       <Component id="jButton9" alignment="3" pref="68" max="32767" attributes="0"/>
                       <Component id="menusiswa" alignment="3" pref="68" max="32767" attributes="0"/>
@@ -88,12 +88,12 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menukelasActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jButton7">
+        <Component class="javax.swing.JButton" name="menuguru">
           <Properties>
-            <Property name="text" type="java.lang.String" value="Nilai"/>
+            <Property name="text" type="java.lang.String" value="Guru"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jButton7ActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="menuguruActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jButton8">

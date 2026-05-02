@@ -29,7 +29,7 @@ public class dashboardtu extends javax.swing.JFrame {
 
         jPanel2 = new javax.swing.JPanel();
         menukelas = new javax.swing.JButton();
-        jButton7 = new javax.swing.JButton();
+        menuguru = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         jButton9 = new javax.swing.JButton();
         menusiswa = new javax.swing.JButton();
@@ -46,10 +46,10 @@ public class dashboardtu extends javax.swing.JFrame {
             }
         });
 
-        jButton7.setText("Nilai");
-        jButton7.addActionListener(new java.awt.event.ActionListener() {
+        menuguru.setText("Guru");
+        menuguru.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton7ActionPerformed(evt);
+                menuguruActionPerformed(evt);
             }
         });
 
@@ -86,7 +86,7 @@ public class dashboardtu extends javax.swing.JFrame {
                 .addGap(32, 32, 32)
                 .addComponent(menusiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(32, 32, 32)
-                .addComponent(jButton7, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menuguru, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36)
                 .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(33, 33, 33)
@@ -99,7 +99,7 @@ public class dashboardtu extends javax.swing.JFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(menukelas, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                    .addComponent(jButton7, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
+                    .addComponent(menuguru, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                     .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                     .addComponent(jButton9, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
                     .addComponent(menusiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
@@ -160,9 +160,27 @@ public class dashboardtu extends javax.swing.JFrame {
     }// Agar muncul di tengah layar       
     }//GEN-LAST:event_menukelasActionPerformed
 
-    private void jButton7ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton7ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton7ActionPerformed
+    private void menuguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuguruActionPerformed
+    desktop.removeAll();
+    desktop.repaint();
+    
+    // 2. Buat objek dari JInternalFrame menu_siswa
+    menu_guru mg = new menu_guru();
+    
+    // 3. Masukkan objek tersebut ke dalam JDesktopPane
+    desktop.add(mg);
+    
+    // 4. Tampilkan formnya
+    mg.setVisible(true);
+    
+    try {
+        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
+        mg.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+        // Jika gagal dimaksimalkan, tampilkan pesan error di console
+        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
+    }// Agar muncul di tengah la
+    }//GEN-LAST:event_menuguruActionPerformed
 
     private void jButton8ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton8ActionPerformed
         // TODO add your handling code here:
@@ -215,10 +233,10 @@ public class dashboardtu extends javax.swing.JFrame {
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktop;
-    private javax.swing.JButton jButton7;
     private javax.swing.JButton jButton8;
     private javax.swing.JButton jButton9;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton menuguru;
     private javax.swing.JButton menukelas;
     private javax.swing.JButton menusiswa;
     // End of variables declaration//GEN-END:variables
