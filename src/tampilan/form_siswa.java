@@ -21,11 +21,12 @@ private DefaultTableModel tabmode;
      */
     public form_siswa() {
         initComponents();
+        
+        loadJurusan();
         kosong();
         aktif();
         datatable();
-        loadKelas();
-        loadJurusan();
+
     }   
     protected void aktif(){
         txtnisn.requestFocus();
@@ -42,8 +43,13 @@ private DefaultTableModel tabmode;
         txtnmwali.setText("");
         txtnowali.setText("");
         txtcari.setText("");
-        cbjurusan.setSelectedIndex(0);
-        cbkls.setSelectedIndex(0);
+      if (cbjurusan.getItemCount() > 0) {
+    cbjurusan.setSelectedIndex(0);
+}
+
+if (cbkls.getItemCount() > 0) {
+    cbkls.setSelectedIndex(0);
+}
     }
    protected void datatable() {
     Object[] Baris = {
@@ -84,11 +90,12 @@ private DefaultTableModel tabmode;
         JOptionPane.showMessageDialog(null, "Data gagal dipanggil: " + e);
     }
 }
-   private void loadKelas() {
+   private void loadKelasByJurusan(String jurusan) {
     try {
-        String sql = "SELECT kelas FROM tbl_kelas"; // ambil kolom kelas
-
+        String sql = "SELECT kelas FROM tbl_kelas WHERE kelas LIKE ?";
         PreparedStatement pst = con.prepareStatement(sql);
+        pst.setString(1, "%-" + jurusan);
+
         ResultSet rs = pst.executeQuery();
 
         cbkls.removeAllItems();
@@ -104,16 +111,16 @@ private DefaultTableModel tabmode;
 }
    private void loadJurusan() {
     try {
-        String sql = "SELECT nama_jurusan FROM tbl_jurusan";
+        String sql = "SELECT DISTINCT SUBSTRING_INDEX(kelas, '-', -1) AS jurusan FROM tbl_kelas";
         PreparedStatement pst = con.prepareStatement(sql);
         ResultSet rs = pst.executeQuery();
 
         cbjurusan.removeAllItems();
         cbjurusan.addItem("-- Pilih Jurusan --");
 
-        while (rs.next()) {
-            cbjurusan.addItem(rs.getString("nama_jurusan"));
-        }
+while (rs.next()) {
+    cbjurusan.addItem(rs.getString("jurusan"));
+}
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(null, "Gagal load jurusan: " + e);
@@ -507,17 +514,19 @@ private DefaultTableModel tabmode;
     JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
     return;
 }
-        stat.setString(1, txtnm.getText());
-        stat.setString(3, txtalamat.getText());
-        stat.setString(4, txttelp.getText());
-        stat.setString(5, cbjk.getSelectedItem().toString());
-        stat.setString(6, txtangkatan.getText());
-        stat.setString(7, txtnmwali.getText());
-        stat.setString(8, txtnowali.getText());
-        stat.setString(9, cbjurusan.getSelectedItem().toString());
-        stat.setString(10, cbkls.getSelectedItem().toString());
-        stat.setString(11, txtnisn.getText());
+        java.sql.Date sqlDate = new java.sql.Date(dctgl.getDate().getTime());
 
+        stat.setString(1, txtnm.getText());
+        stat.setDate(2, sqlDate);
+stat.setString(3, txtalamat.getText());
+stat.setString(4, txttelp.getText());
+stat.setString(5, cbjk.getSelectedItem().toString());
+stat.setString(6, txtangkatan.getText());
+stat.setString(7, txtnmwali.getText());
+stat.setString(8, txtnowali.getText());
+stat.setString(9, cbjurusan.getSelectedItem().toString());
+stat.setString(10, cbkls.getSelectedItem().toString());
+stat.setString(11, txtnisn.getText());
         stat.executeUpdate();
 
         JOptionPane.showMessageDialog(null, "Data berhasil diubah");
@@ -608,6 +617,11 @@ if (ok == JOptionPane.YES_OPTION) {
 
     private void cbjurusanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbjurusanActionPerformed
         // TODO add your handling code here:
+        String jurusan = cbjurusan.getSelectedItem().toString();
+
+if (!jurusan.equals("-- Pilih Jurusan --")) {
+    loadKelasByJurusan(jurusan);
+}
     }//GEN-LAST:event_cbjurusanActionPerformed
 
     /**
