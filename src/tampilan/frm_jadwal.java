@@ -5,6 +5,7 @@
  */
 package tampilan;
 
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -50,20 +51,25 @@ ResultSet rs;
     }
     
     protected void datatable(){
-        Object[] Baris = {"Id Mapel","Mata Pelajaran","Kode Guru","Jam","Kelas"};
+        Object[] Baris = {"Id Mapel","Mata Pelajaran","Nama","Jam","Kelas"};
             tabmode = new DefaultTableModel(null,Baris);
             String cariitem = txcari.getText();
             try{
-                String sql = "SELECT * FROM tbl_jadwal where id_mapel like '%"+cariitem+"%' or nama_mapel like '%"+cariitem+"%' order by id_mapel asc";
+                String sql ="SELECT tbl_jadwal.id_mapel, tbl_jadwal.nama_mapel, tbl_jadwal.kd_guru, guru.nama, tbl_jadwal.jam, tbl_jadwal.kelas, tbl_kelas.kelas " +
+                            "FROM tbl_jadwal " +
+                            "JOIN guru ON tbl_jadwal.kd_guru = guru.kd_guru " +
+                            "JOIN tbl_kelas ON tbl_jadwal.kelas = tbl_kelas.id_kelas " +
+                            "WHERE tbl_jadwal.id_mapel LIKE '%"+cariitem+"%' OR tbl_jadwal.nama_mapel LIKE '%"+cariitem+"%' " +
+                            "ORDER BY tbl_jadwal.id_mapel ASC";
                 Statement stat = con.createStatement();
                 ResultSet hasil = stat.executeQuery(sql);
                 while (hasil.next()){
                     tabmode.addRow(new Object[]{
                         hasil.getString(1),
                         hasil.getString(2),
-                        hasil.getString(3),
                         hasil.getString(4),
                         hasil.getString(5),
+                        hasil.getString(7)
                     });
                 }
                 tbl_jadwal.setModel(tabmode);
@@ -117,10 +123,10 @@ ResultSet rs;
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_jadwal = new javax.swing.JTable();
         bsimpan = new javax.swing.JToggleButton();
-        jToggleButton2 = new javax.swing.JToggleButton();
-        jToggleButton3 = new javax.swing.JToggleButton();
-        jToggleButton4 = new javax.swing.JToggleButton();
-        jToggleButton5 = new javax.swing.JToggleButton();
+        bedit = new javax.swing.JToggleButton();
+        bhapus = new javax.swing.JToggleButton();
+        bbatal = new javax.swing.JToggleButton();
+        bkeluar = new javax.swing.JToggleButton();
         ckelas = new javax.swing.JComboBox<>();
         kjam = new javax.swing.JSpinner();
         txkg = new javax.swing.JTextField();
@@ -157,10 +163,21 @@ ResultSet rs;
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Table Jadwal"));
 
+        txcari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txcariKeyPressed(evt);
+            }
+        });
+
         bcari.setBackground(new java.awt.Color(255, 255, 255));
         bcari.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
         bcari.setForeground(new java.awt.Color(0, 204, 204));
         bcari.setText("Cari");
+        bcari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcariActionPerformed(evt);
+            }
+        });
 
         tbl_jadwal.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -173,6 +190,11 @@ ResultSet rs;
                 "Title 1", "Title 2", "Title 3", "Title 4"
             }
         ));
+        tbl_jadwal.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbl_jadwalMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbl_jadwal);
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -212,25 +234,45 @@ ResultSet rs;
             }
         });
 
-        jToggleButton2.setBackground(new java.awt.Color(255, 255, 51));
-        jToggleButton2.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jToggleButton2.setForeground(new java.awt.Color(255, 255, 255));
-        jToggleButton2.setText("Edit");
+        bedit.setBackground(new java.awt.Color(255, 255, 51));
+        bedit.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        bedit.setForeground(new java.awt.Color(255, 255, 255));
+        bedit.setText("Edit");
+        bedit.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                beditActionPerformed(evt);
+            }
+        });
 
-        jToggleButton3.setBackground(new java.awt.Color(255, 0, 0));
-        jToggleButton3.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jToggleButton3.setForeground(new java.awt.Color(255, 255, 255));
-        jToggleButton3.setText("Hapus");
+        bhapus.setBackground(new java.awt.Color(255, 0, 0));
+        bhapus.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        bhapus.setForeground(new java.awt.Color(255, 255, 255));
+        bhapus.setText("Hapus");
+        bhapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bhapusActionPerformed(evt);
+            }
+        });
 
-        jToggleButton4.setBackground(new java.awt.Color(255, 255, 255));
-        jToggleButton4.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jToggleButton4.setForeground(new java.awt.Color(204, 51, 0));
-        jToggleButton4.setText("Batal");
+        bbatal.setBackground(new java.awt.Color(255, 255, 255));
+        bbatal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        bbatal.setForeground(new java.awt.Color(204, 51, 0));
+        bbatal.setText("Batal");
+        bbatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bbatalActionPerformed(evt);
+            }
+        });
 
-        jToggleButton5.setBackground(new java.awt.Color(255, 255, 255));
-        jToggleButton5.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        jToggleButton5.setForeground(new java.awt.Color(204, 51, 0));
-        jToggleButton5.setText("Keluar");
+        bkeluar.setBackground(new java.awt.Color(255, 255, 255));
+        bkeluar.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        bkeluar.setForeground(new java.awt.Color(204, 51, 0));
+        bkeluar.setText("Keluar");
+        bkeluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bkeluarActionPerformed(evt);
+            }
+        });
 
         kjam.setModel(new javax.swing.SpinnerDateModel(new java.util.Date(), null, null, java.util.Calendar.AM_PM));
 
@@ -256,13 +298,13 @@ ResultSet rs;
                             .addGroup(layout.createSequentialGroup()
                                 .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bedit, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addGap(18, 18, 18)
-                                .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                                .addComponent(bkeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -316,10 +358,10 @@ ResultSet rs;
                 .addGap(46, 46, 46)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton2, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton3, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton4, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jToggleButton5, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bedit, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 49, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bkeluar, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 24, Short.MAX_VALUE)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(36, 36, 36))
@@ -363,6 +405,87 @@ ResultSet rs;
        
     }//GEN-LAST:event_formMouseWheelMoved
 
+    private void beditActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_beditActionPerformed
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        String jamSimpan = sdf.format(kjam.getValue());
+        String kls = ckelas.getSelectedItem().toString();
+        String sql = "update tbl_jadwal set nama_mapel=?, kd_guru=?, jam=?, kelas=? where id_mapel=?";
+        try {
+        PreparedStatement stat = con.prepareStatement(sql);
+        stat.setString(1, txmp.getText());      
+        stat.setString(2, txkg.getText());     
+        stat.setString(3, jamSimpan);          
+        stat.setString(4, kls);                
+        stat.setString(5, txidm.getText());     
+        
+        stat.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Data berhasil diubah");
+        
+        kosong();
+        txidm.requestFocus();
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            e.printStackTrace();
+        }
+        datatable(); 
+    }//GEN-LAST:event_beditActionPerformed
+
+    private void tbl_jadwalMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_jadwalMouseClicked
+        int baris = tbl_jadwal.getSelectedRow();
+        txidm.setText(tbl_jadwal.getValueAt(baris, 0).toString());
+        txmp.setText(tbl_jadwal.getValueAt(baris, 1).toString());
+        txkg.setText(tbl_jadwal.getValueAt(baris, 2).toString());
+        try {
+        String jamTabel = tbl_jadwal.getValueAt(baris, 3).toString();
+        java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
+        kjam.setValue(sdf.parse(jamTabel));
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        ckelas.setSelectedItem(tbl_jadwal.getValueAt(baris, 4).toString());
+    }//GEN-LAST:event_tbl_jadwalMouseClicked
+
+    private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
+        int ok = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+        if (ok == 0) { // Jika user memilih tombol YES
+        String sql = "delete from tbl_jadwal where id_mapel=?";
+        try {
+            PreparedStatement stat = con.prepareStatement(sql);
+            
+            // Ambil ID Mapel dari TextField sebagai acuan hapus
+            stat.setString(1, txidm.getText());
+            
+            stat.executeUpdate();
+            JOptionPane.showMessageDialog(null, "Data berhasil dihapus");
+            
+            kosong();
+            txidm.requestFocus();
+            } catch (SQLException e) {
+                JOptionPane.showMessageDialog(null, "Error: " + e.getMessage());
+            }
+            datatable();
+        }   
+    }//GEN-LAST:event_bhapusActionPerformed
+
+    private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
+        kosong();
+        datatable();
+    }//GEN-LAST:event_bbatalActionPerformed
+
+    private void bkeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkeluarActionPerformed
+        dispose();
+    }//GEN-LAST:event_bkeluarActionPerformed
+
+    private void txcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txcariKeyPressed
+        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+            datatable();
+        }
+    }//GEN-LAST:event_txcariKeyPressed
+
+    private void bcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcariActionPerformed
+        datatable();
+    }//GEN-LAST:event_bcariActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -399,7 +522,11 @@ ResultSet rs;
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JToggleButton bbatal;
     private javax.swing.JToggleButton bcari;
+    private javax.swing.JToggleButton bedit;
+    private javax.swing.JToggleButton bhapus;
+    private javax.swing.JToggleButton bkeluar;
     private javax.swing.JToggleButton bsimpan;
     private javax.swing.JToggleButton btn_cguru;
     private javax.swing.JComboBox<String> ckelas;
@@ -411,10 +538,6 @@ ResultSet rs;
     private javax.swing.JLabel jLabel6;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JToggleButton jToggleButton2;
-    private javax.swing.JToggleButton jToggleButton3;
-    private javax.swing.JToggleButton jToggleButton4;
-    private javax.swing.JToggleButton jToggleButton5;
     private javax.swing.JSpinner kjam;
     private javax.swing.JTable tbl_jadwal;
     private javax.swing.JTextField txcari;
