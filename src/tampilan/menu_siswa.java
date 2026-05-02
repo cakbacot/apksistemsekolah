@@ -36,14 +36,14 @@ private DefaultTableModel tabmode;
         txtnm.setText("");
         dctgl.setDate(null);
         txtalamat.setText("");
-        txtalamat.setText("");
         txttelp.setText("");
         cbjk.setSelectedIndex(0);
         txtangkatan.setText("");
         txtnmwali.setText("");
         txtnowali.setText("");
         txtcari.setText("");
-      if (cbjurusan.getItemCount() > 0) {
+      
+        if (cbjurusan.getItemCount() > 0) {
     cbjurusan.setSelectedIndex(0);
 }
 
@@ -53,9 +53,9 @@ if (cbkls.getItemCount() > 0) {
     }
    protected void datatable() {
     Object[] Baris = {
-        "NISN","Nama","Tanggal","Alamat","No. Telepon",
-        "Jenis Kelamin","Angkatan","Nama Wali","Jurusan","Kelas"
-    };
+    "NISN","Nama","Tanggal","Alamat","No. Telepon",
+    "Jenis Kelamin","Angkatan","Nama Wali","No Wali","Jurusan","Kelas"
+     };
 
     tabmode = new DefaultTableModel(null, Baris);
     tbldatasiswa.setModel(tabmode);
@@ -81,6 +81,7 @@ if (cbkls.getItemCount() > 0) {
                 hasil.getString("jkel"),
                 hasil.getString("angkatan"),
                 hasil.getString("nama_wali"),
+                hasil.getString("no_wali"),
                 hasil.getString("jurusan"),
                 hasil.getString("kelas")
             });
@@ -94,7 +95,7 @@ if (cbkls.getItemCount() > 0) {
     try {
         String sql = "SELECT kelas FROM tbl_kelas WHERE kelas LIKE ?";
         PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, "%-" + jurusan);
+        pst.setString(1, "%" + jurusan + "%");
 
         ResultSet rs = pst.executeQuery();
 
@@ -524,14 +525,23 @@ while (rs.next()) {
             JOptionPane.showMessageDialog(null, "Data belum lengkap!");
             return;
         }
+        String telp = txttelp.getText().replaceAll("[^\\d]", "");
+        
         java.util.Date utilDate = dctgl.getDate();
         if (utilDate == null) {
             JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
             return;
         }
+        if (cbjk.getSelectedIndex() == 0) {
+    JOptionPane.showMessageDialog(null, "Pilih jenis kelamin!");
+    return;
+}
 
         java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-
+        if (telp.length() < 10 || telp.length() > 13) {
+        JOptionPane.showMessageDialog(null, "No telp tidak valid!");
+        return;
+}
         try {
             String sql = "INSERT INTO tbl_siswa (nisn,nama,tgl_lahir,alamat,notelp,jkel,angkatan,nama_wali,no_wali,jurusan,kelas) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
             PreparedStatement stat = con.prepareStatement(sql);
@@ -540,7 +550,7 @@ while (rs.next()) {
             stat.setString(2, txtnm.getText());
             stat.setDate(3, sqlDate);
             stat.setString(4, txtalamat.getText());
-            stat.setString(5, txttelp.getText());
+            stat.setString(5, telp);
             stat.setString(6, cbjk.getSelectedItem().toString());
             stat.setString(7, txtangkatan.getText());
             stat.setString(8, txtnmwali.getText());
@@ -558,6 +568,7 @@ while (rs.next()) {
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Gagal simpan: " + e);
         }
+        txtnisn.requestFocus();
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void bubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bubahActionPerformed
@@ -565,17 +576,23 @@ while (rs.next()) {
         try {
             String sql = "UPDATE tbl_siswa SET nama=?, tgl_lahir=?, alamat=?, notelp=?, jkel=?, angkatan=?, nama_wali=?, no_wali=?, jurusan=?, kelas=? WHERE nisn=?";
             PreparedStatement stat = con.prepareStatement(sql);
+            String telp = txttelp.getText().replaceAll("[^\\d]", "");
 
             if (dctgl.getDate() == null) {
                 JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
                 return;
             }
             java.sql.Date sqlDate = new java.sql.Date(dctgl.getDate().getTime());
+            
+            if (cbjurusan.getSelectedIndex() == 0 || cbkls.getSelectedIndex() == 0) {
+            JOptionPane.showMessageDialog(null, "Pilih jurusan dan kelas!");
+            return;
+}
 
             stat.setString(1, txtnm.getText());
             stat.setDate(2, sqlDate);
             stat.setString(3, txtalamat.getText());
-            stat.setString(4, txttelp.getText());
+            stat.setString(4, telp);
             stat.setString(5, cbjk.getSelectedItem().toString());
             stat.setString(6, txtangkatan.getText());
             stat.setString(7, txtnmwali.getText());
@@ -616,56 +633,55 @@ while (rs.next()) {
     }//GEN-LAST:event_bhapusActionPerformed
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
-        // TODO add your handling code herekosong();kosong();
+        // TODO add your handling code here
         kosong();
         datatable();
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void cbjurusanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbjurusanActionPerformed
         // TODO add your handling code here:
-        String jurusan = cbjurusan.getSelectedItem().toString();
+     Object selected = cbjurusan.getSelectedItem();
+     if (selected == null) return;
 
-        if (!jurusan.equals("-- Pilih Jurusan --")) {
-            loadKelasByJurusan(jurusan);
-        }
+     String jurusan = selected.toString();
+     loadKelasByJurusan(jurusan);
     }//GEN-LAST:event_cbjurusanActionPerformed
 
     private void tbldatasiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbldatasiswaMouseClicked
- int bar = tbldatasiswa.getSelectedRow();
-        String a = tabmode.getValueAt(bar, 0).toString();
-        String b = tabmode.getValueAt(bar, 1).toString();
-        Object c = tabmode.getValueAt(bar, 2);
-        String d = tabmode.getValueAt(bar, 3).toString();
-        String e = tabmode.getValueAt(bar, 4).toString();
-        String f = tabmode.getValueAt(bar, 5).toString();
-        String g = tabmode.getValueAt(bar, 6).toString();
-        String h = tabmode.getValueAt(bar, 7).toString();
-        String i = tabmode.getValueAt(bar, 7).toString();
-        String j = tabmode.getValueAt(bar, 7).toString();
-        String k = tabmode.getValueAt(bar, 7).toString();
-        
-txtnisn.setText(a);
-txtnm.setText(b);
-try {
-        if (c instanceof java.util.Date) {
-            dctgl.setDate((java.util.Date) c);
-        } else {
-            // Sesuaikan format "yyyy-MM-dd" dengan format yang ada di tabel kamu
-            java.util.Date date = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(d.toString());
-            dctgl.setDate(date);
-        }
-    } catch (Exception ex) {
-        // Jika kolom tanggal kosong, kosongkan juga DateChooser-nya
-        dctgl.setDate(null);
+   int bar = tbldatasiswa.getSelectedRow();
+   if (bar == -1) return;
+
+    String a = tabmode.getValueAt(bar, 0).toString();
+    String b = tabmode.getValueAt(bar, 1).toString();
+    Object c = tabmode.getValueAt(bar, 2);
+    String d = tabmode.getValueAt(bar, 3).toString();
+    String e = tabmode.getValueAt(bar, 4).toString();
+    String f = tabmode.getValueAt(bar, 5).toString();
+    String g = tabmode.getValueAt(bar, 6).toString();
+    String h = tabmode.getValueAt(bar, 7).toString();
+    String i = tabmode.getValueAt(bar, 8).toString(); 
+    String j = tabmode.getValueAt(bar, 9).toString();
+    String k = tabmode.getValueAt(bar, 10).toString();
+
+    txtnmwali.setText(h);
+    txtnowali.setText(i);
+    cbjurusan.setSelectedItem(j);
+    loadKelasByJurusan(j);
+    cbkls.setSelectedItem(k);
+    txtnisn.setText(a);
+    txtnm.setText(b);
+    txtalamat.setText(d);
+    txttelp.setText(e);
+    cbjk.setSelectedItem(f);
+    txtangkatan.setText(g);
+  
+    try {
+    if (c != null) {
+        dctgl.setDate(java.sql.Date.valueOf(c.toString()));
     }
-txtalamat.setText(d);
-txttelp.setText(e);
-cbjk.setSelectedItem(f);
-txtangkatan.setText(g);
-txtnmwali.setText(h);
-txtnowali.setText(i);
-cbjurusan.setSelectedItem(f);
-cbkls.setSelectedItem(f);
+   } catch (Exception ex) {
+     dctgl.setDate(null);
+}
     }//GEN-LAST:event_tbldatasiswaMouseClicked
 
 
