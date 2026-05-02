@@ -409,14 +409,13 @@ ResultSet rs;
         java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("HH:mm");
         String jamSimpan = sdf.format(kjam.getValue());
         String kls = ckelas.getSelectedItem().toString();
-        String sql = "update tbl_jadwal set nama_mapel=?, kd_guru=?, jam=?, kelas=? where id_mapel=?";
+        String sql = "update tbl_jadwal set nama_mapel=?, kd_guru=?, jam=?, kelas=? where id_mapel='"+txidm.getText()+"'";
         try {
         PreparedStatement stat = con.prepareStatement(sql);
         stat.setString(1, txmp.getText());      
         stat.setString(2, txkg.getText());     
         stat.setString(3, jamSimpan);          
-        stat.setString(4, kls);                
-        stat.setString(5, txidm.getText());     
+        stat.setString(4, kls);                    
         
         stat.executeUpdate();
         JOptionPane.showMessageDialog(null, "Data berhasil diubah");
