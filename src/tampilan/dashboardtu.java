@@ -28,16 +28,50 @@ public class dashboardtu extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
+        desktop = new javax.swing.JDesktopPane();
+        jPanel1 = new javax.swing.JPanel();
+        menusiswa = new javax.swing.JButton();
         menukelas = new javax.swing.JButton();
         menuguru = new javax.swing.JButton();
         jButton8 = new javax.swing.JButton();
         keluar = new javax.swing.JButton();
-        menusiswa = new javax.swing.JButton();
-        desktop = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
         jPanel2.setBackground(new java.awt.Color(51, 51, 255));
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 105, Short.MAX_VALUE)
+        );
+
+        desktop.setBackground(new java.awt.Color(255, 153, 153));
+
+        javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
+        desktop.setLayout(desktopLayout);
+        desktopLayout.setHorizontalGroup(
+            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 897, Short.MAX_VALUE)
+        );
+        desktopLayout.setVerticalGroup(
+            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+
+        jPanel1.setBackground(new java.awt.Color(0, 51, 255));
+
+        menusiswa.setText("Siswa");
+        menusiswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menusiswaActionPerformed(evt);
+            }
+        });
 
         menukelas.setText("Kelas");
         menukelas.addActionListener(new java.awt.event.ActionListener() {
@@ -69,54 +103,34 @@ public class dashboardtu extends javax.swing.JFrame {
             }
         });
 
-        menusiswa.setText("Siswa");
-        menusiswa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menusiswaActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(45, 45, 45)
-                .addComponent(menukelas, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(menusiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(32, 32, 32)
-                .addComponent(menuguru, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(36, 36, 36)
-                .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(33, 33, 33)
-                .addComponent(keluar, javax.swing.GroupLayout.PREFERRED_SIZE, 165, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(47, Short.MAX_VALUE))
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(menukelas, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                    .addComponent(menuguru, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                    .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                    .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE)
-                    .addComponent(menusiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 68, Short.MAX_VALUE))
-                .addContainerGap())
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(menusiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menukelas, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(menuguru, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(keluar, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(jButton8, javax.swing.GroupLayout.PREFERRED_SIZE, 120, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(20, Short.MAX_VALUE))
         );
-
-        desktop.setBackground(new java.awt.Color(255, 153, 153));
-
-        javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
-        desktop.setLayout(desktopLayout);
-        desktopLayout.setHorizontalGroup(
-            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-        desktopLayout.setVerticalGroup(
-            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 677, Short.MAX_VALUE)
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(57, 57, 57)
+                .addComponent(menukelas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18)
+                .addComponent(menusiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(menuguru, javax.swing.GroupLayout.DEFAULT_SIZE, 37, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
+                .addComponent(jButton8, javax.swing.GroupLayout.DEFAULT_SIZE, 35, Short.MAX_VALUE)
+                .addGap(326, 326, 326)
+                .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, 40, Short.MAX_VALUE)
+                .addGap(61, 61, 61))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -124,14 +138,19 @@ public class dashboardtu extends javax.swing.JFrame {
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-            .addComponent(desktop)
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(desktop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(desktop))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(desktop)))
         );
 
         pack();
@@ -234,6 +253,7 @@ dispose();        // TODO add your handling code here:
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JButton jButton8;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton keluar;
     private javax.swing.JButton menuguru;
