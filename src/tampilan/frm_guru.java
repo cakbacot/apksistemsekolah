@@ -111,7 +111,6 @@ private DefaultTableModel tabmode;
         bhapus = new javax.swing.JButton();
         bkeluar = new javax.swing.JButton();
         bcari = new javax.swing.JButton();
-        btn_cguru = new javax.swing.JButton();
         dctgl = new com.toedter.calendar.JDateChooser();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -265,13 +264,6 @@ private DefaultTableModel tabmode;
             }
         });
 
-        btn_cguru.setText("Cari");
-        btn_cguru.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                btn_cguruActionPerformed(evt);
-            }
-        });
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -307,11 +299,8 @@ private DefaultTableModel tabmode;
                                         .addComponent(txttelp, javax.swing.GroupLayout.DEFAULT_SIZE, 287, Short.MAX_VALUE)
                                         .addComponent(jScrollPane1)
                                         .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, 170, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                        .addGroup(layout.createSequentialGroup()
-                                            .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                            .addGap(41, 41, 41)
-                                            .addComponent(btn_cguru))
-                                        .addComponent(dctgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                                        .addComponent(dctgl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                        .addComponent(txkg)))
                                 .addGroup(layout.createSequentialGroup()
                                     .addComponent(bsimpan)
                                     .addGap(18, 18, 18)
@@ -342,8 +331,7 @@ private DefaultTableModel tabmode;
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(btn_cguru))
+                    .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel4)
@@ -389,7 +377,7 @@ private DefaultTableModel tabmode;
                     .addComponent(bcari))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 263, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(168, Short.MAX_VALUE))
+                .addContainerGap(170, Short.MAX_VALUE))
         );
 
         pack();
@@ -520,13 +508,6 @@ private DefaultTableModel tabmode;
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcariActionPerformed
 
-    private void btn_cguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cguruActionPerformed
-        pop_guru popup = new pop_guru(); 
-        popup.loadData();
-        popup.setLocationRelativeTo(this);
-        popup.setVisible(true);        // TODO add your handling code here:
-    }//GEN-LAST:event_btn_cguruActionPerformed
-
     private void jScrollPane2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jScrollPane2MouseClicked
        
     }//GEN-LAST:event_jScrollPane2MouseClicked
@@ -608,7 +589,6 @@ cbkeahlian.setSelectedItem(h);
     private javax.swing.JButton bhapus;
     private javax.swing.JButton bkeluar;
     private javax.swing.JButton bsimpan;
-    private javax.swing.JButton btn_cguru;
     private javax.swing.JButton bubah;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbkeahlian;
