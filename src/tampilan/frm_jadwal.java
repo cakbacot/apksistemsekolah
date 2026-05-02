@@ -371,7 +371,7 @@ ResultSet rs;
     }// </editor-fold>//GEN-END:initComponents
 
     private void btn_cguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btn_cguruActionPerformed
-        pop_guru popup = new pop_guru(); 
+        pop_guru popup = new pop_guru(txkg); 
         popup.loadData();
         popup.setLocationRelativeTo(this);
         popup.setVisible(true);

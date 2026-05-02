@@ -19,8 +19,10 @@ public class pop_guru extends javax.swing.JFrame {
     /**
      * Creates new form pop_guru
      */
-    public pop_guru() {
+    private javax.swing.JTextField fieldTarget;
+    public pop_guru(javax.swing.JTextField target) {
         initComponents();
+        this.fieldTarget = target;
         loadData();
     }
     
@@ -110,7 +112,7 @@ public class pop_guru extends javax.swing.JFrame {
         String kd = tbl_guru.getValueAt(baris, 0).toString();
 
         // Set nilai tersebut ke TextField di form utama (CRUD Jadwal)
-        frm_jadwal.txkg.setText(kd); 
+        fieldTarget.setText(kd);
 
         // Tutup popup
         this.dispose();
@@ -144,11 +146,7 @@ public class pop_guru extends javax.swing.JFrame {
         //</editor-fold>
 
         /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new pop_guru().setVisible(true);
-            }
-        });
+        
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
