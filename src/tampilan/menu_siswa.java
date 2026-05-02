@@ -181,7 +181,7 @@ while (rs.next()) {
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel2.setText("NISN");
 
-        txtnisn.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        txtnisn.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
 
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel3.setText("Nama Siswa");
@@ -431,6 +431,11 @@ while (rs.next()) {
                 "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6", "Title 7", "Title 8", "Title 9", "Title 10", "Title 11"
             }
         ));
+        tbldatasiswa.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                tbldatasiswaMouseClicked(evt);
+            }
+        });
         jScrollPane1.setViewportView(tbldatasiswa);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -487,7 +492,7 @@ while (rs.next()) {
                     .addComponent(jLabel1)
                     .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addContainerGap(121, Short.MAX_VALUE)))
+                    .addContainerGap(128, Short.MAX_VALUE)))
         );
 
         layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {bbatal, bhapus, bsimpan, bubah});
@@ -624,6 +629,44 @@ while (rs.next()) {
             loadKelasByJurusan(jurusan);
         }
     }//GEN-LAST:event_cbjurusanActionPerformed
+
+    private void tbldatasiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbldatasiswaMouseClicked
+ int bar = tbldatasiswa.getSelectedRow();
+        String a = tabmode.getValueAt(bar, 0).toString();
+        String b = tabmode.getValueAt(bar, 1).toString();
+        Object c = tabmode.getValueAt(bar, 2);
+        String d = tabmode.getValueAt(bar, 3).toString();
+        String e = tabmode.getValueAt(bar, 4).toString();
+        String f = tabmode.getValueAt(bar, 5).toString();
+        String g = tabmode.getValueAt(bar, 6).toString();
+        String h = tabmode.getValueAt(bar, 7).toString();
+        String i = tabmode.getValueAt(bar, 7).toString();
+        String j = tabmode.getValueAt(bar, 7).toString();
+        String k = tabmode.getValueAt(bar, 7).toString();
+        
+txtnisn.setText(a);
+txtnm.setText(b);
+try {
+        if (c instanceof java.util.Date) {
+            dctgl.setDate((java.util.Date) c);
+        } else {
+            // Sesuaikan format "yyyy-MM-dd" dengan format yang ada di tabel kamu
+            java.util.Date date = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(d.toString());
+            dctgl.setDate(date);
+        }
+    } catch (Exception ex) {
+        // Jika kolom tanggal kosong, kosongkan juga DateChooser-nya
+        dctgl.setDate(null);
+    }
+txtalamat.setText(d);
+txttelp.setText(e);
+cbjk.setSelectedItem(f);
+txtangkatan.setText(g);
+txtnmwali.setText(h);
+txtnowali.setText(i);
+cbjurusan.setSelectedItem(f);
+cbkls.setSelectedItem(f);
+    }//GEN-LAST:event_tbldatasiswaMouseClicked
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
