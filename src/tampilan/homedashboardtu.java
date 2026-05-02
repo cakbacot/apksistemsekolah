@@ -170,6 +170,9 @@ public void tampilkanDiagramGuru() {
         panelDiagram = new javax.swing.JPanel();
         pnlgr = new javax.swing.JPanel();
 
+        setBackground(new java.awt.Color(255, 255, 255));
+        setBorder(null);
+
         jLabel3.setFont(new java.awt.Font("Segoe UI Symbol", 3, 12)); // NOI18N
         jLabel3.setText("DIAGRAM GURU");
 
@@ -208,7 +211,7 @@ public void tampilkanDiagramGuru() {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(panelDiagram, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(pnlgr, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(105, Short.MAX_VALUE))
+                .addContainerGap(108, Short.MAX_VALUE))
         );
 
         pack();

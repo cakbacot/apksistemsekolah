@@ -5,6 +5,15 @@
     <Component class="javax.swing.ButtonGroup" name="buttonGroup1">
     </Component>
   </NonVisualComponents>
+  <Properties>
+    <Property name="background" type="java.awt.Color" editor="org.netbeans.beaninfo.editors.ColorEditor">
+      <Color blue="ff" green="ff" red="ff" type="rgb"/>
+    </Property>
+    <Property name="border" type="javax.swing.border.Border" editor="org.netbeans.modules.form.editors2.BorderEditor">
+      <Border info="null"/>
+    </Property>
+    <Property name="defaultCloseOperation" type="int" value="1"/>
+  </Properties>
   <SyntheticProperties>
     <SyntheticProperty name="formSizePolicy" type="int" value="1"/>
   </SyntheticProperties>
@@ -65,13 +74,13 @@
                               <Component id="bcari" min="-2" max="-2" attributes="0"/>
                           </Group>
                           <Group type="102" attributes="0">
-                              <Component id="bsimpan" pref="91" max="32767" attributes="0"/>
+                              <Component id="bsimpan" pref="95" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bubah" pref="91" max="32767" attributes="0"/>
+                              <Component id="bubah" pref="95" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bbatal" pref="93" max="32767" attributes="0"/>
+                              <Component id="bbatal" pref="97" max="32767" attributes="0"/>
                               <EmptySpace max="-2" attributes="0"/>
-                              <Component id="bhapus" pref="93" max="32767" attributes="0"/>
+                              <Component id="bhapus" pref="97" max="32767" attributes="0"/>
                               <EmptySpace min="-2" pref="156" max="-2" attributes="0"/>
                           </Group>
                       </Group>
@@ -125,7 +134,6 @@
                                       <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
                                   </Group>
                               </Group>
-                              <EmptySpace type="unrelated" max="-2" attributes="0"/>
                               <Group type="103" groupAlignment="0" attributes="0">
                                   <Group type="102" attributes="0">
                                       <Component id="txtpass" pref="24" max="32767" attributes="0"/>
