@@ -57,6 +57,7 @@ public class pop_guru extends javax.swing.JFrame {
         tbl_guru = new javax.swing.JTable();
         jLabel1 = new javax.swing.JLabel();
 
+        tbl_guru.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         tbl_guru.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},

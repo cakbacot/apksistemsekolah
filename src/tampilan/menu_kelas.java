@@ -98,7 +98,6 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         tbl_kelas = new javax.swing.JTable();
 
         setBorder(null);
-        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("FORM KELAS");
