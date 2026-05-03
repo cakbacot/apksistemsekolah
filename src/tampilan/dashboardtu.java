@@ -8,6 +8,7 @@ package tampilan;
 import java.awt.Image;
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
+import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
 import javax.swing.JInternalFrame;
 import org.jfree.chart.ChartFactory;
@@ -33,7 +34,6 @@ private Connection conn = new koneksi().getConnection();
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         scaleImage(); 
-       tampilkanHomeAwal();
        
        com.formdev.flatlaf.FlatLightLaf.setup();
     // Inisialisasi HomeFrame (Isinya diagram kamu)
@@ -61,9 +61,29 @@ private Connection conn = new koneksi().getConnection();
     sethome(home,"/resource/home.png");
     setleave(keluar,"/resource/keluar.png");
     setadmin(admin,"/resource/admin.png");
-    
+    lblWelcome.setText("Selamat Datang, " + UserSession.getNama());
+    validasiMenu();
+    tampilkanHomeAwal();// Panggil fungsi pembatasan tombol tadi
     }
 
+    
+    public void validasiMenu() {
+    String role = UserSession.getLevel(); // Ambil level yang disimpan tadi
+    
+    if (role.equals("2")) { 
+        // Level 2: Cuma Transaksi
+        menukelas.setEnabled(false);
+        menusiswa.setEnabled(false);
+        menuguru.setEnabled(false);
+        jdwl.setEnabled(false);
+        admin.setEnabled(false);
+    } else if (role.equals("3")) {
+        // Level 3: Akademik (Guru, Siswa, dll)
+        tranksaksi.setEnabled(false);
+        admin.setEnabled(false);
+    }
+    // Level 1 tidak perlu di-if karena bisa akses semua secara default
+}
 // FUNGSI 1: Khusus untuk Logo (JLabel) - Mengikuti ukuran label
 private void scaleImage() {
     try {
@@ -292,6 +312,7 @@ private void setadmin(javax.swing.JButton btn, String path) {
         jLabel1 = new javax.swing.JLabel();
         home = new javax.swing.JButton();
         admin = new javax.swing.JButton();
+        lblWelcome = new javax.swing.JLabel();
         desktop = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
         menusiswa = new javax.swing.JButton();
@@ -334,6 +355,8 @@ private void setadmin(javax.swing.JButton btn, String path) {
             }
         });
 
+        lblWelcome.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -343,7 +366,9 @@ private void setadmin(javax.swing.JButton btn, String path) {
                 .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(77, 77, 77)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lblWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(admin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(23, 23, 23)
                 .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -356,11 +381,12 @@ private void setadmin(javax.swing.JButton btn, String path) {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(admin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(0, 0, Short.MAX_VALUE)))
+                    .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                        .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(admin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGap(0, 0, Short.MAX_VALUE)
+                        .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
 
@@ -379,7 +405,7 @@ private void setadmin(javax.swing.JButton btn, String path) {
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 449, Short.MAX_VALUE)
         );
 
         jPanel1.setBackground(new java.awt.Color(0, 8, 97));
@@ -486,7 +512,7 @@ private void setadmin(javax.swing.JButton btn, String path) {
                 .addComponent(jdwl, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tranksaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(keluar)
                 .addContainerGap())
         );
@@ -564,7 +590,20 @@ private void setadmin(javax.swing.JButton btn, String path) {
     }//GEN-LAST:event_tranksaksiActionPerformed
 
     private void keluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keluarActionPerformed
-dispose();        // TODO add your handling code here:
+// 1. Tampilkan konfirmasi (Opsional tapi disarankan)
+    int pilih = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+    
+    if (pilih == JOptionPane.YES_OPTION) {
+        // 2. Bersihkan Session (Penting!)
+        UserSession.setLevel(null);
+        UserSession.setNama(null);
+        
+        // 3. Tutup Dashboard
+        this.dispose(); 
+        
+        // 4. Buka kembali form login
+        new loginuser().setVisible(true);
+    }// TODO add your handling code here:
     }//GEN-LAST:event_keluarActionPerformed
 
     private void menusiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menusiswaActionPerformed
@@ -667,6 +706,7 @@ dispose();        // TODO add your handling code here:
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton jdwl;
     private javax.swing.JButton keluar;
+    private javax.swing.JLabel lblWelcome;
     private javax.swing.JLabel lbl_logo;
     private javax.swing.JButton menuguru;
     private javax.swing.JButton menukelas;

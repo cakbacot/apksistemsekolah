@@ -225,23 +225,36 @@ public class loginuser extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-    try {
-            String sql ="SELECT * FROM user WHERE nip= ('"+nip.getText()+"')AND password=('"+pass.getText()+"')";
-            java.sql.Connection con = (Connection)koneksi.getConnection();
-            java.sql.PreparedStatement pet =con.prepareStatement(sql);
-            java.sql.ResultSet rs= pet.executeQuery(sql);
-            if (rs.next()){
-                if(nip.getText().equals(rs.getString("nip"))&&pass.getText().equals(rs.getString("password"))){
-                    JOptionPane.showMessageDialog(null, "berhasil login");
-                    dashboardtu pindah = new dashboardtu();
-                    pindah.setVisible(true);
-                }
-            } else{
-                JOptionPane.showMessageDialog(null, "password salah");
-            }
-        } catch (Exception e) {
+   try {
+        String sql = "SELECT * FROM user WHERE nip=? AND password=?";
+        java.sql.Connection conn = new koneksi().getConnection();
+        java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+        
+        pst.setString(1, nip.getText());
+        pst.setString(2, pass.getText());
+        
+        java.sql.ResultSet rs = pst.executeQuery();
+        
+        if (rs.next()) {
+            // AMBIL DATA DARI DATABASE
+            String levelDariDB = rs.getString("lvl");
+            String namaDariDB = rs.getString("nama");
+            
+            // SIMPAN KE SESSION
+            UserSession.setLevel(levelDariDB);
+            UserSession.setNama(namaDariDB);
+            
+            JOptionPane.showMessageDialog(null, "Login Berhasil sebagai " + namaDariDB);
+            
+            // PINDAH KE DASHBOARD
+            new dashboardtu().setVisible(true);
+            this.dispose();
+        } else {
+            JOptionPane.showMessageDialog(null, "NIP atau Password Salah!");
         }
-      dispose();
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, e.getMessage());
+    }
     }//GEN-LAST:event_loginActionPerformed
 
     /**

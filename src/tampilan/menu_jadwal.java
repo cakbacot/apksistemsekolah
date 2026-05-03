@@ -128,7 +128,6 @@ ResultSet rs;
         bedit = new javax.swing.JToggleButton();
         bhapus = new javax.swing.JToggleButton();
         bbatal = new javax.swing.JToggleButton();
-        bkeluar = new javax.swing.JToggleButton();
         jPanel2 = new javax.swing.JPanel();
         txcari = new javax.swing.JTextField();
         bcari = new javax.swing.JToggleButton();
@@ -239,7 +238,7 @@ ResultSet rs;
                 bsimpanActionPerformed(evt);
             }
         });
-        getContentPane().add(bsimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 70, 159, 49));
+        getContentPane().add(bsimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 110, 159, 49));
 
         bedit.setBackground(new java.awt.Color(255, 255, 51));
         bedit.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -250,7 +249,7 @@ ResultSet rs;
                 beditActionPerformed(evt);
             }
         });
-        getContentPane().add(bedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 140, 159, 49));
+        getContentPane().add(bedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 180, 159, 49));
 
         bhapus.setBackground(new java.awt.Color(255, 0, 0));
         bhapus.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -261,7 +260,7 @@ ResultSet rs;
                 bhapusActionPerformed(evt);
             }
         });
-        getContentPane().add(bhapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 210, 159, 49));
+        getContentPane().add(bhapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 250, 159, 49));
 
         bbatal.setBackground(new java.awt.Color(255, 255, 255));
         bbatal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -272,18 +271,7 @@ ResultSet rs;
                 bbatalActionPerformed(evt);
             }
         });
-        getContentPane().add(bbatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, 159, 49));
-
-        bkeluar.setBackground(new java.awt.Color(255, 255, 255));
-        bkeluar.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
-        bkeluar.setForeground(new java.awt.Color(204, 51, 0));
-        bkeluar.setText("Keluar");
-        bkeluar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bkeluarActionPerformed(evt);
-            }
-        });
-        getContentPane().add(bkeluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 370, 159, 46));
+        getContentPane().add(bbatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 330, 159, 49));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Table Jadwal"));
 
@@ -435,10 +423,6 @@ ResultSet rs;
         datatable();
     }//GEN-LAST:event_bbatalActionPerformed
 
-    private void bkeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkeluarActionPerformed
-        dispose();
-    }//GEN-LAST:event_bkeluarActionPerformed
-
     private void txcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txcariKeyPressed
         if(evt.getKeyCode() == KeyEvent.VK_ENTER){
             datatable();
@@ -470,7 +454,6 @@ ResultSet rs;
     private javax.swing.JToggleButton bcari;
     private javax.swing.JToggleButton bedit;
     private javax.swing.JToggleButton bhapus;
-    private javax.swing.JToggleButton bkeluar;
     private javax.swing.JToggleButton bsimpan;
     private javax.swing.JToggleButton btn_cguru;
     private javax.swing.JComboBox<String> ckelas;

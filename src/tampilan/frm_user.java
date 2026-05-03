@@ -96,7 +96,7 @@ public class frm_user extends javax.swing.JFrame {
         bcari = new javax.swing.JButton();
         txtpw = new javax.swing.JPasswordField();
 
-        setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setType(java.awt.Window.Type.POPUP);
 
         jLabel1.setFont(new java.awt.Font("Tahoma", 0, 20)); // NOI18N
         jLabel1.setText("FORM USER");
