@@ -123,6 +123,12 @@ public class loginuser extends javax.swing.JFrame {
         setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
         setBackground(new java.awt.Color(255, 255, 255));
 
+        nip.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                nipKeyPressed(evt);
+            }
+        });
+
         jLabel1.setFont(new java.awt.Font("Palatino Linotype", 1, 18)); // NOI18N
         jLabel1.setText("Masukan NIP");
 
@@ -138,7 +144,7 @@ public class loginuser extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(153, 255, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 0, 255));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -157,6 +163,12 @@ public class loginuser extends javax.swing.JFrame {
                 .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
+
+        pass.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                passKeyPressed(evt);
+            }
+        });
 
         jLabel3.setFont(new java.awt.Font("Palatino Linotype", 1, 18)); // NOI18N
         jLabel3.setText("LOGIN ADMINISTRASI");
@@ -256,6 +268,20 @@ public class loginuser extends javax.swing.JFrame {
         JOptionPane.showMessageDialog(this, e.getMessage());
     }
     }//GEN-LAST:event_loginActionPerformed
+
+    private void nipKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nipKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+        // Pindah fokus ke kotak password
+        pass.requestFocus();
+    }// TODO add your handling code here:
+    }//GEN-LAST:event_nipKeyPressed
+
+    private void passKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passKeyPressed
+        if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
+        // Panggil fungsi login Anda di sini
+         login.doClick(); 
+    }// TODO add your handling code here:
+    }//GEN-LAST:event_passKeyPressed
 
     /**
      * @param args the command line arguments
