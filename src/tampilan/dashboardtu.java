@@ -80,7 +80,7 @@ private Connection conn = new koneksi().getConnection();
     } else if (role.equals("3")) {
         // Level 3: Akademik (Guru, Siswa, dll)
         tranksaksi.setEnabled(false);
-        admin.setEnabled(false);
+        admin.setEnabled(false); 
     }
     // Level 1 tidak perlu di-if karena bisa akses semua secara default
 }
@@ -356,6 +356,7 @@ private void setadmin(javax.swing.JButton btn, String path) {
         });
 
         lblWelcome.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
+        lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
