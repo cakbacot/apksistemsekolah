@@ -26,11 +26,16 @@ private Connection conn = new koneksi().getConnection();
     /**
      * Creates new form dashboardtu
      */
+     
+     
     public dashboardtu() {
         com.formdev.flatlaf.FlatLightLaf.setup();
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         scaleImage(); 
        tampilkanHomeAwal();
+       
+       com.formdev.flatlaf.FlatLightLaf.setup();
     // Inisialisasi HomeFrame (Isinya diagram kamu)
     homedashboardtu h = new homedashboardtu();
     desktop.add(h); // Masukkan ke JDesktopPane
@@ -214,7 +219,7 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(22, Short.MAX_VALUE))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -236,7 +241,7 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 460, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
 
         jPanel1.setBackground(new java.awt.Color(0, 8, 97));
@@ -327,7 +332,7 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
                 .addComponent(menuguru, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(tranksaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 192, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(keluar)
                 .addContainerGap())
         );
