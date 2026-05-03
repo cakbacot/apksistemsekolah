@@ -139,7 +139,7 @@ ResultSet rs;
 
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("FORM JADWAL");
-        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(580, 0, -1, -1));
+        getContentPane().add(jLabel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(470, 0, -1, -1));
 
         jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel2.setText("ID Mapel :");
@@ -187,7 +187,7 @@ ResultSet rs;
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                             .addComponent(txidm, javax.swing.GroupLayout.Alignment.TRAILING)
                             .addGroup(jPanel1Layout.createSequentialGroup()
-                                .addComponent(txkg, javax.swing.GroupLayout.DEFAULT_SIZE, 279, Short.MAX_VALUE)
+                                .addComponent(txkg, javax.swing.GroupLayout.DEFAULT_SIZE, 185, Short.MAX_VALUE)
                                 .addGap(18, 18, 18)
                                 .addComponent(btn_cguru, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE))
                             .addComponent(txmp)))
@@ -228,7 +228,7 @@ ResultSet rs;
                 .addContainerGap(49, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 62, 620, 370));
+        getContentPane().add(jPanel1, new org.netbeans.lib.awtextra.AbsoluteConstraints(12, 62, 520, 370));
 
         bsimpan.setBackground(new java.awt.Color(51, 255, 102));
         bsimpan.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -239,7 +239,7 @@ ResultSet rs;
                 bsimpanActionPerformed(evt);
             }
         });
-        getContentPane().add(bsimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 70, 159, 49));
+        getContentPane().add(bsimpan, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 70, 159, 49));
 
         bedit.setBackground(new java.awt.Color(255, 255, 51));
         bedit.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -250,7 +250,7 @@ ResultSet rs;
                 beditActionPerformed(evt);
             }
         });
-        getContentPane().add(bedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 140, 159, 49));
+        getContentPane().add(bedit, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 140, 159, 49));
 
         bhapus.setBackground(new java.awt.Color(255, 0, 0));
         bhapus.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -261,7 +261,7 @@ ResultSet rs;
                 bhapusActionPerformed(evt);
             }
         });
-        getContentPane().add(bhapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 210, 159, 49));
+        getContentPane().add(bhapus, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 210, 159, 49));
 
         bbatal.setBackground(new java.awt.Color(255, 255, 255));
         bbatal.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -272,7 +272,7 @@ ResultSet rs;
                 bbatalActionPerformed(evt);
             }
         });
-        getContentPane().add(bbatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 290, 159, 49));
+        getContentPane().add(bbatal, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 290, 159, 49));
 
         bkeluar.setBackground(new java.awt.Color(255, 255, 255));
         bkeluar.setFont(new java.awt.Font("Times New Roman", 1, 14)); // NOI18N
@@ -283,7 +283,7 @@ ResultSet rs;
                 bkeluarActionPerformed(evt);
             }
         });
-        getContentPane().add(bkeluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(640, 370, 159, 46));
+        getContentPane().add(bkeluar, new org.netbeans.lib.awtextra.AbsoluteConstraints(550, 370, 159, 46));
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder("Table Jadwal"));
 
@@ -328,7 +328,7 @@ ResultSet rs;
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 574, Short.MAX_VALUE)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 528, Short.MAX_VALUE)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -348,7 +348,7 @@ ResultSet rs;
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(840, 60, 610, -1));
+        getContentPane().add(jPanel2, new org.netbeans.lib.awtextra.AbsoluteConstraints(720, 70, 560, -1));
 
         pack();
     }// </editor-fold>//GEN-END:initComponents

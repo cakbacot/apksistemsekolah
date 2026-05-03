@@ -57,8 +57,10 @@ private Connection conn = new koneksi().getConnection();
     setFixedIcon(menuguru, "/resource/guru.png");
     setFixedIcon(menusiswa, "/resource/murid.png");
     setFixedIcon(tranksaksi, "/resource/tranksaksi.png");
-    setFixedIcon(home,"/resource/home.png");
-    setFixedIcon(keluar,"/resource/keluar.png");
+    setFixedIcon(jdwl,"/resource/jadwal.png");
+    sethome(home,"/resource/home.png");
+    setleave(keluar,"/resource/keluar.png");
+    setadmin(admin,"/resource/admin.png");
     
     }
 
@@ -125,7 +127,7 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
         btn.setOpaque(false);
         btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
         btn.setIconTextGap(20);
 
@@ -152,7 +154,132 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
     }
 }
 
+private void setleave(javax.swing.JButton btn, String path) {
+    try {
+        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
+        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btn.setIcon(new ImageIcon(imgBaru));
 
+        // Styling Dasar
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setOpaque(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
+        btn.setIconTextGap(20);
+
+        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
+                btn.setContentAreaFilled(true);
+                btn.setBackground(new java.awt.Color(255, 0, 0)); //Merah Terang
+                btn.setForeground(java.awt.Color.WHITE); 
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
+                btn.setContentAreaFilled(false);
+                btn.setForeground(java.awt.Color.WHITE);
+            }
+        });
+
+    } catch (Exception e) {
+        System.err.println("Gagal set hover: " + e.getMessage());
+    }
+}
+
+private void sethome(javax.swing.JButton btn, String path) {
+    try {
+        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
+        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btn.setIcon(new ImageIcon(imgBaru));
+
+        // Styling Dasar
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setOpaque(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        btn.setIconTextGap(20);
+
+        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
+                btn.setContentAreaFilled(true);
+                btn.setBackground(new java.awt.Color(255, 255, 255)); // Putih Terang
+                btn.setForeground(java.awt.Color.BLACK); 
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
+                btn.setContentAreaFilled(false);
+                btn.setForeground(java.awt.Color.WHITE);
+            }
+        });
+
+    } catch (Exception e) {
+        System.err.println("Gagal set hover: " + e.getMessage());
+    }
+}
+
+
+private void setadmin(javax.swing.JButton btn, String path) {
+    try {
+        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
+        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btn.setIcon(new ImageIcon(imgBaru));
+
+        // Styling Dasar
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setOpaque(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        btn.setIconTextGap(20);
+
+        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
+                btn.setContentAreaFilled(true);
+                btn.setBackground(new java.awt.Color(0, 255, 98)); // Kuning Terang
+                btn.setForeground(java.awt.Color.WHITE); 
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
+                btn.setContentAreaFilled(false);
+                btn.setForeground(java.awt.Color.WHITE);
+            }
+        });
+
+    } catch (Exception e) {
+        System.err.println("Gagal set hover: " + e.getMessage());
+    }
+}
 // * This method is called from within the constructor to initialize the form.
     // * WARNING: Do NOT modify this code. The content of this method is always
     // * regenerated by the Form Editor.
@@ -164,6 +291,7 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
         lbl_logo = new javax.swing.JLabel();
         jLabel1 = new javax.swing.JLabel();
         home = new javax.swing.JButton();
+        admin = new javax.swing.JButton();
         desktop = new javax.swing.JDesktopPane();
         jPanel1 = new javax.swing.JPanel();
         menusiswa = new javax.swing.JButton();
@@ -171,6 +299,7 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
         menuguru = new javax.swing.JButton();
         tranksaksi = new javax.swing.JButton();
         keluar = new javax.swing.JButton();
+        jdwl = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
         addComponentListener(new java.awt.event.ComponentAdapter() {
@@ -193,10 +322,15 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
         jLabel1.setText("SELAMAT DATANG DI DASHBOARD TATA USAHA");
 
         home.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
-        home.setText("HOME");
         home.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 homeActionPerformed(evt);
+            }
+        });
+
+        admin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminActionPerformed(evt);
             }
         });
 
@@ -206,23 +340,27 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 91, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67)
+                .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(77, 77, 77)
                 .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 134, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(73, 73, 73))
+                .addComponent(admin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(23, 23, 23)
+                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 32, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(admin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
 
@@ -288,7 +426,7 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
         tranksaksi.setForeground(new java.awt.Color(255, 255, 255));
         tranksaksi.setText("Transaksi");
         tranksaksi.setToolTipText("");
-        tranksaksi.setBorder(null);
+        tranksaksi.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tranksaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tranksaksi.setFocusPainted(false);
         tranksaksi.addActionListener(new java.awt.event.ActionListener() {
@@ -307,6 +445,19 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
             }
         });
 
+        jdwl.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
+        jdwl.setForeground(new java.awt.Color(255, 255, 255));
+        jdwl.setText("jadwal");
+        jdwl.setToolTipText("");
+        jdwl.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
+        jdwl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        jdwl.setFocusPainted(false);
+        jdwl.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jdwlActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -317,8 +468,9 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
                     .addComponent(menukelas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(menusiswa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(menuguru, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                     .addComponent(tranksaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE))
+                    .addComponent(jdwl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -330,9 +482,11 @@ private void setFixedIcon(javax.swing.JButton btn, String path) {
                 .addComponent(menusiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(menuguru, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(jdwl, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tranksaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 138, Short.MAX_VALUE)
                 .addComponent(keluar)
                 .addContainerGap())
         );
@@ -459,6 +613,33 @@ dispose();        // TODO add your handling code here:
     tampilkanHomeAwal();
     }//GEN-LAST:event_homeActionPerformed
 
+    private void adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminActionPerformed
+    frm_user user = new frm_user();
+    user.setVisible(true);
+    }//GEN-LAST:event_adminActionPerformed
+
+    private void jdwlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdwlActionPerformed
+    desktop.removeAll();
+    desktop.repaint();
+    
+    // 2. Buat objek dari JInternalFrame menu_siswa
+    menu_jadwal mj = new menu_jadwal();
+    
+    // 3. Masukkan objek tersebut ke dalam JDesktopPane
+    desktop.add(mj);
+    
+    // 4. Tampilkan formnya
+    mj.setVisible(true);
+    
+    try {
+        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
+        mj.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+        // Jika gagal dimaksimalkan, tampilkan pesan error di console
+        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
+    }// Agar muncul di teng
+    }//GEN-LAST:event_jdwlActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -478,11 +659,13 @@ dispose();        // TODO add your handling code here:
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton admin;
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JButton home;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton jdwl;
     private javax.swing.JButton keluar;
     private javax.swing.JLabel lbl_logo;
     private javax.swing.JButton menuguru;
