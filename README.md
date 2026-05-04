@@ -1,6 +1,16 @@
-pull usahain download .jar yang disini dulu biar tinggal add ke libraries
+pull usahakan download .jar yang disini dulu
+biar tinggal add ke libraries
+
 pastikan libraries ter add ke libraries masing masing
-cek ss source whatsapp pastiin sama kayak gitu  jangan kurang
-kalo error coba cek librariesnya
-kalo gabisa run coba cek databasenya bisa nyambung apa engga
-setelah pull, coba clean and build
+
+libraries yang harus ada (selain jdbc)
+- flatlaf-3.7.jar
+- jcalender-1.4.jar
+- jfreechart-1.0.19.jar
+- jcommon-1.0.23.jar
+
+setelah pull, lakukan clean and build
+cek database 
+
+run project on login_user (posible)
+//included dashboardtu, menu_siswa, menu_kelas, menu_jadwal, frm_user, tranksaksi [masih belum selesai pengerjaan form tranksaksi]
