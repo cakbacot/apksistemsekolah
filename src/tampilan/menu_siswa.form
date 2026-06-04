@@ -469,7 +469,7 @@
         <Component class="javax.swing.JTextField" name="txtcari">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
-              <Font name="Times New Roman" size="18" style="0"/>
+              <Font name="Times New Roman" size="18" style="2"/>
             </Property>
           </Properties>
           <Events>

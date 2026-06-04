@@ -469,7 +469,7 @@ while (rs.next()) {
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(""));
         jPanel2.setLayout(new org.netbeans.lib.awtextra.AbsoluteLayout());
 
-        txtcari.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        txtcari.setFont(new java.awt.Font("Times New Roman", 2, 18)); // NOI18N
         txtcari.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 txtcariKeyPressed(evt);
