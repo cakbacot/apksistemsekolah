@@ -22,30 +22,67 @@ private DefaultTableModel tabmode;
    
      */
     public menu_siswa() {
-        initComponents();
-        
-         bsimpan.setIcon(new ImageIcon(getClass().getResource("/resource/save.png")));
-         bubah.setIcon(new ImageIcon(getClass().getResource("/resource/edit.png")));
-         bhapus.setIcon(new ImageIcon(getClass().getResource("/resource/delete.png")));
-         bbatal.setIcon(new ImageIcon(getClass().getResource("/resource/reset.png")));
-    
-        loadJurusan();
-        kosong();
-        aktif();
-        datatable();
+    initComponents();
 
-    }   
-  private void setIconButton(javax.swing.JButton btn, String path){
-    java.net.URL url = getClass().getResource(path);
-
-    if(url == null){
-        System.out.println("File tidak ditemukan: " + path);
-        return;
+    // FlatLaf
+    try {
+        com.formdev.flatlaf.FlatLightLaf.setup();
+    } catch (Exception e) {
     }
 
-    ImageIcon icon = new ImageIcon(url);
-    Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
-    btn.setIcon(new ImageIcon(img));
+    bsimpan.setIcon(new ImageIcon(
+    new ImageIcon(getClass().getResource("/resource/save.png"))
+        .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+
+bubah.setIcon(new ImageIcon(
+    new ImageIcon(getClass().getResource("/resource/edit.png"))
+        .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+
+bhapus.setIcon(new ImageIcon(
+    new ImageIcon(getClass().getResource("/resource/delete.png"))
+        .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+
+bbatal.setIcon(new ImageIcon(
+    new ImageIcon(getClass().getResource("/resource/reset.png"))
+        .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
+
+    // WARNA TOMBOL
+    bsimpan.setBackground(new java.awt.Color(34, 197, 94));
+    bsimpan.setForeground(java.awt.Color.WHITE);
+
+    bubah.setBackground(new java.awt.Color(59, 130, 246));
+    bubah.setForeground(java.awt.Color.WHITE);
+
+    bhapus.setBackground(new java.awt.Color(239, 68, 68));
+    bhapus.setForeground(java.awt.Color.WHITE);
+
+    bbatal.setBackground(new java.awt.Color(240, 240, 240));
+
+    // STYLE BUTTON
+    bsimpan.setFocusPainted(false);
+    bubah.setFocusPainted(false);
+    bhapus.setFocusPainted(false);
+    bbatal.setFocusPainted(false);
+
+    bsimpan.setIconTextGap(8);
+    bubah.setIconTextGap(8);
+    bhapus.setIconTextGap(8);
+    bbatal.setIconTextGap(8);
+    
+    bsimpan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+bubah.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+bhapus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+bbatal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+
+bsimpan.setIconTextGap(10);
+bubah.setIconTextGap(10);
+bhapus.setIconTextGap(10);
+bbatal.setIconTextGap(10);
+
+    loadJurusan();
+    kosong();
+    aktif();
+    datatable();
 }
     protected void aktif(){
         txtnisn.requestFocus();
