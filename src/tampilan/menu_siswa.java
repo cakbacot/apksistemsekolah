@@ -70,14 +70,14 @@ bbatal.setIcon(new ImageIcon(
     bbatal.setIconTextGap(8);
     
     bsimpan.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-bubah.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-bhapus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-bbatal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    bubah.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    bhapus.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+    bbatal.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
 
-bsimpan.setIconTextGap(10);
-bubah.setIconTextGap(10);
-bhapus.setIconTextGap(10);
-bbatal.setIconTextGap(10);
+    bsimpan.setIconTextGap(10);
+    bubah.setIconTextGap(10);
+    bhapus.setIconTextGap(10);
+    bbatal.setIconTextGap(10);
 
     loadJurusan();
     kosong();
