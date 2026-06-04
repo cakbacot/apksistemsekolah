@@ -31,19 +31,19 @@ private DefaultTableModel tabmode;
     }
 
     bsimpan.setIcon(new ImageIcon(
-    new ImageIcon(getClass().getResource("/resource/save.png"))
+    new ImageIcon(getClass().getResource("/resource/save_siswa.png"))
         .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
 bubah.setIcon(new ImageIcon(
-    new ImageIcon(getClass().getResource("/resource/edit.png"))
+    new ImageIcon(getClass().getResource("/resource/edit_siswa.png"))
         .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
 bhapus.setIcon(new ImageIcon(
-    new ImageIcon(getClass().getResource("/resource/delete.png"))
+    new ImageIcon(getClass().getResource("/resource/delete_siswa.png"))
         .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
 bbatal.setIcon(new ImageIcon(
-    new ImageIcon(getClass().getResource("/resource/reset.png"))
+    new ImageIcon(getClass().getResource("/resource/reset_siswa.png"))
         .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
     // WARNA TOMBOL
