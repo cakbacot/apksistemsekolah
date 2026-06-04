@@ -59,7 +59,11 @@ bcari.setIcon(new ImageIcon(
     bhapus.setBackground(new java.awt.Color(239, 68, 68));
     bhapus.setForeground(java.awt.Color.WHITE);
 
-    bbatal.setBackground(new java.awt.Color(240, 240, 240));
+    bbatal.setBackground(new java.awt.Color(107, 114, 128));
+    bbatal.setForeground(java.awt.Color.WHITE);
+
+   bcari.setBackground(new java.awt.Color(59, 130, 246));
+   bcari.setForeground(java.awt.Color.WHITE);
 
     // STYLE BUTTON
     bsimpan.setFocusPainted(false);
@@ -481,13 +485,13 @@ while (rs.next()) {
         jPanel2.add(txtcari, new org.netbeans.lib.awtextra.AbsoluteConstraints(14, 44, 300, -1));
 
         bcari.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bcari.setText("Cari");
+        bcari.setMargin(new java.awt.Insets(14, 14, 14, 14));
         bcari.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bcariActionPerformed(evt);
             }
         });
-        jPanel2.add(bcari, new org.netbeans.lib.awtextra.AbsoluteConstraints(321, 43, -1, -1));
+        jPanel2.add(bcari, new org.netbeans.lib.awtextra.AbsoluteConstraints(321, 43, -1, 30));
 
         jLabel13.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel13.setText(" Data Siswa");
