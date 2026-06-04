@@ -20,6 +20,7 @@ public class dashboardguru extends javax.swing.JFrame {
      */
     public dashboardguru() {
         initComponents();
+        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
 
     /**
@@ -51,7 +52,13 @@ public class dashboardguru extends javax.swing.JFrame {
 
         bnilai.setText("nilai");
 
+        jButton1.setForeground(new java.awt.Color(255, 0, 0));
         jButton1.setText("Log out");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -88,7 +95,7 @@ public class dashboardguru extends javax.swing.JFrame {
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 938, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -112,18 +119,18 @@ public class dashboardguru extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
-                .addComponent(desktop, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addComponent(desktop))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(9, 9, 9)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(desktop))
                 .addGap(3, 3, 3))
@@ -147,11 +154,14 @@ public class dashboardguru extends javax.swing.JFrame {
     ma.setVisible(true);
     
     // 5. Set ukuran mengikuti panel penampung agar pas
-    ma.setSize(desktop.getWidth(), desktop.getHeight());
-    
-    // 6. Refresh total
-    desktop.revalidate();
-    desktop.repaint();
+//    ma.setSize(desktop.getWidth(), desktop.getHeight());
+    try {
+        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
+        ma.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+        // Jika gagal dimaksimalkan, tampilkan pesan error di console
+        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
+    }// Agar muncul di tengah layar       
     }//GEN-LAST:event_babsenActionPerformed
 
     private void desktopComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_desktopComponentResized
@@ -164,6 +174,22 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
         }
     }
     }//GEN-LAST:event_desktopComponentResized
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // 1. Tampilkan konfirmasi (Opsional tapi disarankan)
+    int pilih = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+    
+    if (pilih == JOptionPane.YES_OPTION) {
+        // 2. Bersihkan Session (Penting!)
+        UserSession.setNama(null);
+        
+        // 3. Tutup Dashboard
+        this.dispose(); 
+        
+        // 4. Buka kembali form login
+        new loginguru().setVisible(true);
+    }// TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
   public static void main(String args[]) {
     try {
