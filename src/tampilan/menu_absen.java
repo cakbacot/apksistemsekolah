@@ -5,19 +5,104 @@
  */
 package tampilan;
 
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
+
 /**
  *
- * @author faisa
+ * @author ACER
  */
 public class menu_absen extends javax.swing.JInternalFrame {
-
+private Connection con = new koneksi().getConnection();
+private DefaultTableModel tabmode;
+PreparedStatement ps;
+ResultSet rs;
     /**
-     * Creates new form menu_absen
+     * Creates new form menu_jadwal
      */
     public menu_absen() {
         initComponents();
+        kosong();
+        aktif();
+        datatable();
+        loadcombo();
     }
+    
+    protected void aktif(){
+        txtcarisiswa.requestFocus();
+    }
+    
+    protected void kosong(){
+        txtnisn.setText("");
+        txtnama.setText("");
+        txtkelas.setText("");
+        txtpertemuan.setText("");
+        txtcarisiswa.setText("");
+        
+        tglTemu.setDate(new Date());
+        
+        chbhadir.setSelected(false);
+        chbtdkhadir.setSelected(false);
+        
+        if (cbkelas.getItemCount() > 0) {
+            cbkelas.setSelectedIndex(0);
+        }
+    }
+    
+    protected void datatable(){
+        Object[] Baris = {"NISN", "Nama Siswa", "Kelas"};
+        tabmode = new DefaultTableModel(null, Baris);
+        String cariitem = txtcarisiswa.getText();
+        
+        try {
+            // Query mengambil data dari tbl_siswa (Pastikan nama kolom sesuai di database kamu)
+            String sql = "SELECT nisn, nama, kelas FROM tbl_siswa " +
+                         "WHERE nisn LIKE '%" + cariitem + "%' OR nama LIKE '%" + cariitem + "%' " +
+                         "ORDER BY nisn ASC";
+            
+            Statement stat = con.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
+            
+            while (hasil.next()){
+                tabmode.addRow(new Object[]{
+                    hasil.getString("nisn"),
+                    hasil.getString("nama"),
+                    hasil.getString("kelas")
+                });
+            }
+            tblsiswa.setModel(tabmode);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Data siswa gagal dipanggil: " + e.getMessage());
+        }
+    }
+    
+    private void loadcombo() {
+        try {
+            // Query untuk mengambil data unik dari tabel kelas
+            String sql = "SELECT id_kelas FROM tbl_kelas"; // Sesuaikan jika nama kolomnya beda
+            PreparedStatement pst = con.prepareStatement(sql);
+            ResultSet rs = pst.executeQuery();
 
+            // Bersihkan item lama dan ganti nama variabel dari ckelas menjadi cbkelas (sesuai GUI)
+            cbkelas.removeAllItems(); 
+            cbkelas.addItem("-- Pilih Kelas --"); 
+
+            // Masukkan hasil query ke dalam Combo Box
+            while(rs.next()) {
+                cbkelas.addItem(rs.getString(1)); // Mengambil data di kolom pertama hasil query
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Gagal Load Kelas: " + e.getMessage());
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -36,8 +121,8 @@ public class menu_absen extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
         jLabel9 = new javax.swing.JLabel();
-        jCheckBox1 = new javax.swing.JCheckBox();
-        jCheckBox2 = new javax.swing.JCheckBox();
+        chbhadir = new javax.swing.JCheckBox();
+        chbtdkhadir = new javax.swing.JCheckBox();
         txtnisn = new javax.swing.JTextField();
         txtnama = new javax.swing.JTextField();
         txtpertemuan = new javax.swing.JTextField();
@@ -46,6 +131,7 @@ public class menu_absen extends javax.swing.JInternalFrame {
         bubah = new javax.swing.JButton();
         bhapus = new javax.swing.JButton();
         bbatal = new javax.swing.JButton();
+        tglTemu = new com.toedter.calendar.JDateChooser();
         jLabel1 = new javax.swing.JLabel();
         jPanel2 = new javax.swing.JPanel();
         cbkelas = new javax.swing.JComboBox<>();
@@ -88,22 +174,23 @@ public class menu_absen extends javax.swing.JInternalFrame {
         jLabel9.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel9.setText("Kehadiran : ");
 
-        jCheckBox1.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jCheckBox1.setText("Hadir");
-        jCheckBox1.addActionListener(new java.awt.event.ActionListener() {
+        chbhadir.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        chbhadir.setText("Hadir");
+        chbhadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox1ActionPerformed(evt);
+                chbhadirActionPerformed(evt);
             }
         });
 
-        jCheckBox2.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        jCheckBox2.setText("Tidak Hadir");
-        jCheckBox2.addActionListener(new java.awt.event.ActionListener() {
+        chbtdkhadir.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
+        chbtdkhadir.setText("Tidak Hadir");
+        chbtdkhadir.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jCheckBox2ActionPerformed(evt);
+                chbtdkhadirActionPerformed(evt);
             }
         });
 
+        txtnisn.setEditable(false);
         txtnisn.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         txtnisn.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -111,6 +198,7 @@ public class menu_absen extends javax.swing.JInternalFrame {
             }
         });
 
+        txtnama.setEditable(false);
         txtnama.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         txtnama.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -125,6 +213,7 @@ public class menu_absen extends javax.swing.JInternalFrame {
             }
         });
 
+        txtkelas.setEditable(false);
         txtkelas.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
         txtkelas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -177,10 +266,11 @@ public class menu_absen extends javax.swing.JInternalFrame {
                         .addComponent(txtnama)
                         .addComponent(txtnisn)
                         .addGroup(jPanel1Layout.createSequentialGroup()
-                            .addComponent(jCheckBox1)
+                            .addComponent(chbhadir)
                             .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jCheckBox2))
-                        .addComponent(txtpertemuan, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                            .addComponent(chbtdkhadir))
+                        .addComponent(txtpertemuan, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(tglTemu, javax.swing.GroupLayout.PREFERRED_SIZE, 245, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -199,15 +289,19 @@ public class menu_absen extends javax.swing.JInternalFrame {
                     .addComponent(txtkelas, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel6))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jLabel7)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel7)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addGap(8, 8, 8)
+                        .addComponent(tglTemu, javax.swing.GroupLayout.PREFERRED_SIZE, 20, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtpertemuan, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jCheckBox1)
-                    .addComponent(jCheckBox2)
+                    .addComponent(chbhadir)
+                    .addComponent(chbtdkhadir)
                     .addComponent(jLabel9))
                 .addGap(18, 18, 18)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -309,13 +403,13 @@ public class menu_absen extends javax.swing.JInternalFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void jCheckBox1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox1ActionPerformed
+    private void chbhadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbhadirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox1ActionPerformed
+    }//GEN-LAST:event_chbhadirActionPerformed
 
-    private void jCheckBox2ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jCheckBox2ActionPerformed
+    private void chbtdkhadirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_chbtdkhadirActionPerformed
         // TODO add your handling code here:
-    }//GEN-LAST:event_jCheckBox2ActionPerformed
+    }//GEN-LAST:event_chbtdkhadirActionPerformed
 
     private void txtnisnActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtnisnActionPerformed
         // TODO add your handling code here:
@@ -334,7 +428,66 @@ public class menu_absen extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_txtkelasActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-        // TODO add your handling code here:
+        if (txtnisn.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Silakan pilih data siswa dari tabel terlebih dahulu!");
+        return; // Menghentikan proses jika NISN kosong
+    }
+    if (tglTemu.getDate() == null) {
+        JOptionPane.showMessageDialog(null, "Silakan pilih Tanggal Pertemuan!");
+        return;
+    }
+    if (txtpertemuan.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(null, "Silakan isi Pertemuan ke- berapa!");
+        txtpertemuan.requestFocus();
+        return;
+    }
+    if (!chbhadir.isSelected() && !chbtdkhadir.isSelected()) {
+        JOptionPane.showMessageDialog(null, "Silakan centang status Kehadiran (Hadir / Tidak Hadir)!");
+        return;
+    }
+
+    // 2. Format Tanggal dari JDateChooser ke format database (yyyy-MM-dd)
+    java.text.SimpleDateFormat sdf = new java.text.SimpleDateFormat("yyyy-MM-dd");
+    String tglPertemuan = sdf.format(tglTemu.getDate());
+
+    // 3. Konversi Status Kehadiran (Karena di database kamu tipenya INT)
+    // Asumsi: 1 = Hadir, 2 = Tidak Hadir
+    int statusHadir = 0;
+    if (chbhadir.isSelected()) {
+        statusHadir = 1;
+    } else if (chbtdkhadir.isSelected()) {
+        statusHadir = 2;
+    }
+
+    // 4. Proses Simpan Database
+    try {
+        /* PENTING: 
+         * Kode ini mengasumsikan kamu SUDAH menambahkan kolom "tgl_pertemuan" (tipe DATE)
+         * ke dalam database tbl_absen di phpMyAdmin kamu.
+         */
+        String sql = "INSERT INTO tbl_absen (nisn, kelas, kehadiran, jumlah) VALUES (?, ?, ?, ?)";
+        PreparedStatement stat = con.prepareStatement(sql);
+        
+        // Memasukkan data ke masing-masing parameter (?)
+        stat.setString(1, txtnisn.getText());
+        stat.setString(2, txtkelas.getText());
+        stat.setInt(3, statusHadir);
+        stat.setString(4, txtpertemuan.getText()); // kolom jumlah di DB
+        stat.setString(5, tglPertemuan);           // kolom tanggal baru di DB
+        
+        stat.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Data absensi berhasil disimpan!");
+        
+        // Membersihkan isian setelah berhasil disimpan
+        kosong(); 
+        aktif();
+        
+    } catch (SQLException e) {
+        JOptionPane.showMessageDialog(null, "Data gagal disimpan: " + e.getMessage());
+        e.printStackTrace();
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(null, "Pastikan 'Pertemuan ke-' berisi angka!");
+    }    // TODO add your handling code here:
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void cbkelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbkelasActionPerformed
@@ -345,15 +498,23 @@ public class menu_absen extends javax.swing.JInternalFrame {
         // TODO add your handling code here:
     }//GEN-LAST:event_txtcarisiswaActionPerformed
 
-
+public static void main(String args[]) {
+    // Kode bawaan NetBeans untuk memunculkan form
+    java.awt.EventQueue.invokeLater(new Runnable() {
+        public void run() {
+            new menu_absen().setVisible(true);
+//            new loginguru().setVisible(true);
+        }
+    });
+}
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
     private javax.swing.JButton bhapus;
     private javax.swing.JButton bsimpan;
     private javax.swing.JButton bubah;
     private javax.swing.JComboBox<String> cbkelas;
-    private javax.swing.JCheckBox jCheckBox1;
-    private javax.swing.JCheckBox jCheckBox2;
+    private javax.swing.JCheckBox chbhadir;
+    private javax.swing.JCheckBox chbtdkhadir;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel10;
     private javax.swing.JLabel jLabel11;
@@ -367,6 +528,7 @@ public class menu_absen extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JTable tblsiswa;
+    private com.toedter.calendar.JDateChooser tglTemu;
     private javax.swing.JTextField txtcarisiswa;
     private javax.swing.JTextField txtkelas;
     private javax.swing.JTextField txtnama;
