@@ -108,7 +108,7 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel3.setText("Kelas");
 
-        bsimpan.setBackground(new java.awt.Color(51, 255, 51));
+        bsimpan.setBackground(new java.awt.Color(0, 255, 0));
         bsimpan.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bsimpan.setText("Simpan");
         bsimpan.addActionListener(new java.awt.event.ActionListener() {
@@ -126,7 +126,7 @@ public class menu_kelas extends javax.swing.JInternalFrame {
             }
         });
 
-        bubah.setBackground(new java.awt.Color(255, 255, 51));
+        bubah.setBackground(new java.awt.Color(0, 0, 255));
         bubah.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bubah.setText("Ubah");
         bubah.addActionListener(new java.awt.event.ActionListener() {
@@ -135,7 +135,7 @@ public class menu_kelas extends javax.swing.JInternalFrame {
             }
         });
 
-        bhapus.setBackground(new java.awt.Color(255, 153, 0));
+        bhapus.setBackground(new java.awt.Color(255, 0, 0));
         bhapus.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bhapus.setText("Hapus");
         bhapus.addActionListener(new java.awt.event.ActionListener() {
@@ -144,8 +144,8 @@ public class menu_kelas extends javax.swing.JInternalFrame {
             }
         });
 
+        bbatal.setBackground(new java.awt.Color(102, 102, 102));
         bbatal.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bbatal.setForeground(new java.awt.Color(255, 51, 51));
         bbatal.setText("Batal");
         bbatal.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {

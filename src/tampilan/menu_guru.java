@@ -347,7 +347,7 @@ private DefaultTableModel tabmode;
                                         .addGap(0, 0, Short.MAX_VALUE)))
                                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                                     .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txtpass, javax.swing.GroupLayout.DEFAULT_SIZE, 24, Short.MAX_VALUE)
+                                        .addComponent(txtpass, javax.swing.GroupLayout.PREFERRED_SIZE, 24, Short.MAX_VALUE)
                                         .addGap(2, 2, 2))
                                     .addComponent(jLabel5))
                                 .addGap(20, 20, 20)
