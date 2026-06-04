@@ -23,6 +23,7 @@ private DefaultTableModel tabmode;
      */
     public menu_siswa() {
         initComponents();
+        
          bsimpan.setIcon(new ImageIcon(getClass().getResource("/resource/save.png")));
          bubah.setIcon(new ImageIcon(getClass().getResource("/resource/edit.png")));
          bhapus.setIcon(new ImageIcon(getClass().getResource("/resource/delete.png")));
@@ -34,8 +35,15 @@ private DefaultTableModel tabmode;
         datatable();
 
     }   
-    private void setIconButton(javax.swing.JButton btn, String path){
-    ImageIcon icon = new ImageIcon(getClass().getResource(path));
+  private void setIconButton(javax.swing.JButton btn, String path){
+    java.net.URL url = getClass().getResource(path);
+
+    if(url == null){
+        System.out.println("File tidak ditemukan: " + path);
+        return;
+    }
+
+    ImageIcon icon = new ImageIcon(url);
     Image img = icon.getImage().getScaledInstance(24, 24, Image.SCALE_SMOOTH);
     btn.setIcon(new ImageIcon(img));
 }
