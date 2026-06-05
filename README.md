@@ -32,7 +32,7 @@ Update 5 Juni 2026
   - Menambahkan logika if-else pada query SQL untuk menggabungkan filter ComboBox kelas dengan TextField pencarian.
   - Mengganti baris txtpertemuan.setText("") menjadi jTemu.setValue(1) karena perubahan komponen ke JSpinner.
   - Menambahkan pemanggilan datatable(); agar tabel me-refresh data saat kelas diganti.
-  - Memindahkan pemanggilan datatable(); dari KeyPressed ke KeyReleased agar fitur Live Search berjalan mulus tanpa delay satu huruf.
+  - Memindahkan pemanggilan datatable(); pakai keyPressed.
   - [ADD] Event bsimpanActionPerformed:
      -  Menambahkan validasi angka untuk jTemu (JSpinner).
      -  Menambahkan JOptionPane.showConfirmDialog untuk konfirmasi sebelum menyimpan.
