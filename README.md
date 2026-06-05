@@ -12,5 +12,8 @@ libraries yang harus ada (selain jdbc)
 setelah pull, lakukan clean and build
 cek database 
 
+PENAMBAHAN KERKOM 4 Juni 2026
+- database Tabel user -> users
+
 run project on login_user (posible)
 //included dashboardtu, menu_siswa, menu_kelas, menu_jadwal, frm_user, tranksaksi [masih belum selesai pengerjaan form tranksaksi]
