@@ -44,8 +44,8 @@ public class homedashboardtu extends javax.swing.JInternalFrame {
         while (res.next()) {
             String gender = res.getString("jkel");
             int jumlah = res.getInt("jumlah");
-            String label = (gender.equalsIgnoreCase("L") || gender.equalsIgnoreCase("Laki-Laki")) 
-                           ? "Laki-Laki" : "Perempuan";
+            String label = (gender.equalsIgnoreCase("L") || gender.equalsIgnoreCase("Laki - laki")) 
+                           ? "Laki - laki" : "Perempuan";
             dataset.setValue(label + " (" + jumlah + ")", jumlah);
         }
 
@@ -68,7 +68,7 @@ public class homedashboardtu extends javax.swing.JInternalFrame {
         // Kita harus mengambil key/label yang persis sama dengan yang ada di dataset
         for (Object key : dataset.getKeys()) {
             String label = key.toString();
-            if (label.startsWith("Laki-Laki")) {
+            if (label.startsWith("Laki - laki")) {
                 plot.setSectionPaint((Comparable) key, new java.awt.Color(44, 62, 80)); // Navy
             } else if (label.startsWith("Perempuan")) {
                 plot.setSectionPaint((Comparable) key, new java.awt.Color(255, 105, 180)); // Pink
@@ -109,7 +109,7 @@ public void tampilkanDiagramGuru() {
             int jumlah = res.getInt("jumlah");
             
             // Logika agar variasi tulisan "Laki-Laki" tetap masuk kategori yang sama
-            String label = (gender.toLowerCase().startsWith("l")) ? "Laki-Laki" : "Perempuan";
+            String label = (gender.toLowerCase().startsWith("l")) ? "Laki - laki" : "Perempuan";
             dataset.setValue(label + " (" + jumlah + ")", jumlah);
         }
 
@@ -128,7 +128,7 @@ public void tampilkanDiagramGuru() {
         // Loop untuk set warna Navy & Pink berdasarkan label
         for (Object key : dataset.getKeys()) {
             String l = key.toString();
-            if (l.startsWith("Laki-Laki")) {
+            if (l.startsWith("Laki - laki")) {
                 plot.setSectionPaint((Comparable) key, new java.awt.Color(0, 51, 102)); 
             } else {
                 plot.setSectionPaint((Comparable) key, new java.awt.Color(135, 206, 250)); 

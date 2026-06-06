@@ -240,7 +240,7 @@ public class loginuser extends javax.swing.JFrame {
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
    nip.requestFocus();
         try {
-    String sql = "SELECT * FROM user WHERE nip=? AND password=?"; // Pastikan nama kolom 'password' benar
+    String sql = "SELECT * FROM users WHERE nip=? AND password=?"; // Pastikan nama kolom 'password' benar
     java.sql.Connection conn = new koneksi().getConnection();
     java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 

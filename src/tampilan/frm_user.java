@@ -107,7 +107,7 @@ bcari.setIcon(new ImageIcon(
         tabmode = new DefaultTableModel(null, Baris);
         String cariuser = txtcari.getText();
          try {
-            String sql = "SELECT * FROM user where nip like '%" + cariuser + "%' or nama like '%" + cariuser + "%' order by nip asc";
+            String sql = "SELECT * FROM users where nip like '%" + cariuser + "%' or nama like '%" + cariuser + "%' order by nip asc";
             Statement stat = conn.createStatement();
             ResultSet hasil = stat.executeQuery(sql);
             while (hasil.next()) {
@@ -422,7 +422,7 @@ bcari.setIcon(new ImageIcon(
          String status = cbstatus.getSelectedItem().toString();
          String level = cblvl.getSelectedItem().toString();
         
-        String sql = "insert into user values (?,?,?,?,?)";
+        String sql = "insert into users values (?,?,?,?,?)";
         try {
             PreparedStatement stat = conn.prepareStatement(sql);
             stat.setString(1, txtnip.getText());
@@ -444,7 +444,7 @@ bcari.setIcon(new ImageIcon(
         String status = cbstatus.getSelectedItem().toString();
         String level = cblvl.getSelectedItem().toString();
         try {
-            String sql = "update user set nama=?, password=?, status=?, lvl=? where nip='"+txtnip.getText()+"'";
+            String sql = "update users set nama=?, password=?, status=?, lvl=? where nip='"+txtnip.getText()+"'";
             PreparedStatement stat = conn.prepareStatement(sql);
             stat.setString(1, txtnm.getText());
             stat.setString(2, txtpw.getText());
@@ -464,7 +464,7 @@ bcari.setIcon(new ImageIcon(
          int ok = JOptionPane.showConfirmDialog(null, "hapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
         if (ok == 0) {
             try {
-                String sql = "delete from user where nip ='" + txtnip.getText() + "'";
+                String sql = "delete from users where nip ='" + txtnip.getText() + "'";
                 PreparedStatement stat = conn.prepareStatement(sql);
                 stat.executeUpdate();
                 JOptionPane.showMessageDialog(null, "data berhasil dihapus");
