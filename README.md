@@ -70,4 +70,4 @@ CREATE TABLE users (
   `status` varchar(2) NOT NULL
 );
 
-
+  - add dummy values for database
