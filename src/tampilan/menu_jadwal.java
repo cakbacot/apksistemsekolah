@@ -154,6 +154,11 @@ ResultSet rs;
         jLabel4.setText("Kode Guru :");
 
         txkg.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        txkg.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                txkgActionPerformed(evt);
+            }
+        });
 
         btn_cguru.setText("Cari");
         btn_cguru.addActionListener(new java.awt.event.ActionListener() {
@@ -447,6 +452,10 @@ ResultSet rs;
         }
         ckelas.setSelectedItem(tbl_jadwal.getValueAt(baris, 4).toString());
     }//GEN-LAST:event_tbl_jadwalMouseClicked
+
+    private void txkgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txkgActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_txkgActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

@@ -285,7 +285,7 @@ while (rs.next()) {
         txttelp.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
         cbjk.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        cbjk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Pilih Jenis Kelamin", "Laki-Laki", "Perempuan" }));
+        cbjk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki-laki", "Perempuan" }));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel7.setText("Angkatan");
