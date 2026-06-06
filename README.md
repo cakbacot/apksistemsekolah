@@ -57,3 +57,17 @@ CREATE TABLE tbl_absen (
   UNIQUE KEY sesi_unik (nisn, tanggal, pertemuan_ke)
 ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4;
       
+UPDATE 6 JUNI 2026
+  - FIXING menu_absen logika sql combo box
+  - update logika sql tabel user (user -> users)
+  - QUERY TABEL USERS
+
+CREATE TABLE users (
+  `nip` int(20) NOT NULL,
+  `nama` varchar(25) NOT NULL,
+  `password` varchar(20) NOT NULL,
+  `lvl` varchar(15) NOT NULL,
+  `status` varchar(2) NOT NULL
+);
+
+
