@@ -22,7 +22,37 @@ public class dashboardguru extends javax.swing.JFrame {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
     }
-
+// Method satu untuk semua JLabel dan Gambar
+public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar) {
+    try {
+        java.net.URL imgURL = getClass().getResource(pathGambar);
+        
+        if (imgURL == null) {
+            System.err.println("Gambar TIDAK ditemukan di path: " + pathGambar);
+            return;
+        }
+        
+        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(imgURL);
+        java.awt.Image img = icon.getImage();
+        
+        // Mengambil ukuran dari komponen (bisa JButton / JLabel) dengan jarak aman -6 pixel
+        int width = komponenTarget.getWidth() > 0 ? (komponenTarget.getWidth() - 6) : 100;
+        int height = komponenTarget.getHeight() > 0 ? (komponenTarget.getHeight() - 6) : 100;
+        
+        java.awt.Image imgScale = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
+        javax.swing.ImageIcon scaledIcon = new javax.swing.ImageIcon(imgScale);
+        
+        // CEK NYATA: Apakah komponennya berupa JLabel atau JButton?
+        if (komponenTarget instanceof javax.swing.JLabel) {
+            ((javax.swing.JLabel) komponenTarget).setIcon(scaledIcon);
+        } else if (komponenTarget instanceof javax.swing.JButton) {
+            ((javax.swing.JButton) komponenTarget).setIcon(scaledIcon);
+        }
+        
+    } catch (Exception e) {
+        System.out.println("Error scale image: " + e.getMessage());
+    }
+}
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -38,6 +68,11 @@ public class dashboardguru extends javax.swing.JFrame {
         jButton1 = new javax.swing.JButton();
         desktop = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
+        label = new javax.swing.JLabel();
+        lab_login = new javax.swing.JLabel();
+        logo = new javax.swing.JLabel();
+        profile = new javax.swing.JButton();
+        home = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -69,7 +104,7 @@ public class dashboardguru extends javax.swing.JFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(babsen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bnilai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 193, Short.MAX_VALUE))
+                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -79,7 +114,7 @@ public class dashboardguru extends javax.swing.JFrame {
                 .addComponent(babsen, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(bnilai, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 270, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 397, Short.MAX_VALUE)
                 .addComponent(jButton1)
                 .addGap(25, 25, 25))
         );
@@ -95,7 +130,7 @@ public class dashboardguru extends javax.swing.JFrame {
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 938, Short.MAX_VALUE)
+            .addGap(0, 0, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -104,15 +139,74 @@ public class dashboardguru extends javax.swing.JFrame {
 
         jPanel2.setBackground(new java.awt.Color(0, 51, 255));
 
+        label.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 22)); // NOI18N
+        label.setForeground(new java.awt.Color(255, 255, 255));
+        label.setText("SELAMAT DATANG,");
+
+        lab_login.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 22)); // NOI18N
+        lab_login.setForeground(new java.awt.Color(255, 255, 255));
+        lab_login.setText("LOREM IMPSUM");
+
+        logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/logo.png"))); // NOI18N
+        logo.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                logoComponentResized(evt);
+            }
+        });
+
+        profile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/logoProfile.png"))); // NOI18N
+        profile.setBorder(null);
+        profile.setBorderPainted(false);
+        profile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        profile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        profile.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                profileComponentResized(evt);
+            }
+        });
+
+        home.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/home.png"))); // NOI18N
+        home.setBorder(null);
+        home.setBorderPainted(false);
+        home.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        home.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        home.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                homeComponentResized(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addContainerGap()
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(67, 67, 67)
+                .addComponent(label)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(lab_login)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
+                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(40, 40, 40)
+                .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 100, Short.MAX_VALUE)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -122,14 +216,14 @@ public class dashboardguru extends javax.swing.JFrame {
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(desktop))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(9, 9, 9)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(desktop)))
@@ -190,6 +284,18 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     }// TODO add your handling code here:
     }//GEN-LAST:event_jButton1ActionPerformed
 
+    private void logoComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_logoComponentResized
+        scaleImage(logo, "/resource/logo.png");
+    }//GEN-LAST:event_logoComponentResized
+
+    private void homeComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_homeComponentResized
+        scaleImage(home, "/resource/home.png");
+    }//GEN-LAST:event_homeComponentResized
+
+    private void profileComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_profileComponentResized
+        scaleImage(profile, "/resource/logoProfile.png");
+    }//GEN-LAST:event_profileComponentResized
+
   public static void main(String args[]) {
     try {
         // Mengaktifkan tema modern FlatLaf
@@ -211,8 +317,13 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     private javax.swing.JButton babsen;
     private javax.swing.JButton bnilai;
     private javax.swing.JDesktopPane desktop;
+    private javax.swing.JButton home;
     private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JLabel lab_login;
+    private javax.swing.JLabel label;
+    private javax.swing.JLabel logo;
+    private javax.swing.JButton profile;
     // End of variables declaration//GEN-END:variables
 }
