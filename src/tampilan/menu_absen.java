@@ -98,10 +98,11 @@ ResultSet rs;
                   "ORDER BY nisn ASC";
         } else {
             // Jika kelas dipilih, filter berdasarkan kelas TERSEBUT dan hasil pencarian
-            sql = "SELECT nisn, nama, jkel FROM tbl_siswa " +
-                  "WHERE kelas = '" + kelasTerpilih + "' " +
-                  "AND (nisn LIKE '%" + cariitem + "%' OR nama LIKE '%" + cariitem + "%') " +
-                  "ORDER BY nisn ASC";
+            sql = "SELECT a.nisn, a.nama, a.jkel FROM tbl_siswa a " +
+                      "JOIN tbl_kelas b ON a.kelas = b.id_kelas " +
+                      "WHERE b.kelas = '" + kelasTerpilih + "' " +
+                      "AND (a.nisn LIKE '%" + cariitem + "%' OR a.nama LIKE '%" + cariitem + "%') " +
+                      "ORDER BY a.nisn ASC";
         }
 
         Statement stat = con.createStatement(); // Pastikan 'con' sudah terhubung
@@ -124,7 +125,7 @@ ResultSet rs;
     private void loadcombo() {
         try {
             // Query untuk mengambil data unik dari tabel kelas
-            String sql = "SELECT kelas FROM tbl_kelas GROUP BY kelas"; // Sesuaikan jika nama kolomnya beda
+            String sql = "SELECT kelas FROM tbl_kelas ORDER BY kelas"; // Sesuaikan jika nama kolomnya beda
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
 
