@@ -285,7 +285,7 @@ while (rs.next()) {
         txttelp.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
 
         cbjk.setFont(new java.awt.Font("Times New Roman", 0, 18)); // NOI18N
-        cbjk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki-laki", "Perempuan" }));
+        cbjk.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Laki - Laki", "Perempuan" }));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel7.setText("Angkatan");
@@ -544,100 +544,127 @@ while (rs.next()) {
     }//GEN-LAST:event_bcariActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-        // TODO add your handling code here:
-        if (txtnisn.getText().equals("") ||
-            txtnm.getText().equals("") ||
-            cbjurusan.getSelectedIndex() == 0 ||
-            cbkls.getSelectedIndex() == 0) {
+      if (txtnisn.getText().equals("") ||
+        txtnm.getText().equals("") ||
+        cbjurusan.getSelectedIndex() == 0 ||
+        cbkls.getSelectedIndex() == 0) {
 
-            JOptionPane.showMessageDialog(null, "Data belum lengkap!");
-            return;
-        }
-        String telp = txttelp.getText().replaceAll("[^\\d]", "");
-        
-        java.util.Date utilDate = dctgl.getDate();
-        if (utilDate == null) {
-            JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
-            return;
-        }
-        if (cbjk.getSelectedIndex() == 0) {
-    JOptionPane.showMessageDialog(null, "Pilih jenis kelamin!");
-    return;
-}
+        JOptionPane.showMessageDialog(null, "Data belum lengkap!");
+        return;
+    }
+    String telp = txttelp.getText().replaceAll("[^\\d]", "");
+    
+    java.util.Date utilDate = dctgl.getDate();
+    if (utilDate == null) {
+        JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
+        return;
+    }
+    if (cbjk.getSelectedIndex() == -1) {
+        JOptionPane.showMessageDialog(null, "Pilih jenis kelamin!");
+        return;
+    }
 
-        java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
-        if (telp.length() < 10 || telp.length() > 13) {
+    java.sql.Date sqlDate = new java.sql.Date(utilDate.getTime());
+    if (telp.length() < 10 || telp.length() > 13) {
         JOptionPane.showMessageDialog(null, "No telp tidak valid!");
         return;
-}
-        try {
-            String sql = "INSERT INTO tbl_siswa (nisn,nama,tgl_lahir,alamat,notelp,jkel,angkatan,nama_wali,no_wali,jurusan,kelas) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
-            PreparedStatement stat = con.prepareStatement(sql);
-
-            stat.setString(1, txtnisn.getText());
-            stat.setString(2, txtnm.getText());
-            stat.setDate(3, sqlDate);
-            stat.setString(4, txtalamat.getText());
-            stat.setString(5, telp);
-            stat.setString(6, cbjk.getSelectedItem().toString());
-            stat.setString(7, txtangkatan.getText());
-            stat.setString(8, txtnmwali.getText());
-            stat.setString(9, txtnowali.getText());
-            stat.setString(10, cbjurusan.getSelectedItem().toString());
-            stat.setString(11, cbkls.getSelectedItem().toString());
-
-            stat.executeUpdate();
-
-            JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
-
-            kosong();
-            datatable();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Gagal simpan: " + e);
+    }
+    
+    try {
+        // --- BAGIAN TAMBAHAN UNTUK MENCARI ID KELAS ---
+        String namaKelas = cbkls.getSelectedItem().toString();
+        String idKelas = "";
+        String sqlCariID = "SELECT id_kelas FROM tbl_kelas WHERE kelas = '" + namaKelas + "'";
+        Statement st = con.createStatement();
+        ResultSet rsID = st.executeQuery(sqlCariID);
+        if (rsID.next()) {
+            idKelas = rsID.getString("id_kelas"); // Mendapatkan KLS001, KLS002, dst.
         }
-        txtnisn.requestFocus();
+        // ----------------------------------------------
+
+        String sql = "INSERT INTO tbl_siswa (nisn,nama,tgl_lahir,alamat,notelp,jkel,angkatan,nama_wali,no_wali,jurusan,kelas) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
+        PreparedStatement stat = con.prepareStatement(sql);
+
+        stat.setString(1, txtnisn.getText());
+        stat.setString(2, txtnm.getText());
+        stat.setDate(3, sqlDate);
+        stat.setString(4, txtalamat.getText());
+        stat.setString(5, telp);
+        stat.setString(6, cbjk.getSelectedItem().toString());
+        stat.setString(7, txtangkatan.getText());
+        stat.setString(8, txtnmwali.getText());
+        stat.setString(9, txtnowali.getText());
+        stat.setString(10, cbjurusan.getSelectedItem().toString());
+       
+        stat.setString(11, idKelas);
+       
+
+        stat.executeUpdate();
+        JOptionPane.showMessageDialog(null, "Data berhasil disimpan");
+
+        kosong();
+        datatable();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Gagal simpan: " + e);
+    }
+    txtnisn.requestFocus();
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void bubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bubahActionPerformed
-        // TODO add your handling code here:
         try {
-            String sql = "UPDATE tbl_siswa SET nama=?, tgl_lahir=?, alamat=?, notelp=?, jkel=?, angkatan=?, nama_wali=?, no_wali=?, jurusan=?, kelas=? WHERE nisn=?";
-            PreparedStatement stat = con.prepareStatement(sql);
-            String telp = txttelp.getText().replaceAll("[^\\d]", "");
+        String telp = txttelp.getText().replaceAll("[^\\d]", "");
 
-            if (dctgl.getDate() == null) {
-                JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
-                return;
-            }
-            java.sql.Date sqlDate = new java.sql.Date(dctgl.getDate().getTime());
-            
-            if (cbjurusan.getSelectedIndex() == 0 || cbkls.getSelectedIndex() == 0) {
+        if (dctgl.getDate() == null) {
+            JOptionPane.showMessageDialog(null, "Tanggal belum dipilih!");
+            return;
+        }
+        java.sql.Date sqlDate = new java.sql.Date(dctgl.getDate().getTime());
+        
+        if (cbjurusan.getSelectedIndex() == 0 || cbkls.getSelectedIndex() == 0) {
             JOptionPane.showMessageDialog(null, "Pilih jurusan dan kelas!");
             return;
-}
-
-            stat.setString(1, txtnm.getText());
-            stat.setDate(2, sqlDate);
-            stat.setString(3, txtalamat.getText());
-            stat.setString(4, telp);
-            stat.setString(5, cbjk.getSelectedItem().toString());
-            stat.setString(6, txtangkatan.getText());
-            stat.setString(7, txtnmwali.getText());
-            stat.setString(8, txtnowali.getText());
-            stat.setString(9, cbjurusan.getSelectedItem().toString());
-            stat.setString(10, cbkls.getSelectedItem().toString());
-            stat.setString(11, txtnisn.getText());
-            stat.executeUpdate();
-
-            JOptionPane.showMessageDialog(null, "Data berhasil diubah");
-
-            kosong();
-            datatable();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Gagal ubah: " + e);
         }
+
+        // --- BAGIAN TAMBAHAN UNTUK MENCARI ID KELAS ---
+        String namaKelas = cbkls.getSelectedItem().toString();
+        String idKelas = "";
+        String sqlCariID = "SELECT id_kelas FROM tbl_kelas WHERE kelas = '" + namaKelas + "'";
+        Statement st = con.createStatement();
+        ResultSet rsID = st.executeQuery(sqlCariID);
+        if (rsID.next()) {
+            idKelas = rsID.getString("id_kelas");
+        }
+        // ----------------------------------------------
+
+        String sql = "UPDATE tbl_siswa SET nama=?, tgl_lahir=?, alamat=?, notelp=?, jkel=?, angkatan=?, nama_wali=?, no_wali=?, jurusan=?, kelas=? WHERE nisn=?";
+        PreparedStatement stat = con.prepareStatement(sql);
+
+        stat.setString(1, txtnm.getText());
+        stat.setDate(2, sqlDate);
+        stat.setString(3, txtalamat.getText());
+        stat.setString(4, telp);
+        stat.setString(5, cbjk.getSelectedItem().toString());
+        stat.setString(6, txtangkatan.getText());
+        stat.setString(7, txtnmwali.getText());
+        stat.setString(8, txtnowali.getText());
+        stat.setString(9, cbjurusan.getSelectedItem().toString());
+        
+        // --- BAGIAN YANG DIPERBAIKI ---
+        stat.setString(10, idKelas); // Masukkan variabel idKelas
+        // ------------------------------
+        
+        stat.setString(11, txtnisn.getText());
+        stat.executeUpdate();
+
+        JOptionPane.showMessageDialog(null, "Data berhasil diubah");
+
+        kosong();
+        datatable();
+
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(null, "Gagal ubah: " + e);
+    }
     }//GEN-LAST:event_bubahActionPerformed
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
