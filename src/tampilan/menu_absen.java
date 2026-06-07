@@ -124,19 +124,31 @@ ResultSet rs;
     
     private void loadcombo() {
         try {
-            // Query untuk mengambil data unik dari tabel kelas
-            String sql = "SELECT kelas FROM tbl_kelas ORDER BY kelas"; // Sesuaikan jika nama kolomnya beda
+            // 1. Ambil Kode Guru yang sedang login dari GuruSession (Karena 1 package, langsung panggil nama class-nya)
+            String idGuruLogin = GuruSession.getKdGuru();
+
+            // 2. Modifikasi Query: Ambil nama kelas berdasarkan kd_guru yang sedang login
+            String sql = "SELECT kelas FROM tbl_kelas WHERE kd_guru = '" + idGuruLogin + "' ORDER BY kelas ASC"; 
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
 
-            // Bersihkan item lama dan ganti nama variabel dari ckelas menjadi cbkelas (sesuai GUI)
+            // Bersihkan item lama dan siapkan opsi default
             cbkelas.removeAllItems(); 
             cbkelas.addItem("-- Pilih Kelas --"); 
 
-            // Masukkan hasil query ke dalam Combo Box
+            boolean punyaKelas = false; // Penanda apakah guru ini memegang suatu kelas
+
+            // 3. Masukkan hasil query ke dalam Combo Box
             while(rs.next()) {
-                cbkelas.addItem(rs.getString(1)); // Mengambil data di kolom pertama hasil query
+                cbkelas.addItem(rs.getString("kelas")); 
+                punyaKelas = true;
             }
+            
+            // 4. (Opsional) Peringatan jika guru yang login tidak terdaftar di kelas manapun
+            if (!punyaKelas && idGuruLogin != null) {
+                JOptionPane.showMessageDialog(this, "Anda belum ditugaskan untuk mengajar/wali di kelas manapun.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            }
+
         } catch (Exception e) {
             JOptionPane.showMessageDialog(null, "Gagal Load Kelas: " + e.getMessage());
         }

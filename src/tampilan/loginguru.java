@@ -256,26 +256,23 @@ try {
     java.sql.ResultSet rs = pst.executeQuery();
 
     // 1. Cek apakah data NIP dan Password ada di database
-    if (rs.next()) {
-        // Mengambil nama guru dari database untuk display pesan sukses
-        String namaDariDB = rs.getString("nama");
-
-        // 2. Simpan nama ke UserSession (Level & Status diabaikan)
-        UserSession.setNama(namaDariDB);
-
-        // 3. Tampilkan pesan sukses dan buka Dashboard
-        JOptionPane.showMessageDialog(null, "Login Berhasil sebagai " + namaDariDB);
-        new dashboardguru().setVisible(true);
-        
-        // Menutup form login saat ini
-        this.dispose();
-        
-    } else {
-        // Jika rs.next() bernilai false (NIP atau Password tidak cocok di DB)
-        JOptionPane.showMessageDialog(null, "NIP atau Password Salah!");
-        nip.setText("");
-        pass.setText("");
-    }
+   if (rs.next()) {
+            // 3. JIKA BERHASIL, SIMPAN KE SESSION
+            GuruSession.setKdGuru(rs.getString("kd_guru"));
+            GuruSession.setNama(rs.getString("nama"));
+            GuruSession.setJkel(rs.getString("jkel"));
+            
+            JOptionPane.showMessageDialog(null, "Login Berhasil!\nSelamat Datang, "
+                    + GuruSession.getSapaan() + (", ") + GuruSession.getNama());
+            
+            dashboardguru menu = new dashboardguru(); 
+            menu.setVisible(true);
+            
+            this.dispose(); // Tutup form login
+        } else {
+            // Jika salah password/kode guru
+            JOptionPane.showMessageDialog(null, "Kode Guru atau Password salah!", "Gagal Login", JOptionPane.ERROR_MESSAGE);
+        }
 } catch (Exception e) {
     JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
 }

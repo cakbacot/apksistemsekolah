@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tampilan;
+import java.awt.Image;
 import java.beans.PropertyVetoException;
 import javax.swing.JOptionPane;
 import javax.swing.ImageIcon;
@@ -21,7 +22,137 @@ public class dashboardguru extends javax.swing.JFrame {
     public dashboardguru() {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
+        lab_login.setText(GuruSession.getSapaan()+ (", ") + GuruSession.getNama());
+        setFixedIcon(babsen,"/resource/absen.png");
+        sethome(home,"/resource/home.png");
+        setFixedIcon(bnilai,"/resource/nilai.png");
+        setleave(logout,"/resource/keluar.png");
     }
+    
+   private void setFixedIcon(javax.swing.JButton btn, String path) {
+    try {
+        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
+        Image imgBaru = iconAwal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        btn.setIcon(new ImageIcon(imgBaru));
+
+        // Styling Dasar
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setOpaque(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
+        btn.setIconTextGap(20);
+
+        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
+                btn.setContentAreaFilled(true);
+                btn.setBackground(new java.awt.Color(255, 255, 0)); // Kuning Terang
+                btn.setForeground(java.awt.Color.BLACK); 
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
+                btn.setContentAreaFilled(false);
+                btn.setForeground(java.awt.Color.WHITE);
+            }
+        });
+
+    } catch (Exception e) {
+        System.err.println("Gagal set hover: " + e.getMessage());
+    }
+}
+   private void sethome(javax.swing.JButton btn, String path) {
+    try {
+        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
+        Image imgBaru = iconAwal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
+        btn.setIcon(new ImageIcon(imgBaru));
+
+        // Styling Dasar
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setOpaque(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        btn.setMargin(new java.awt.Insets(10, 10, 10, 10));
+        btn.setIconTextGap(10);
+
+        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
+                btn.setContentAreaFilled(true);
+                btn.setBackground(new java.awt.Color(255, 255, 255)); // Putih Terang
+                btn.setForeground(java.awt.Color.BLACK); 
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
+                btn.setContentAreaFilled(false);
+                btn.setForeground(java.awt.Color.WHITE);
+            }
+        });
+
+    } catch (Exception e) {
+        System.err.println("Gagal set hover: " + e.getMessage());
+    }
+}
+   
+   private void setleave(javax.swing.JButton btn, String path) {
+    try {
+        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
+        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
+        btn.setIcon(new ImageIcon(imgBaru));
+
+        // Styling Dasar
+        btn.setForeground(java.awt.Color.WHITE);
+        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
+        btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
+        btn.setFocusPainted(false);
+        btn.setOpaque(false);
+        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        
+        btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
+        btn.setIconTextGap(20);
+
+        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
+        btn.addMouseListener(new java.awt.event.MouseAdapter() {
+            @Override
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
+                btn.setContentAreaFilled(true);
+                btn.setBackground(new java.awt.Color(255, 0, 0)); //Merah Terang
+                btn.setForeground(java.awt.Color.WHITE); 
+            }
+
+            @Override
+            public void mouseExited(java.awt.event.MouseEvent evt) {
+                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
+                btn.setContentAreaFilled(false);
+                btn.setForeground(java.awt.Color.WHITE);
+            }
+        });
+
+    } catch (Exception e) {
+        System.err.println("Gagal set hover: " + e.getMessage());
+    }
+}
 // Method satu untuk semua JLabel dan Gambar
 public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar) {
     try {
@@ -61,22 +192,23 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
+        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         babsen = new javax.swing.JButton();
         bnilai = new javax.swing.JButton();
-        jButton1 = new javax.swing.JButton();
+        logout = new javax.swing.JButton();
         desktop = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
         label = new javax.swing.JLabel();
         lab_login = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
-        profile = new javax.swing.JButton();
         home = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setBackground(new java.awt.Color(0, 8, 97));
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 8, 97));
 
         babsen.setText("absen");
         babsen.addActionListener(new java.awt.event.ActionListener() {
@@ -87,11 +219,11 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
 
         bnilai.setText("nilai");
 
-        jButton1.setForeground(new java.awt.Color(255, 0, 0));
-        jButton1.setText("Log out");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        logout.setForeground(new java.awt.Color(255, 0, 0));
+        logout.setText("Log out");
+        logout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                logoutActionPerformed(evt);
             }
         });
 
@@ -104,7 +236,7 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(babsen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bnilai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jButton1, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
+                    .addComponent(logout, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -114,8 +246,8 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
                 .addComponent(babsen, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(bnilai, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 397, Short.MAX_VALUE)
-                .addComponent(jButton1)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 365, Short.MAX_VALUE)
+                .addComponent(logout)
                 .addGap(25, 25, 25))
         );
 
@@ -137,7 +269,7 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel2.setBackground(new java.awt.Color(0, 51, 255));
+        jPanel2.setBackground(new java.awt.Color(0, 8, 97));
 
         label.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 22)); // NOI18N
         label.setForeground(new java.awt.Color(255, 255, 255));
@@ -145,7 +277,6 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
 
         lab_login.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 22)); // NOI18N
         lab_login.setForeground(new java.awt.Color(255, 255, 255));
-        lab_login.setText("LOREM IMPSUM");
 
         logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
         logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/logo.png"))); // NOI18N
@@ -155,25 +286,10 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
             }
         });
 
-        profile.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/logoProfile.png"))); // NOI18N
-        profile.setBorder(null);
-        profile.setBorderPainted(false);
-        profile.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        profile.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        profile.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                profileComponentResized(evt);
-            }
-        });
-
-        home.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/home.png"))); // NOI18N
-        home.setBorder(null);
-        home.setBorderPainted(false);
-        home.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        home.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
-        home.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                homeComponentResized(evt);
+        home.setText("home");
+        home.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeActionPerformed(evt);
             }
         });
 
@@ -182,31 +298,33 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
         jPanel2Layout.setHorizontalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 149, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(67, 67, 67)
+                .addGap(19, 19, 19)
+                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(69, 69, 69)
                 .addComponent(label)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(lab_login)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 258, Short.MAX_VALUE)
-                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(40, 40, 40)
-                .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(59, 59, 59))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(profile, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 70, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 98, javax.swing.GroupLayout.PREFERRED_SIZE))
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addContainerGap()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                                    .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                    .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                                .addGap(29, 29, 29))))
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addGap(22, 22, 22)
+                        .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
@@ -216,17 +334,17 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
             .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(0, 0, 0)
                 .addComponent(desktop))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(desktop)))
+                .addGap(0, 0, Short.MAX_VALUE)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(desktop)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
         );
 
         pack();
@@ -268,7 +386,7 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     }
     }//GEN-LAST:event_desktopComponentResized
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+    private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
         // 1. Tampilkan konfirmasi (Opsional tapi disarankan)
     int pilih = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
     
@@ -282,19 +400,15 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
         // 4. Buka kembali form login
         new loginguru().setVisible(true);
     }// TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    }//GEN-LAST:event_logoutActionPerformed
 
     private void logoComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_logoComponentResized
         scaleImage(logo, "/resource/logo.png");
     }//GEN-LAST:event_logoComponentResized
 
-    private void homeComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_homeComponentResized
-        scaleImage(home, "/resource/home.png");
-    }//GEN-LAST:event_homeComponentResized
-
-    private void profileComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_profileComponentResized
-        scaleImage(profile, "/resource/logoProfile.png");
-    }//GEN-LAST:event_profileComponentResized
+    private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
+    
+    }//GEN-LAST:event_homeActionPerformed
 
   public static void main(String args[]) {
     try {
@@ -318,12 +432,11 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     private javax.swing.JButton bnilai;
     private javax.swing.JDesktopPane desktop;
     private javax.swing.JButton home;
-    private javax.swing.JButton jButton1;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lab_login;
     private javax.swing.JLabel label;
     private javax.swing.JLabel logo;
-    private javax.swing.JButton profile;
+    private javax.swing.JButton logout;
     // End of variables declaration//GEN-END:variables
 }
