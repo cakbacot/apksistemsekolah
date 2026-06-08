@@ -168,7 +168,7 @@ public class loginguru extends javax.swing.JFrame {
             }
         });
 
-        jPanel1.setBackground(new java.awt.Color(0, 0, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 8, 97));
         jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
@@ -267,6 +267,7 @@ try {
             
             dashboardguru menu = new dashboardguru(); 
             menu.setVisible(true);
+            
             
             this.dispose(); // Tutup form login
         } else {
