@@ -192,7 +192,6 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
-        java.awt.GridBagConstraints gridBagConstraints;
 
         jPanel1 = new javax.swing.JPanel();
         babsen = new javax.swing.JButton();
@@ -218,6 +217,11 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
         });
 
         bnilai.setText("nilai");
+        bnilai.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bnilaiActionPerformed(evt);
+            }
+        });
 
         logout.setForeground(new java.awt.Color(255, 0, 0));
         logout.setText("Log out");
@@ -409,6 +413,31 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
     
     }//GEN-LAST:event_homeActionPerformed
+
+    private void bnilaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnilaiActionPerformed
+        // 1. Bersihkan area desktop agar tidak ada form yang tumpang tindih
+    desktop.removeAll();
+    
+    // 2. Buat objek internal frame baru
+    menu_nilai mn = new menu_nilai();
+    
+    // 3. Hilangkan border/dekorasi bawaan internal frame jika ingin menyatu mulus dengan dashboard
+    // fa.setBorder(null); // Buka komen ini jika ingin menghilangkan border luar JInternalFrame
+    
+    // 4. Masukkan ke desktop
+    desktop.add(mn);
+    mn.setVisible(true);
+    
+    // 5. Set ukuran mengikuti panel penampung agar pas
+//    ma.setSize(desktop.getWidth(), desktop.getHeight());
+    try {
+        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
+        mn.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+        // Jika gagal dimaksimalkan, tampilkan pesan error di console
+        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
+    }// Agar muncul di tengah layar
+    }//GEN-LAST:event_bnilaiActionPerformed
 
   public static void main(String args[]) {
     try {
