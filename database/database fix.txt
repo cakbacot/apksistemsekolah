@@ -74,4 +74,15 @@ CREATE TABLE 'users' (
   `status` varchar(2) NOT NULL
 );
 
+CREATE TABLE tbl_nilai (
+    id_nilai INT AUTO_INCREMENT PRIMARY KEY,
+    nisn VARCHAR(15) NOT NULL,            
+    id_mapel VARCHAR(10) NOT NULL,        
+    kd_guru VARCHAR(10) NOT NULL,         
+    jenis_nilai VARCHAR(20) NOT NULL,     
+    skor INT NOT NULL,                    
+    FOREIGN KEY (nisn) REFERENCES tbl_siswa(nisn) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (id_mapel) REFERENCES tbl_jadwal(id_mapel) ON DELETE CASCADE ON UPDATE CASCADE,
+    FOREIGN KEY (kd_guru) REFERENCES guru(kd_guru) ON DELETE CASCADE ON UPDATE CASCADE
+);
 
