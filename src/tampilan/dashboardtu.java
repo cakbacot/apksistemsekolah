@@ -414,7 +414,6 @@ private void setadmin(javax.swing.JButton btn, String path) {
         menusiswa.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
         menusiswa.setForeground(new java.awt.Color(255, 255, 255));
         menusiswa.setText("Siswa");
-        menusiswa.setBorder(null);
         menusiswa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menusiswa.setFocusPainted(false);
         menusiswa.addActionListener(new java.awt.event.ActionListener() {
@@ -426,7 +425,6 @@ private void setadmin(javax.swing.JButton btn, String path) {
         menukelas.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
         menukelas.setForeground(new java.awt.Color(255, 255, 255));
         menukelas.setText("Kelas");
-        menukelas.setBorder(null);
         menukelas.setBorderPainted(false);
         menukelas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menukelas.setFocusPainted(false);
@@ -439,7 +437,6 @@ private void setadmin(javax.swing.JButton btn, String path) {
         menuguru.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
         menuguru.setForeground(new java.awt.Color(255, 255, 255));
         menuguru.setText("Guru");
-        menuguru.setBorder(null);
         menuguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menuguru.setFocusPainted(false);
         menuguru.addActionListener(new java.awt.event.ActionListener() {
@@ -452,7 +449,6 @@ private void setadmin(javax.swing.JButton btn, String path) {
         tranksaksi.setForeground(new java.awt.Color(255, 255, 255));
         tranksaksi.setText("Transaksi");
         tranksaksi.setToolTipText("");
-        tranksaksi.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         tranksaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         tranksaksi.setFocusPainted(false);
         tranksaksi.addActionListener(new java.awt.event.ActionListener() {
@@ -475,7 +471,6 @@ private void setadmin(javax.swing.JButton btn, String path) {
         jdwl.setForeground(new java.awt.Color(255, 255, 255));
         jdwl.setText("jadwal");
         jdwl.setToolTipText("");
-        jdwl.setBorder(new javax.swing.border.SoftBevelBorder(javax.swing.border.BevelBorder.RAISED));
         jdwl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jdwl.setFocusPainted(false);
         jdwl.addActionListener(new java.awt.event.ActionListener() {

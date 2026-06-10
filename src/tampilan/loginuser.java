@@ -137,7 +137,6 @@ public class loginuser extends javax.swing.JFrame {
         jLabel2.setText("Masukan Password");
 
         login.setText("Login");
-        login.setBorder(null);
         login.setBorderPainted(false);
         login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -316,7 +315,11 @@ public class loginuser extends javax.swing.JFrame {
             java.util.logging.Logger.getLogger(loginuser.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+        try {
+        com.formdev.flatlaf.FlatLightLaf.setup();
+    } catch (Exception ex) {
+    System.err.println("Gagal memuat tema FlatLaf");
+}
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

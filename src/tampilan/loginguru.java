@@ -63,10 +63,10 @@ public class loginguru extends javax.swing.JFrame {
         // Styling Dasar
         btn.setForeground(java.awt.Color.BLACK);
         btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
+//        btn.setContentAreaFilled(false);
+//        btn.setBorderPainted(false);
         btn.setFocusPainted(false);
-        btn.setOpaque(false);
+//        btn.setOpaque(false);
         btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         
         btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -160,7 +160,6 @@ public class loginguru extends javax.swing.JFrame {
         jLabel2.setText("Masukan Password");
 
         login.setText("Login");
-        login.setBorder(null);
         login.setBorderPainted(false);
         login.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -312,7 +311,11 @@ try {
             java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
         }
         //</editor-fold>
-
+    try {
+        com.formdev.flatlaf.FlatLightLaf.setup();
+    } catch (Exception ex) {
+    System.err.println("Gagal memuat tema FlatLaf");
+}
         /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {

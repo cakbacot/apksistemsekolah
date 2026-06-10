@@ -22,7 +22,7 @@ public class dashboardguru extends javax.swing.JFrame {
     public dashboardguru() {
         initComponents();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        lab_login.setText(GuruSession.getSapaan()+ (", ") + GuruSession.getNama());
+        lab_login.setText(("SELAMAT DATANG ")+GuruSession.getSapaan()+ (", ") + GuruSession.getNama());
         setFixedIcon(babsen,"/resource/absen.png");
         sethome(home,"/resource/home.png");
         setFixedIcon(bnilai,"/resource/nilai.png");
@@ -199,7 +199,6 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
         logout = new javax.swing.JButton();
         desktop = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
-        label = new javax.swing.JLabel();
         lab_login = new javax.swing.JLabel();
         logo = new javax.swing.JLabel();
         home = new javax.swing.JButton();
@@ -275,10 +274,6 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
 
         jPanel2.setBackground(new java.awt.Color(0, 8, 97));
 
-        label.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 22)); // NOI18N
-        label.setForeground(new java.awt.Color(255, 255, 255));
-        label.setText("SELAMAT DATANG,");
-
         lab_login.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 22)); // NOI18N
         lab_login.setForeground(new java.awt.Color(255, 255, 255));
 
@@ -304,13 +299,11 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(19, 19, 19)
                 .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(69, 69, 69)
-                .addComponent(label)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 500, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(75, 75, 75)
+                .addComponent(lab_login, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 132, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(59, 59, 59))
+                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -318,16 +311,12 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addContainerGap()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(jPanel2Layout.createSequentialGroup()
-                                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(label, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                    .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                                .addGap(29, 29, 29))))
+                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addGap(22, 22, 22)
-                        .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                            .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -345,10 +334,9 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(desktop)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(desktop)))
         );
 
         pack();
@@ -464,7 +452,6 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lab_login;
-    private javax.swing.JLabel label;
     private javax.swing.JLabel logo;
     private javax.swing.JButton logout;
     // End of variables declaration//GEN-END:variables
