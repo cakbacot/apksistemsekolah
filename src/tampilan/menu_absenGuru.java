@@ -28,41 +28,78 @@ ResultSet rs;
      */
     public menu_absenGuru() {
         initComponents();
+        
         datatable();
+        aktif();
+        kosong();
     }
     protected void datatable(){ 
-        DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("KD Guru");
-    model.addColumn("Tanggal");
-    model.addColumn("Kehadiran");
-    model.addColumn("Keterangan");
-    
-    try {
-        // 2. Query SQL untuk mengambil 4 pilar data yang Anda inginkan
-        // Sesuaikan 'tb_absenguru' dengan nama tabel absensi guru di database Anda
-        String sql = "SELECT kd_guru, tanggal, kehadiran, keterangan FROM tb_absenguru"; 
-        
-        java.sql.Connection con = koneksi.getConnection(); // Menggunakan class koneksi Anda
-        java.sql.PreparedStatement pst = con.prepareStatement(sql);
-        java.sql.ResultSet rs = pst.executeQuery();
-        
-        // 3. Looping data dari database untuk dimasukkan ke baris tabel
-        while (rs.next()) {
-            model.addRow(new Object[]{
-                rs.getString("kd_guru"),
-                rs.getString("tanggal"),
-                rs.getString("kehadiran"),
-                rs.getString("keterangan")
-            });
-        }
-        
-        // 4. Pasang model yang sudah terisi data ke JTable Anda
-        tblguru.setModel(model); 
-        
-    } catch (Exception e) {
-        javax.swing.JOptionPane.showMessageDialog(this, "Gagal memuat data tabel: " + e.getMessage());
+        // 1. Definisikan header/judul kolom (4 Kolom utama)
+        String[] baris = {"Kode Guru", "Tanggal", "Kehadiran", "Keterangan"};
+
+        // 2. Buat Custom DefaultTableModel agar kolom ke-3 (Kehadiran) menjadi Checkbox
+        tabmode = new DefaultTableModel(null, baris) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                // Index 2 adalah kolom "Kehadiran" (Dimulai dari 0, 1, 2)
+                if (columnIndex == 2) { 
+                    return Boolean.class; 
+                }
+                return super.getColumnClass(columnIndex);
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Hanya kolom index 2 (Kehadiran) dan index 3 (Keterangan) yang bisa diubah di tabel
+                return column == 2 || column == 3; 
+            }
+        };
+
+        tblguru.setModel(tabmode);
+
+        try {
+            // Query mengunci data berdasarkan guru yang sedang login
+            String sql = "SELECT g.kd_guru, a.tgl, a.kehadiran, a.keterangan " +
+                         "FROM guru g " +
+                         "LEFT JOIN tbl_absen_guru a ON g.kd_guru = a.kd_guru " +
+                         "WHERE g.kd_guru = ?"; 
+
+            PreparedStatement stat = con.prepareStatement(sql);
+            
+            // --- CUKUP GANTI BAGIAN INI ---
+            // Mengambil langsung Kode Guru yang aktif dari GuruSession
+            stat.setString(1, GuruSession.getKdGuru()); 
+            
+            ResultSet hasil = stat.executeQuery();
+
+            // Bersihkan baris lama sebelum load data baru
+            tabmode.setRowCount(0);
+
+            while (hasil.next()) {
+                String kdGuru = hasil.getString("kd_guru");
+                String tgl = hasil.getString("tgl") != null ? hasil.getString("tgl") : "-";
+                
+                int statusDb = hasil.getInt("kehadiran");
+                boolean isHadir = (statusDb == 1); 
+                
+                String keterangan = hasil.getString("keterangan") != null ? hasil.getString("keterangan") : "";
+
+                Object[] data = {
+                    kdGuru,
+                    tgl,
+                    isHadir,      
+                    keterangan    
+                };
+                tabmode.addRow(data);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(); 
+            JOptionPane.showMessageDialog(this, "Gagal memuat data tabel: " + e.getMessage());
+        }   
     }
-        }
+
+       
         
     protected void aktif(){
         tglTemu.requestFocus();
@@ -71,7 +108,7 @@ ResultSet rs;
     protected void kosong(){
         jTemu.setValue(1);
         tglTemu.setDate(new Date());
-        
+
     }
     /**
      * This method is called from within the constructor to initialize the form.
@@ -255,7 +292,6 @@ ResultSet rs;
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-        // 1. Validasi Input Dasar
         if (tglTemu.getDate() == null) {
             JOptionPane.showMessageDialog(this, "Pilih tanggal pertemuan terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
@@ -266,64 +302,73 @@ ResultSet rs;
             return;
         }
 
-        // 2. Ambil Model Tabel
+        // 2. Ambil Data Model dari JTable
         DefaultTableModel model = (DefaultTableModel) tblguru.getModel();
         int jumlahBaris = model.getRowCount();
 
-        // Validasi jika tabel masih kosong
         if (jumlahBaris == 0) {
-            JOptionPane.showMessageDialog(this, "Tabel data siswa masih kosong. Silakan pilih kelas terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            JOptionPane.showMessageDialog(this, "Tabel data guru masih kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
             return;
         }
 
-        // =========================================================
-        // --- TAMBAHAN CROSSCHECK / KONFIRMASI SIMPAN ---
-        // =========================================================
+        // 3. Prompt Dialog Konfirmasi
         int konfirmasi = JOptionPane.showConfirmDialog(this,
             "Apakah Anda yakin data kehadiran sudah benar dan ingin disimpan?",
             "Konfirmasi Simpan",
             JOptionPane.YES_NO_OPTION,
             JOptionPane.QUESTION_MESSAGE);
 
-        // Jika user mengeklik "No" (Tidak) atau menutup dialog (X)
         if (konfirmasi != JOptionPane.YES_OPTION) {
-            return; // Hentikan proses simpan
+            return; 
         }
-        // =========================================================
 
-        // 3. Konversi format tanggal dari JDateChooser ke SQL Date
+        // 4. Konversi format tanggal ke SQL Date
         java.sql.Date sqlDate = new java.sql.Date(tglTemu.getDate().getTime());
 
-        try {
-            // Siapkan Query INSERT
-            String sql = "INSERT INTO tbl_absen_guru (id_absen, kd_guru, tgl, kehadiran, keterangan)" + "VALUES (?, ?, ?, ?,?)" + "ON DUPLICATE KEY UPDATE status_hadir = VALUES(status_hadir)";
-            PreparedStatement pst = con.prepareStatement(sql);
+try {
+    // UPDATE: Query disesuaikan persis dengan 5 kolom asli di database (id_absen otomatis AUTO_INCREMENT)
+    String sql = "INSERT INTO tbl_absen_guru (kd_guru, tgl, kehadiran, keterangan) " +
+                 "VALUES (?, ?, ?, ?) " +
+                 "ON DUPLICATE KEY UPDATE kehadiran = VALUES(kehadiran), keterangan = VALUES(keterangan)";
+                 
+    PreparedStatement pst = con.prepareStatement(sql);
 
-            // 4. Looping untuk membaca isi tabel baris demi baris
-            for (int i = 0; i < jumlahBaris; i++) {
-                String nisn = model.getValueAt(i, 0).toString();
+    // 5. Perulangan membaca baris JTable
+    for (int i = 0; i < jumlahBaris; i++) {
+        String kdGuru = model.getValueAt(i, 0).toString();
 
-                Object objKehadiran = model.getValueAt(i, 3);
-                boolean isChecked = (objKehadiran != null && (Boolean) objKehadiran);
+        // Kolom ke-2 (Index 2) adalah Boolean Checkbox Kehadiran
+        Object objKehadiran = model.getValueAt(i, 2);
+        boolean isChecked = (objKehadiran != null && (Boolean) objKehadiran);
+        int status_hadir = isChecked ? 1 : 0; // Masuk ke int(1) di database
 
-                int status_hadir = isChecked ? 1 : 0;
+        // Kolom ke-3 (Index 3) adalah String Keterangan
+        Object objKeterangan = model.getValueAt(i, 3);
+        String keterangan = (objKeterangan != null) ? objKeterangan.toString() : "";
 
+        // PEMETAAN BARU (Wajib Berurutan):
+        pst.setString(1, kdGuru);       // Mengisi kd_guru (varchar)
+        pst.setDate(2, sqlDate);        // Mengisi tgl (date)
+        pst.setInt(3, status_hadir);    // Mengisi kehadiran (int)
+        pst.setString(4, keterangan);   // Mengisi keterangan (varchar)
 
-                pst.addBatch();
-            }
+        pst.addBatch(); 
+    }
 
-            // 5. Eksekusi semua antrean query ke database
-            pst.executeBatch();
+    // 6. Eksekusi batch
+    pst.executeBatch();
 
-            JOptionPane.showMessageDialog(this, "Data absensi kelas berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+    JOptionPane.showMessageDialog(this, "Data absensi guru berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
 
-            // 6. Reset form agar bersih untuk pertemuan berikutnya
-            kosong();
-            datatable();
+    // 7. Bersihkan dan segarkan form
+    kosong();
+    
 
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal menyimpan data absensi:\n" + e.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
-        }
+} catch (Exception e) {
+    e.printStackTrace();
+    JOptionPane.showMessageDialog(this, "Gagal menyimpan data absensi:\n" + e.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
+}
+    
         // TODO add your handling code here:
     }//GEN-LAST:event_bsimpanActionPerformed
 

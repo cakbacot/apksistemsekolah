@@ -23,6 +23,7 @@ public class loginguru extends javax.swing.JFrame {
      * Creates new form loginguru
      */
    Connection con=koneksi.getConnection();
+   
     PreparedStatement pet;
     ResultSet rs;
     public loginguru() {

@@ -48,12 +48,12 @@ public class panel_absen1 extends javax.swing.JFrame {
         Image imgLama = iconAwal.getImage();
         
         // Mengambil ukuran lbl_logo saat ini
-        int width = loginguru.getWidth();
-        int height = loginguru.getHeight();
+        int width = menu_absenGuru.getWidth();
+        int height = menu_absenGuru.getHeight();
         
         if (width > 0 && height > 0) {
             Image imgBaru = imgLama.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            loginguru.setIcon(new ImageIcon(imgBaru));
+            menu_absenGuru.setIcon(new ImageIcon(imgBaru));
         }
     } catch (Exception e) {
         System.err.println("Error logo: " + e.getMessage());
@@ -67,12 +67,12 @@ public class panel_absen1 extends javax.swing.JFrame {
         Image imgLama = iconAwal.getImage();
         
         // Mengambil ukuran lbl_logo saat ini
-        int width = loginuser.getWidth();
-        int height = loginuser.getHeight();
+        int width = menu_absenSiswa.getWidth();
+        int height = menu_absenSiswa.getHeight();
         
         if (width > 0 && height > 0) {
             Image imgBaru = imgLama.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            loginuser.setIcon(new ImageIcon(imgBaru));
+            menu_absenSiswa.setIcon(new ImageIcon(imgBaru));
         }
     } catch (Exception e) {
         System.err.println("Error logo: " + e.getMessage());
@@ -82,8 +82,8 @@ public class panel_absen1 extends javax.swing.JFrame {
     private void tampilkanGambar() {
         try {
             // Memasang gambar secara manual dari folder resource
-            loginuser.setIcon(new ImageIcon(getClass().getResource("/resource/user.png")));
-            loginguru.setIcon(new ImageIcon(getClass().getResource("/resource/logoguru.png")));
+            menu_absenSiswa.setIcon(new ImageIcon(getClass().getResource("/resource/user.png")));
+            menu_absenSiswa.setIcon(new ImageIcon(getClass().getResource("/resource/logoguru.png")));
         } catch (Exception e) {
             System.err.println("Gambar tidak ditemukan! Pastikan folder resource sudah benar.");
         }
@@ -146,9 +146,9 @@ public class panel_absen1 extends javax.swing.JFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        loginguru = new javax.swing.JLabel();
-        loginsiswa = new javax.swing.JPanel();
         menu_absenGuru = new javax.swing.JLabel();
+        jPanel1 = new javax.swing.JPanel();
+        menu_absenSiswa = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
 
@@ -160,33 +160,33 @@ public class panel_absen1 extends javax.swing.JFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
                 .addContainerGap(51, Short.MAX_VALUE)
-                .addComponent(loginguru, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menu_absenGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
         );
         jPanel2Layout.setVerticalGroup(
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addComponent(loginguru, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menu_absenGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(94, Short.MAX_VALUE))
         );
 
-        loginsiswa.setBackground(new java.awt.Color(0, 0, 255));
+        jPanel1.setBackground(new java.awt.Color(0, 0, 255));
 
-        javax.swing.GroupLayout loginsiswaLayout = new javax.swing.GroupLayout(loginsiswa);
-        loginsiswa.setLayout(loginsiswaLayout);
-        loginsiswaLayout.setHorizontalGroup(
-            loginsiswaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, loginsiswaLayout.createSequentialGroup()
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
                 .addContainerGap(51, Short.MAX_VALUE)
-                .addComponent(menu_absenGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menu_absenSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(41, 41, 41))
         );
-        loginsiswaLayout.setVerticalGroup(
-            loginsiswaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(loginsiswaLayout.createSequentialGroup()
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
                 .addGap(60, 60, 60)
-                .addComponent(menu_absenGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(menu_absenSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 219, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(94, Short.MAX_VALUE))
         );
 
@@ -220,7 +220,7 @@ public class panel_absen1 extends javax.swing.JFrame {
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addGap(70, 70, 70)
-                .addComponent(loginsiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 154, Short.MAX_VALUE)
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(95, 95, 95))
@@ -233,54 +233,54 @@ public class panel_absen1 extends javax.swing.JFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 15, Short.MAX_VALUE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(loginsiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(39, 39, 39))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-    try {
-        com.formdev.flatlaf.FlatLightLaf.setup();
-    } catch (Exception ex) {
-    System.err.println("Gagal memuat tema FlatLaf");
-}
-        /* Create and display the form */
-        java.awt.EventQueue.invokeLater(new Runnable() {
-            public void run() {
-                new panel_absen().setVisible(true);
-            }
-        });
-    }
+//public static void main(String args[]) {
+//        /* Set the Nimbus look and feel */
+//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
+//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
+//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
+//         */
+//        try {
+//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
+//                if ("Nimbus".equals(info.getName())) {
+//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
+//                    break;
+//                }
+//            }
+//        } catch (ClassNotFoundException ex) {
+//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (InstantiationException ex) {
+//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (IllegalAccessException ex) {
+//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
+//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
+//        }
+//        //</editor-fold>
+//    try {
+//        com.formdev.flatlaf.FlatLightLaf.setup();
+//    } catch (Exception ex) {
+//    System.err.println("Gagal memuat tema FlatLaf");
+//}
+//        /* Create and display the form */
+//        java.awt.EventQueue.invokeLater(new Runnable() {
+//            public void run() {
+//                new panel_absen().setVisible(true);
+//            }
+//        });
+//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
-    private javax.swing.JLabel loginguru;
-    private javax.swing.JPanel loginsiswa;
     private javax.swing.JLabel menu_absenGuru;
+    private javax.swing.JLabel menu_absenSiswa;
     // End of variables declaration//GEN-END:variables
 }
