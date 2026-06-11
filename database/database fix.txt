@@ -86,3 +86,14 @@ CREATE TABLE tbl_nilai (
     FOREIGN KEY (kd_guru) REFERENCES guru(kd_guru) ON DELETE CASCADE ON UPDATE CASCADE
 );
 
+CREATE TABLE tbl_absen_guru (
+    id_absen INT PRIMARY KEY AUTO_INCREMENT,
+    kd_guru VARCHAR(10), 
+    tgl DATE,
+    kehadiran INT(1) DEFAULT 0,
+    keterangan VARCHAR(50),
+    -- Tambahkan Foreign Key langsung di sini
+    CONSTRAINT fk_absen_guru FOREIGN KEY (kd_guru) 
+    REFERENCES guru(kd_guru) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
