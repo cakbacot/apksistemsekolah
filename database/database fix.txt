@@ -97,3 +97,15 @@ CREATE TABLE tbl_absen_guru (
     REFERENCES guru(kd_guru) 
     ON DELETE CASCADE ON UPDATE CASCADE
 );
+
+CREATE TABLE tbl_absen_user (
+    id_absen INT PRIMARY KEY AUTO_INCREMENT,
+    nip VARCHAR(10), 
+    tgl DATE,
+    kehadiran INT(1) DEFAULT 0,
+    keterangan VARCHAR(50),
+    -- Tambahkan Foreign Key langsung di sini
+    CONSTRAINT fk_absen_user FOREIGN KEY (nip) 
+    REFERENCES users(nip) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+);
