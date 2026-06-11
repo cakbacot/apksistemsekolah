@@ -1,22 +1,101 @@
+package tampilan;
+
 /*
  * To change this license header, choose License Headers in Project Properties.
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package tampilan;
 
+
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
 /**
  *
  * @author User
  */
 public class menu_absenUser extends javax.swing.JInternalFrame {
-
+private Connection con = new koneksi().getConnection();
+private DefaultTableModel tabmode;
+PreparedStatement ps;
+ResultSet rs;
     /**
      * Creates new form menu_absenUser
      */
     public menu_absenUser() {
         initComponents();
+        kosong();
+        aktif();
+        datatable();
     }
+    
+    protected void aktif(){
+        tglTemu.requestFocus();
+    }
+    
+    protected void kosong(){
+        tglTemu.setDate(new Date());
+    }
+    
+    protected void datatable(){
+        // 1. Definisikan header/judul kolom (Ada 4 kolom)
+        String[] baris = {"NIP", "Nama User", "Kehadiran", "Total Hadir", "Total Tidak Hadir", "Keterangan"};
+
+        // 2. Buat Custom DefaultTableModel agar kolom ke-3 (Kehadiran) menjadi Checkbox
+        tabmode = new DefaultTableModel(null, baris) {
+            @Override
+            public Class<?> getColumnClass(int columnIndex) {
+                // Index 3 adalah kolom "Kehadiran" (Dimulai dari 0, 1, 2, 3)
+                if (columnIndex == 2) { 
+                    return Boolean.class; 
+                }
+                return super.getColumnClass(columnIndex);
+            }
+
+            @Override
+            public boolean isCellEditable(int row, int column) {
+                // Hanya kolom index 3 ("Kehadiran") yang bisa diklik/diedit oleh user
+                return column == 2 || column == 5; 
+            }
+        };
+
+        tbluser.setModel(tabmode);
+
+        try {
+            // Menggunakan query LEFT JOIN yang jauh lebih aman dan cepat
+            String sql = "SELECT u.nip, u.nama, " +
+                         "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
+                         "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir " +
+                         "FROM users u " +
+                         "LEFT JOIN tbl_absen_user a ON u.nip = a.nip " +
+                         "GROUP BY u.nip, u.nama";
+
+            Statement stat = con.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
+
+            while (hasil.next()) {
+                Object[] data = {
+                    hasil.getString("nip"),
+                    hasil.getString("nama"),
+                    false, // Checkbox default belum dicentang
+                    hasil.getInt("total_hadir"),
+                    hasil.getInt("total_tidak_hadir"),
+                    ""
+                };
+                tabmode.addRow(data);
+            }
+
+        } catch (Exception e) {
+            e.printStackTrace(); // Mencetak error di console NetBeans
+            JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
+        }    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -31,11 +110,11 @@ public class menu_absenUser extends javax.swing.JInternalFrame {
         bsimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblsiswa = new javax.swing.JTable();
+        tbluser = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         tglTemu = new com.toedter.calendar.JDateChooser();
-        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
         bbatal.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bbatal.setText("BATAL");
@@ -56,23 +135,23 @@ public class menu_absenUser extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("Absensi User");
 
-        tblsiswa.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        tblsiswa.setModel(new javax.swing.table.DefaultTableModel(
+        tbluser.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        tbluser.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null},
+                {null, null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5", "Title 6"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.Object.class, java.lang.Object.class, java.lang.Object.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, true, false, false, false
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -83,14 +162,14 @@ public class menu_absenUser extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblsiswa.addMouseListener(new java.awt.event.MouseAdapter() {
+        tbluser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblsiswaMouseClicked(evt);
+                tbluserMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblsiswa);
+        jScrollPane1.setViewportView(tbluser);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16), new java.awt.Color(1, 1, 1))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(1, 1, 1))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
@@ -105,7 +184,7 @@ public class menu_absenUser extends javax.swing.JInternalFrame {
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(tglTemu, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -115,53 +194,56 @@ public class menu_absenUser extends javax.swing.JInternalFrame {
                     .addComponent(jLabel7)
                     .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(tglTemu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addGap(3, 3, 3)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jLabel2.setText("jLabel2");
+        jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jButton1.setText("CETAK");
+        jButton1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                jButton1ActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 649, Short.MAX_VALUE))
-                .addGap(35, 35, 35))
             .addGroup(layout.createSequentialGroup()
+                .addGap(244, 244, 244)
+                .addComponent(jLabel1)
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+            .addGroup(layout.createSequentialGroup()
+                .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(244, 244, 244)
-                        .addComponent(jLabel1)))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1))
+                .addContainerGap())
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(253, 253, 253))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 34, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsimpan)
-                    .addComponent(bbatal))
-                .addGap(61, 61, 61))
+                    .addComponent(bbatal)
+                    .addComponent(jButton1))
+                .addContainerGap(118, Short.MAX_VALUE))
         );
 
         pack();
@@ -185,96 +267,94 @@ public class menu_absenUser extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-        // 1. Validasi Input Dasar
-        if (tglTemu.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Pilih tanggal pertemuan terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
+
+    DefaultTableModel model =
+            (DefaultTableModel) tbluser.getModel();
+
+    int jumlahBaris = model.getRowCount();
+
+    if (jumlahBaris == 0) {
+        JOptionPane.showMessageDialog(this,
+                "Data masih kosong!");
+        return;
+    }
+
+    int konfirmasi = JOptionPane.showConfirmDialog(
+            this,
+            "Yakin ingin menyimpan data absensi?",
+            "Konfirmasi",
+            JOptionPane.YES_NO_OPTION);
+
+    if (konfirmasi != JOptionPane.YES_OPTION) {
+        return;
+    }
+
+    try {
+
+        String sql =
+                "INSERT INTO tbl_absen_user " +
+                "(nip,tgl,kehadiran,keterangan) " +
+                "VALUES (?,?,?,?)";
+
+        PreparedStatement pst =
+                con.prepareStatement(sql);
+
+       java.sql.Date tgl =
+            new java.sql.Date(tglTemu.getDate().getTime());
+
+        for (int i = 0; i < jumlahBaris; i++) {
+
+            String nip =
+                    model.getValueAt(i, 0).toString();
+
+            boolean hadir =
+                    (Boolean) model.getValueAt(i, 2);
+
+            String keterangan =
+                    model.getValueAt(i, 5).toString();
+
+            pst.setString(1, nip);
+            pst.setDate(2, tgl);
+            pst.setInt(3, hadir ? 1 : 0);
+            pst.setString(4, keterangan);
+
+            pst.addBatch();
         }
-        int pertemuan_ke = (Integer) jTemu.getValue();
-        if (pertemuan_ke <= 0) {
-            JOptionPane.showMessageDialog(this, "Pertemuan tidak boleh 0!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
 
-        // 2. Ambil Model Tabel
-        DefaultTableModel model = (DefaultTableModel) tblsiswa.getModel();
-        int jumlahBaris = model.getRowCount();
+        pst.executeBatch();
 
-        // Validasi jika tabel masih kosong
-        if (jumlahBaris == 0) {
-            JOptionPane.showMessageDialog(this, "Tabel data siswa masih kosong. Silakan pilih kelas terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        JOptionPane.showMessageDialog(
+                this,
+                "Data absensi berhasil disimpan");
 
-        // =========================================================
-        // --- TAMBAHAN CROSSCHECK / KONFIRMASI SIMPAN ---
-        // =========================================================
-        int konfirmasi = JOptionPane.showConfirmDialog(this,
-            "Apakah Anda yakin data kehadiran sudah benar dan ingin disimpan?",
-            "Konfirmasi Simpan",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
+        datatable();
 
-        // Jika user mengeklik "No" (Tidak) atau menutup dialog (X)
-        if (konfirmasi != JOptionPane.YES_OPTION) {
-            return; // Hentikan proses simpan
-        }
-        // =========================================================
+    } catch (Exception e) {
 
-        // 3. Konversi format tanggal dari JDateChooser ke SQL Date
-        java.sql.Date sqlDate = new java.sql.Date(tglTemu.getDate().getTime());
-
-        try {
-            // Siapkan Query INSERT
-            String sql = "INSERT INTO tbl_absen (nisn, tanggal, pertemuan_ke, status_hadir)" + "VALUES (?, ?, ?, ?)" + "ON DUPLICATE KEY UPDATE status_hadir = VALUES(status_hadir)";
-            PreparedStatement pst = con.prepareStatement(sql);
-
-            // 4. Looping untuk membaca isi tabel baris demi baris
-            for (int i = 0; i < jumlahBaris; i++) {
-                String nisn = model.getValueAt(i, 0).toString();
-
-                Object objKehadiran = model.getValueAt(i, 3);
-                boolean isChecked = (objKehadiran != null && (Boolean) objKehadiran);
-
-                int status_hadir = isChecked ? 1 : 0;
-
-                pst.setString(1, nisn);
-                pst.setDate(2, sqlDate);
-                pst.setInt(3, pertemuan_ke);
-                pst.setInt(4, status_hadir);
-
-                pst.addBatch();
-            }
-
-            // 5. Eksekusi semua antrean query ke database
-            pst.executeBatch();
-
-            JOptionPane.showMessageDialog(this, "Data absensi kelas berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
-
-            // 6. Reset form agar bersih untuk pertemuan berikutnya
-            kosong();
-            datatable();
-
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(this, "Gagal menyimpan data absensi:\n" + e.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
-        }
-        // TODO add your handling code here:
+        JOptionPane.showMessageDialog(
+                this,
+                "Error : " + e.getMessage());
+    }
     }//GEN-LAST:event_bsimpanActionPerformed
 
-    private void tblsiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblsiswaMouseClicked
+    private void tbluserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbluserMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tblsiswaMouseClicked
+    }//GEN-LAST:event_tbluserMouseClicked
+
+    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_jButton1ActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
     private javax.swing.JButton bsimpan;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTable tblsiswa;
+    private javax.swing.JTable tbluser;
     private com.toedter.calendar.JDateChooser tglTemu;
     // End of variables declaration//GEN-END:variables
 }
