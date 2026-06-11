@@ -4,20 +4,75 @@
  * and open the template in the editor.
  */
 package tampilan;
-
+import java.awt.event.KeyEvent;
+import java.sql.Connection;
+import java.sql.PreparedStatement;
+import java.sql.ResultSet;
+import java.sql.SQLException;
+import java.sql.Statement;
+import java.util.Date;
+import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import koneksi.koneksi;
 /**
  *
  * @author User
  */
 public class menu_absenGuru extends javax.swing.JInternalFrame {
-
+private Connection con = new koneksi().getConnection();
+private DefaultTableModel tabmode;
+PreparedStatement ps;
+ResultSet rs;
     /**
      * Creates new form menu_loginGuru
      */
     public menu_absenGuru() {
         initComponents();
+        datatable();
     }
-
+    protected void datatable(){ 
+        DefaultTableModel model = new DefaultTableModel();
+    model.addColumn("KD Guru");
+    model.addColumn("Tanggal");
+    model.addColumn("Kehadiran");
+    model.addColumn("Keterangan");
+    
+    try {
+        // 2. Query SQL untuk mengambil 4 pilar data yang Anda inginkan
+        // Sesuaikan 'tb_absenguru' dengan nama tabel absensi guru di database Anda
+        String sql = "SELECT kd_guru, tanggal, kehadiran, keterangan FROM tb_absenguru"; 
+        
+        java.sql.Connection con = koneksi.getConnection(); // Menggunakan class koneksi Anda
+        java.sql.PreparedStatement pst = con.prepareStatement(sql);
+        java.sql.ResultSet rs = pst.executeQuery();
+        
+        // 3. Looping data dari database untuk dimasukkan ke baris tabel
+        while (rs.next()) {
+            model.addRow(new Object[]{
+                rs.getString("kd_guru"),
+                rs.getString("tanggal"),
+                rs.getString("kehadiran"),
+                rs.getString("keterangan")
+            });
+        }
+        
+        // 4. Pasang model yang sudah terisi data ke JTable Anda
+        tblguru.setModel(model); 
+        
+    } catch (Exception e) {
+        javax.swing.JOptionPane.showMessageDialog(this, "Gagal memuat data tabel: " + e.getMessage());
+    }
+        }
+        
+    protected void aktif(){
+        tglTemu.requestFocus();
+    }
+    
+    protected void kosong(){
+        jTemu.setValue(1);
+        tglTemu.setDate(new Date());
+        
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -28,7 +83,7 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jScrollPane1 = new javax.swing.JScrollPane();
-        tblsiswa = new javax.swing.JTable();
+        tblguru = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         jLabel8 = new javax.swing.JLabel();
@@ -37,25 +92,25 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
         bbatal = new javax.swing.JButton();
         bsimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
+        jButton1 = new javax.swing.JButton();
 
-        tblsiswa.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
-        tblsiswa.setModel(new javax.swing.table.DefaultTableModel(
+        tblguru.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        tblguru.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null},
-                {null, null, null, null}
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null},
+                {null, null, null, null, null}
             },
             new String [] {
-                "Title 1", "Title 2", "Title 3", "Title 4"
+                "Title 1", "Title 2", "Title 3", "Title 4", "Title 5"
             }
         ) {
             Class[] types = new Class [] {
-                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class
+                java.lang.Object.class, java.lang.Object.class, java.lang.Object.class, java.lang.Boolean.class, java.lang.String.class
             };
             boolean[] canEdit = new boolean [] {
-                false, false, false, true
+                false, false, false, true, true
             };
 
             public Class getColumnClass(int columnIndex) {
@@ -66,12 +121,12 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
                 return canEdit [columnIndex];
             }
         });
-        tblsiswa.addMouseListener(new java.awt.event.MouseAdapter() {
+        tblguru.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tblsiswaMouseClicked(evt);
+                tblguruMouseClicked(evt);
             }
         });
-        jScrollPane1.setViewportView(tblsiswa);
+        jScrollPane1.setViewportView(tblguru);
 
         jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16), new java.awt.Color(1, 1, 1))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
@@ -132,57 +187,55 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("Absensi Guru");
 
-        jLabel2.setText("jLabel2");
+        jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        jButton1.setText("PRINT");
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, 18)
-                .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(38, 38, 38))
             .addGroup(layout.createSequentialGroup()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(308, 308, 308)
-                        .addComponent(jLabel1))
-                    .addGroup(layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(jLabel2)))
+                .addGap(308, 308, 308)
+                .addComponent(jLabel1)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jScrollPane1))
-                .addGap(35, 35, 35))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(layout.createSequentialGroup()
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addComponent(jScrollPane1))
+                        .addGap(35, 35, 35))
+                    .addGroup(layout.createSequentialGroup()
+                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(38, 38, 38))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jLabel1)
-                .addGap(34, 34, 34)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 80, Short.MAX_VALUE)
+                .addGap(18, 18, 18)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 221, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsimpan)
-                    .addComponent(bbatal))
-                .addGap(61, 61, 61))
+                    .addComponent(bbatal)
+                    .addComponent(jButton1))
+                .addContainerGap(181, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void tblsiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblsiswaMouseClicked
+    private void tblguruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblguruMouseClicked
         // TODO add your handling code here:
-    }//GEN-LAST:event_tblsiswaMouseClicked
+    }//GEN-LAST:event_tblguruMouseClicked
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
         // Memunculkan dialog konfirmasi (opsional, tapi disarankan)
@@ -214,7 +267,7 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
         }
 
         // 2. Ambil Model Tabel
-        DefaultTableModel model = (DefaultTableModel) tblsiswa.getModel();
+        DefaultTableModel model = (DefaultTableModel) tblguru.getModel();
         int jumlahBaris = model.getRowCount();
 
         // Validasi jika tabel masih kosong
@@ -243,7 +296,7 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
 
         try {
             // Siapkan Query INSERT
-            String sql = "INSERT INTO tbl_absen (nisn, tanggal, pertemuan_ke, status_hadir)" + "VALUES (?, ?, ?, ?)" + "ON DUPLICATE KEY UPDATE status_hadir = VALUES(status_hadir)";
+            String sql = "INSERT INTO tbl_absen_guru (id_absen, kd_guru, tgl, kehadiran, keterangan)" + "VALUES (?, ?, ?, ?,?)" + "ON DUPLICATE KEY UPDATE status_hadir = VALUES(status_hadir)";
             PreparedStatement pst = con.prepareStatement(sql);
 
             // 4. Looping untuk membaca isi tabel baris demi baris
@@ -255,10 +308,6 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
 
                 int status_hadir = isChecked ? 1 : 0;
 
-                pst.setString(1, nisn);
-                pst.setDate(2, sqlDate);
-                pst.setInt(3, pertemuan_ke);
-                pst.setInt(4, status_hadir);
 
                 pst.addBatch();
             }
@@ -282,14 +331,14 @@ public class menu_absenGuru extends javax.swing.JInternalFrame {
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
     private javax.swing.JButton bsimpan;
+    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JSpinner jTemu;
-    private javax.swing.JTable tblsiswa;
+    private javax.swing.JTable tblguru;
     private com.toedter.calendar.JDateChooser tglTemu;
     // End of variables declaration//GEN-END:variables
 }

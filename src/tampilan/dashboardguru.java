@@ -347,20 +347,20 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
     desktop.removeAll();
     
     // 2. Buat objek internal frame baru
-    menu_absen ma = new menu_absen();
+    panel_absen pa = new panel_absen(desktop);
     
     // 3. Hilangkan border/dekorasi bawaan internal frame jika ingin menyatu mulus dengan dashboard
     // fa.setBorder(null); // Buka komen ini jika ingin menghilangkan border luar JInternalFrame
     
     // 4. Masukkan ke desktop
-    desktop.add(ma);
-    ma.setVisible(true);
+    desktop.add(pa);
+    pa.setVisible(true);
     
     // 5. Set ukuran mengikuti panel penampung agar pas
 //    ma.setSize(desktop.getWidth(), desktop.getHeight());
     try {
         // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
-        ma.setMaximum(true);
+        pa.setMaximum(true);
     } catch (java.beans.PropertyVetoException e) {
         // Jika gagal dimaksimalkan, tampilkan pesan error di console
         System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
