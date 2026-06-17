@@ -482,7 +482,7 @@ private void setadmin(javax.swing.JButton btn, String path) {
 
         absenuser.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
         absenuser.setForeground(new java.awt.Color(255, 255, 255));
-        absenuser.setText("Transaksi");
+        absenuser.setText("Absen");
         absenuser.setToolTipText("");
         absenuser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         absenuser.setFocusPainted(false);
@@ -602,7 +602,25 @@ private void setadmin(javax.swing.JButton btn, String path) {
     }//GEN-LAST:event_menuguruActionPerformed
 
     private void tranksaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tranksaksiActionPerformed
-        // TODO add your handling code here:
+   desktop.removeAll();
+    desktop.repaint();
+    
+    // 2. Buat objek dari JInternalFrame menu_siswa
+    menu_tranksaksi mt = new menu_tranksaksi();
+    
+    // 3. Masukkan objek tersebut ke dalam JDesktopPane
+    desktop.add(mt);
+    
+    // 4. Tampilkan formnya
+    mt.setVisible(true);
+    
+    try {
+        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
+        mt.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+        // Jika gagal dimaksimalkan, tampilkan pesan error di console
+        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
+    }// Agar muncul di tengah la
     }//GEN-LAST:event_tranksaksiActionPerformed
 
     private void keluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keluarActionPerformed
