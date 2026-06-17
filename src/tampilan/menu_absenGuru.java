@@ -5,15 +5,27 @@
  */
 package tampilan;
 import java.awt.event.KeyEvent;
+import java.io.File;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.HashMap;
+import java.util.Map;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
+import net.sf.jasperreports.engine.design.JasperDesign;
+import net.sf.jasperreports.engine.xml.JRXmlLoader;
+import net.sf.jasperreports.engine.JasperCompileManager;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.JasperExportManager;
+import net.sf.jasperreports.engine.JasperReport;
+import net.sf.jasperreports.view.JasperViewer;
+
 /**
  *
  * @author User
@@ -110,6 +122,20 @@ ResultSet rs;
         tglTemu.setDate(new Date());
 
     }
+    
+    public void cetak() {
+        try{
+            String path="./src/report/nota.jasper";
+            HashMap parameter = new HashMap();
+            String guruLogin = GuruSession.getKdGuru();
+            System.out.println("=== DEBUG LOG === Kode Guru dari Session: " + guruLogin); 
+            parameter.put("paramKdGuru", guruLogin); 
+            JasperPrint print = JasperFillManager.fillReport(path, parameter,con);
+            JasperViewer.viewReport(print, false);
+        }catch (Exception ex){
+            JOptionPane.showMessageDialog(rootPane,"Dokumen tidak ada" +ex);
+        }
+    }
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -129,7 +155,7 @@ ResultSet rs;
         bbatal = new javax.swing.JButton();
         bsimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
-        jButton1 = new javax.swing.JButton();
+        bprint = new javax.swing.JButton();
 
         tblguru.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         tblguru.setModel(new javax.swing.table.DefaultTableModel(
@@ -165,7 +191,7 @@ ResultSet rs;
         });
         jScrollPane1.setViewportView(tblguru);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16), new java.awt.Color(1, 1, 1))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(1, 1, 1))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
@@ -224,8 +250,13 @@ ResultSet rs;
         jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
         jLabel1.setText("Absensi Guru");
 
-        jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jButton1.setText("PRINT");
+        bprint.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        bprint.setText("PRINT");
+        bprint.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bprintActionPerformed(evt);
+            }
+        });
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -244,7 +275,7 @@ ResultSet rs;
                             .addComponent(jScrollPane1))
                         .addGap(35, 35, 35))
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bprint, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -263,7 +294,7 @@ ResultSet rs;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsimpan)
                     .addComponent(bbatal)
-                    .addComponent(jButton1))
+                    .addComponent(bprint))
                 .addContainerGap(181, Short.MAX_VALUE))
         );
 
@@ -372,11 +403,15 @@ try {
         // TODO add your handling code here:
     }//GEN-LAST:event_bsimpanActionPerformed
 
+    private void bprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bprintActionPerformed
+        cetak();
+    }//GEN-LAST:event_bprintActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
+    private javax.swing.JButton bprint;
     private javax.swing.JButton bsimpan;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;

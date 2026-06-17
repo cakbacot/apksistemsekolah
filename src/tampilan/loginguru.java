@@ -13,6 +13,7 @@ import javax.swing.ImageIcon;
 import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import koneksi.koneksi;
+import tampilan.GuruSession;
 /**
  *
  * @author ACER
@@ -260,7 +261,7 @@ try {
             // 3. JIKA BERHASIL, SIMPAN KE SESSION
             GuruSession.setKdGuru(rs.getString("kd_guru"));
             GuruSession.setNama(rs.getString("nama"));
-            GuruSession.setJkel(rs.getString("jkel"));
+            GuruSession.setJkel(rs.getString("jkel")); 
             
             JOptionPane.showMessageDialog(null, "Login Berhasil!\nSelamat Datang, "
                     + GuruSession.getSapaan() + (", ") + GuruSession.getNama());
