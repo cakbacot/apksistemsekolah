@@ -62,7 +62,7 @@ CREATE TABLE tbl_report (
 CREATE TABLE tbl_transaksi (
     no_transaksi VARCHAR(10) PRIMARY KEY,
     tgl DATE,
-    nisn VARCHAR(10) NOT NULL,
+    nisn VARCHAR(15) NOT NULL,
     FOREIGN KEY (`nisn`) REFERENCES `tbl_siswa`(`nisn`) ON UPDATE RESTRICT ON DELETE CASCADE
 );
 
