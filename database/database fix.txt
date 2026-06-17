@@ -61,10 +61,16 @@ CREATE TABLE tbl_report (
 
 CREATE TABLE tbl_transaksi (
     no_transaksi VARCHAR(10) PRIMARY KEY,
-    tgl DATE,
+    tgl_bayar DATE,
     nisn VARCHAR(15) NOT NULL,
-    FOREIGN KEY (`nisn`) REFERENCES `tbl_siswa`(`nisn`) ON UPDATE RESTRICT ON DELETE CASCADE
-);
+    jumlah_bayar INT,          
+    bulan_bayar VARCHAR(15),   
+    tahun_bayar VARCHAR(4),     
+    
+    CONSTRAINT fk_siswa_transaksi FOREIGN KEY (nisn) 
+    REFERENCES tbl_siswa(nisn) 
+    ON DELETE CASCADE ON UPDATE CASCADE
+)
 
 CREATE TABLE 'users' (
   `nip` int(20) NOT NULL,
