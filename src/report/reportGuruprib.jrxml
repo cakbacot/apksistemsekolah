@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="31ff6287-ea02-4d16-9328-693d616230f3">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="paramKdGuru" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    a.kd_guru,
+    g.nama,
+    COUNT(a.id_absen) AS total_hari_kerja,
+    ROUND((SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END) / COUNT(a.id_absen)) * 100, 2) AS persentase_kehadiran
+FROM tbl_absen_guru a
+JOIN guru g ON a.kd_guru = g.kd_guru
+WHERE g.nip_g = $P{paramKdGuru}
+GROUP BY a.kd_guru, g.nama]]>
+	</queryString>
+	<field name="kd_guru" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="total_hari_kerja" class="java.lang.Long"/>
+	<field name="persentase_kehadiran" class="java.math.BigDecimal"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="135" y="0" width="293" height="65" uuid="846d7aae-7e40-4883-8dfd-d69851ab4cbd"/>
+				<textElement textAlignment="Center">
+					<font size="18" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN ABSENSI MANDIRI]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="e3cdf234-b353-42a9-ad21-557640dffd46"/>
+				<text><![CDATA[kd_guru]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="145" y="0" width="100" height="20" uuid="d9ce6d71-6329-4e99-80d8-a4d7078e2359"/>
+				<text><![CDATA[nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="301" y="0" width="100" height="20" uuid="f6512e07-e0ae-4bb0-a8aa-4b32e04733db"/>
+				<text><![CDATA[total_hari_kerja]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="100" height="20" uuid="e2297590-2cce-4ef5-b9b4-4fca00db42a0"/>
+				<text><![CDATA[persentase_kehadiran]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="caa3b1a0-d920-4d78-8795-0e33b71e002c"/>
+				<textFieldExpression><![CDATA[$F{kd_guru}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="145" y="0" width="100" height="20" uuid="a2d6e201-23dc-4249-a520-fd1396b9ccb0"/>
+				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="301" y="0" width="100" height="20" uuid="0cbb7c1a-cc48-49dd-a6b4-f7f6d3979c4c"/>
+				<textFieldExpression><![CDATA[$F{total_hari_kerja}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20" uuid="e6ee994e-bb70-4615-bb57-463538b1a6eb"/>
+				<textFieldExpression><![CDATA[$F{persentase_kehadiran}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>

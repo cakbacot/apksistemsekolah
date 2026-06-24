@@ -25,6 +25,7 @@ import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.engine.JasperExportManager;
 import net.sf.jasperreports.engine.JasperReport;
 import net.sf.jasperreports.view.JasperViewer;
+import tampilan.GuruSession;
 
 /**
  *
@@ -40,7 +41,9 @@ ResultSet rs;
      */
     public menu_absenGuru() {
         initComponents();
-        
+        String KD = GuruSession.getKdGuru();
+        jLabel2.setText(KD);
+        System.out.println(KD);
         datatable();
         aktif();
         kosong();
@@ -125,7 +128,7 @@ ResultSet rs;
     
     public void cetak() {
         try{
-            String path="./src/report/nota.jasper";
+            String path="./src/report/reportGuruprib.jasper";
             HashMap parameter = new HashMap();
             String guruLogin = GuruSession.getKdGuru();
             System.out.println("=== DEBUG LOG === Kode Guru dari Session: " + guruLogin); 
@@ -133,6 +136,7 @@ ResultSet rs;
             JasperPrint print = JasperFillManager.fillReport(path, parameter,con);
             JasperViewer.viewReport(print, false);
         }catch (Exception ex){
+            ex.printStackTrace();
             JOptionPane.showMessageDialog(rootPane,"Dokumen tidak ada" +ex);
         }
     }
@@ -152,6 +156,7 @@ ResultSet rs;
         jLabel8 = new javax.swing.JLabel();
         tglTemu = new com.toedter.calendar.JDateChooser();
         jTemu = new javax.swing.JSpinner();
+        jLabel2 = new javax.swing.JLabel();
         bbatal = new javax.swing.JButton();
         bsimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -203,6 +208,8 @@ ResultSet rs;
         jTemu.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
         jTemu.setModel(new javax.swing.SpinnerNumberModel(1, 1, 48, 1));
 
+        jLabel2.setText("jLabel2");
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -217,11 +224,16 @@ ResultSet rs;
                 .addGap(18, 18, 18)
                 .addComponent(jTemu, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(188, Short.MAX_VALUE))
+            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jLabel2)
+                .addGap(49, 49, 49))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(24, 24, 24)
+                .addComponent(jLabel2)
+                .addGap(8, 8, 8)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
                     .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -413,6 +425,7 @@ try {
     private javax.swing.JButton bprint;
     private javax.swing.JButton bsimpan;
     private javax.swing.JLabel jLabel1;
+    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;

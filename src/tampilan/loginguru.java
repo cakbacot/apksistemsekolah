@@ -65,10 +65,10 @@ public class loginguru extends javax.swing.JFrame {
         // Styling Dasar
         btn.setForeground(java.awt.Color.BLACK);
         btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-//        btn.setContentAreaFilled(false);
-//        btn.setBorderPainted(false);
+ btn.setContentAreaFilled(false);
+        btn.setBorderPainted(false);
         btn.setFocusPainted(false);
-//        btn.setOpaque(false);
+       btn.setOpaque(false);
         btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         
         btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
@@ -260,6 +260,7 @@ try {
    if (rs.next()) {
             // 3. JIKA BERHASIL, SIMPAN KE SESSION
             GuruSession.setKdGuru(rs.getString("kd_guru"));
+            GuruSession.setNip(rs.getString("nip_g"));
             GuruSession.setNama(rs.getString("nama"));
             GuruSession.setJkel(rs.getString("jkel")); 
             

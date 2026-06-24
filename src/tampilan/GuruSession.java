@@ -13,6 +13,7 @@ public class GuruSession {
    private static String kd_guru;
     private static String nama;
     private static String jkel;
+    private static String Nip;
 
     // Getter & Setter kd_guru
     public static String getKdGuru() {
@@ -37,7 +38,16 @@ public class GuruSession {
     public static void setJkel(String jkel) {
         GuruSession.jkel = jkel;
     }
-
+    
+    public static String getNip() {
+        return Nip;
+    }
+    
+    public static void setNip(String Nip) {
+        GuruSession.Nip = Nip;
+    }
+    
+    
     // Method pembuat sapaan otomatis
     public static String getSapaan() {
         String panggilan = "";
