@@ -14,10 +14,15 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
 import koneksi.koneksi;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
 /**
  *
  * @author User
@@ -35,6 +40,7 @@ ResultSet rs;
         kosong();
         aktif();
         datatable();
+        aturHakAkses();
     }
     
     protected void aktif(){
@@ -43,6 +49,17 @@ ResultSet rs;
     
     protected void kosong(){
         tglTemu.setDate(new Date());
+    }
+    
+    public void cetak() {
+       try{
+            String path="./src/report/reportUser.jasper";
+            HashMap<String, Object> parameter = new HashMap<>();
+            JasperPrint print = JasperFillManager.fillReport(path, parameter, con);
+            JasperViewer.viewReport(print, false);
+        }catch (Exception ex){
+            JOptionPane.showMessageDialog(rootPane,"Dokumen tidak ada" +ex.getMessage());
+        }
     }
     
     protected void datatable(){
@@ -96,7 +113,15 @@ ResultSet rs;
         } catch (Exception e) {
             e.printStackTrace(); // Mencetak error di console NetBeans
             JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
-        }    }
+        }    
+    }
+    
+    private void aturHakAkses() {
+        String levelUser = UserSession.getLevel();
+        if (levelUser != null && !levelUser.equals("1")) {           
+            bcetak.setVisible(false); 
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -115,7 +140,7 @@ ResultSet rs;
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
         tglTemu = new com.toedter.calendar.JDateChooser();
-        jButton1 = new javax.swing.JButton();
+        bcetak = new javax.swing.JButton();
 
         bbatal.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
         bbatal.setText("BATAL");
@@ -199,11 +224,11 @@ ResultSet rs;
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
-        jButton1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        jButton1.setText("CETAK");
-        jButton1.addActionListener(new java.awt.event.ActionListener() {
+        bcetak.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        bcetak.setText("CETAK");
+        bcetak.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jButton1ActionPerformed(evt);
+                bcetakActionPerformed(evt);
             }
         });
 
@@ -219,7 +244,7 @@ ResultSet rs;
                 .addGap(22, 22, 22)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(layout.createSequentialGroup()
-                        .addComponent(jButton1, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(bcetak, javax.swing.GroupLayout.PREFERRED_SIZE, 238, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                         .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
@@ -243,7 +268,7 @@ ResultSet rs;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsimpan)
                     .addComponent(bbatal)
-                    .addComponent(jButton1))
+                    .addComponent(bcetak))
                 .addContainerGap(118, Short.MAX_VALUE))
         );
 
@@ -342,15 +367,15 @@ ResultSet rs;
         // TODO add your handling code here:
     }//GEN-LAST:event_tbluserMouseClicked
 
-    private void jButton1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jButton1ActionPerformed
-        // TODO add your handling code here:
-    }//GEN-LAST:event_jButton1ActionPerformed
+    private void bcetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcetakActionPerformed
+        cetak();
+    }//GEN-LAST:event_bcetakActionPerformed
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
+    private javax.swing.JButton bcetak;
     private javax.swing.JButton bsimpan;
-    private javax.swing.JButton jButton1;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;
     private javax.swing.JPanel jPanel1;
