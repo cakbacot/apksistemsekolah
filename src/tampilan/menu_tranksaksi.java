@@ -5,10 +5,16 @@
  */
 package tampilan;
 
+
 import java.sql.PreparedStatement;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import static koneksi.koneksi.con;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -26,6 +32,7 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
         String pendek = time.substring(time.length() - 4);
         trank.setText("TRX-" + pendek);
         trank.setEnabled(false);
+        //cetakData(trank.getText());
         datatable();
     }
     
@@ -95,6 +102,51 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
     
     nominal.setText(String.valueOf(nominalBayar));
 }
+  public void cetakData(String text) {
+    try {
+        // Path disesuaikan untuk pembacaan GetResourceAsStream
+        String path = "/report/nota.jasper"; 
+        
+        // PERBAIKAN: Menggunakan tanda < > (bukan kurung biasa)
+        java.util.Map<String, Object> map = new java.util.HashMap<>();
+        
+        // PERBAIKAN: Mengambil data dari textfield 'trank', bukan variabel 'noTrx' yang ghoib
+        map.put("no_transaksi", trank.getText());
+        
+        // PERBAIKAN: Memperbaiki salah ketik package dan menyusun fungsi JasperFillManager dengan benar
+        net.sf.jasperreports.engine.JasperPrint printReport = JasperFillManager.fillReport(
+            getClass().getResourceAsStream(path), 
+            map, 
+            koneksi.koneksi.getConnection()
+        );
+        
+        // Menampilkan nota pembayaran
+        JasperViewer.viewReport(printReport, false);
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Gagal cetak: " + e.getMessage());
+    }
+}
+  
+ public void cetak() {
+    try {
+        // Menggunakan getResourceAsStream agar path aman saat aplikasi dijalankan
+        String path = "/report/reportkeuangan.jasper";
+        java.util.HashMap<String, Object> parameter = new java.util.HashMap<>();
+        
+        // PERBAIKAN: Mengganti variabel 'con' yang null menjadi 'koneksi.koneksi.getConnection()'
+        net.sf.jasperreports.engine.JasperPrint print = JasperFillManager.fillReport(
+            getClass().getResourceAsStream(path),
+            parameter,
+            koneksi.koneksi.getConnection() // Menggunakan koneksi terpusat yang sudah pasti aktif
+        );
+        
+        JasperViewer.viewReport(print, false);
+    } catch (Exception ex) {
+        JOptionPane.showMessageDialog(this, "Dokumen Tidak Ada atau Kosong: " + ex.getMessage());
+    }
+}
+
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -350,15 +402,13 @@ pop_up_siswa popup = new pop_up_siswa(this);
     }//GEN-LAST:event_bcariActionPerformed
 
     private void simpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_simpanActionPerformed
-    if (txtnisn.getText().isEmpty() || trank.getText().isEmpty()) {
+   if (txtnisn.getText().isEmpty() || trank.getText().isEmpty()) {
         JOptionPane.showMessageDialog(this, "Data belum lengkap!");
         return;
     }
 
-   try {
-        // Ganti 'bulan' menjadi 'bulan_bayar' dan 'tahun' menjadi 'tahun_bayar'
+    try {
         String sql = "INSERT INTO tbl_transaksi (no_transaksi, nisn, jumlah_bayar, bulan_bayar, tahun_bayar) VALUES (?, ?, ?, ?, ?)";
-        
         java.sql.PreparedStatement ps = koneksi.koneksi.getConnection().prepareStatement(sql);
         
         ps.setString(1, trank.getText());                 
@@ -368,9 +418,20 @@ pop_up_siswa popup = new pop_up_siswa(this);
         ps.setString(5, txtyear.getText());               
         
         ps.executeUpdate();
-        
         JOptionPane.showMessageDialog(this, "Pembayaran Berhasil Disimpan!");
+        
+        // 1. Cetak data yang BARU SAJA sukses disimpan ke database
+        cetakData(trank.getText());
+        
+        // 2. Kosongkan field inputan
         kosong();
+        
+        // 3. GENERATE KEMBALI nomor transaksi baru untuk transaksi berikutnya setelah dikosongkan
+        String time = String.valueOf(System.currentTimeMillis());
+        String pendek = time.substring(time.length() - 4);
+        trank.setText("TRX-" + pendek);
+        
+        // 4. Refresh isi tabel
         datatable(); 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
@@ -382,7 +443,7 @@ pop_up_siswa popup = new pop_up_siswa(this);
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-        // TODO add your handling code here:
+    cetak();
     }//GEN-LAST:event_printActionPerformed
 
 

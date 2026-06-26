@@ -1,0 +1,142 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="ae03df21-6234-45ce-965e-d41d3e18c6ef">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     tbl_transaksi.`no_transaksi` ,
+     tbl_transaksi.`nisn` AS nisn,
+     tbl_transaksi.`jumlah_bayar`,
+     tbl_transaksi.`bulan_bayar`,
+     tbl_transaksi.`tahun_bayar`,
+     tbl_siswa.`nisn`,
+     tbl_siswa.`nama`,
+     tbl_siswa.`angkatan`,
+     tbl_siswa.`jurusan`,
+     tbl_siswa.`kelas`,
+     tbl_siswa.`jkel`
+FROM
+     `tbl_siswa` tbl_siswa INNER JOIN `tbl_transaksi` tbl_transaksi ON tbl_siswa.`nisn` = tbl_transaksi.`nisn`]]>
+	</queryString>
+	<field name="no_transaksi" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nisn" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jumlah_bayar" class="java.lang.Integer">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="bulan_bayar" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="tahun_bayar" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="angkatan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jurusan" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="kelas" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jkel" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="0" y="0" width="46" height="20" uuid="f1bd3890-05b6-4d1a-9101-aa321ccb103f"/>
+				<text><![CDATA[no_transaksi]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="56" y="2" width="55" height="20" uuid="edf330cf-7408-4844-bb62-c7aa69178971"/>
+				<text><![CDATA[nisn]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="363" y="2" width="58" height="20" uuid="35d3cb33-2963-4753-add4-19dbdf178895"/>
+				<text><![CDATA[bulan_bayar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="122" y="2" width="100" height="20" uuid="eb728d54-daf9-49e1-8f1a-ee510b10f9f1"/>
+				<text><![CDATA[nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="235" y="2" width="39" height="20" uuid="5eec2579-17b0-4154-b98d-91e840328154"/>
+				<text><![CDATA[kelas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="288" y="2" width="64" height="20" uuid="11566ad5-ce9b-4ea1-b5fa-53c0b64fa082"/>
+				<text><![CDATA[jumlah_bayar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="439" y="2" width="36" height="20" uuid="2807d6e8-0a8e-4f2d-83a9-a6c6b91a3dfb"/>
+				<text><![CDATA[tahun_bayar]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="488" y="2" width="67" height="20" uuid="2273bd39-46db-4514-89b5-dd7a01cc4846"/>
+				<text><![CDATA[jurusan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="125" splitType="Stretch">
+			<textField>
+				<reportElement x="0" y="9" width="46" height="20" uuid="34f0cbea-165f-417e-819f-0774e8fe195b"/>
+				<textFieldExpression><![CDATA[$F{no_transaksi}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="56" y="9" width="55" height="20" uuid="6f1dd5c5-9a6c-4013-9fa6-935c4ee2d558"/>
+				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="363" y="3" width="58" height="20" uuid="09041b02-a52a-46fe-9046-4c013f46ab8d"/>
+				<textFieldExpression><![CDATA[$F{bulan_bayar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="122" y="17" width="100" height="20" uuid="0a263ebc-2f90-4ac8-ac05-addedd19223f"/>
+				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="235" y="12" width="39" height="20" uuid="065697f9-b331-4eb7-a6a9-df01a600644e"/>
+				<textFieldExpression><![CDATA[$F{kelas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="288" y="9" width="64" height="20" uuid="0e2a9c2b-1203-49ea-b5e4-045222e2da64"/>
+				<textFieldExpression><![CDATA[$F{jumlah_bayar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="439" y="9" width="36" height="20" uuid="2abb421e-97f6-4d81-bbea-01de34d2c957"/>
+				<textFieldExpression><![CDATA[$F{tahun_bayar}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="488" y="12" width="67" height="20" uuid="394b1c4e-bad3-4e3e-9a02-a5d5dddaee2f"/>
+				<textFieldExpression><![CDATA[$F{jurusan}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="45" splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="54" splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band height="42" splitType="Stretch"/>
+	</summary>
+</jasperReport>
