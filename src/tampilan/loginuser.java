@@ -237,42 +237,43 @@ public class loginuser extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-   nip.requestFocus();
+        nip.requestFocus();
         try {
-    String sql = "SELECT * FROM users WHERE nip=? AND password=?"; // Pastikan nama kolom 'password' benar
-    java.sql.Connection conn = new koneksi().getConnection();
-    java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            String sql = "SELECT * FROM users WHERE nip=? AND password=?"; 
+            java.sql.Connection conn = new koneksi().getConnection();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 
-    // PASTIKAN nip dan pass adalah nama variabel TextField kamu di Design
-    pst.setString(1, nip.getText()); 
-    pst.setString(2, pass.getText());
+            pst.setString(1, nip.getText()); 
+            pst.setString(2, pass.getText());
 
-    java.sql.ResultSet rs = pst.executeQuery();
+            java.sql.ResultSet rs = pst.executeQuery();
 
-    if (rs.next()) {
-        String statusUser = rs.getString("status");
-        String namaDariDB = rs.getString("nama");
+            if (rs.next()) {
+                String statusUser = rs.getString("status");
+                String namaDariDB = rs.getString("nama");
 
-        if (statusUser.equalsIgnoreCase("no")) {
-            JOptionPane.showMessageDialog(null, "Maaf, status Anda tidak aktif!");
-            nip.setText("");
-            pass.setText("");
-        } else {
-            UserSession.setLevel(rs.getString("lvl"));
-            UserSession.setNama(namaDariDB);
-            // Simpan status juga jika sudah menambahkan di UserSession.java
-            // UserSession.setStatus(statusUser); 
+                if (statusUser.equalsIgnoreCase("no")) {
+                    JOptionPane.showMessageDialog(null, "Maaf, status Anda tidak aktif!");
+                    nip.setText("");
+                    pass.setText("");
+                } else {
+                    UserSession.setNip(rs.getString("nip")); 
+                    
+                    UserSession.setLevel(rs.getString("lvl"));
+                    UserSession.setNama(namaDariDB);
+                    
+                    UserSession.setStatus(statusUser); 
 
-            JOptionPane.showMessageDialog(null, "Login Berhasil sebagai " + namaDariDB);
-            new dashboardtu().setVisible(true);
-            this.dispose();
+                    JOptionPane.showMessageDialog(null, "Login Berhasil sebagai " + namaDariDB);
+                    new dashboardtu().setVisible(true);
+                    this.dispose();
+                }
+            } else {
+                JOptionPane.showMessageDialog(null, "NIP atau Password Salah!");
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         }
-    } else {
-        JOptionPane.showMessageDialog(null, "NIP atau Password Salah!");
-    }
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-}
     }//GEN-LAST:event_loginActionPerformed
 
     private void nipKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nipKeyPressed

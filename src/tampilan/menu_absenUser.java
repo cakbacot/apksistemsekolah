@@ -23,6 +23,7 @@ import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
 import net.sf.jasperreports.view.JasperViewer;
 import net.sf.jasperreports.engine.data.JRTableModelDataSource;
+import tampilan.UserSession;
 /**
  *
  * @author User
@@ -36,6 +37,7 @@ ResultSet rs;
      * Creates new form menu_absenUser
      */
     public menu_absenUser() {
+        String NP = UserSession.getNip();
         initComponents();
         kosong();
         aktif();
@@ -63,14 +65,13 @@ ResultSet rs;
     }
     
     protected void datatable(){
-        // 1. Definisikan header/judul kolom (Ada 4 kolom)
+        // 1. Definisikan header/judul kolom (BAGIAN INI YANG SEBELUMNYA HILANG)
         String[] baris = {"NIP", "Nama User", "Kehadiran", "Total Hadir", "Total Tidak Hadir", "Keterangan"};
 
-        // 2. Buat Custom DefaultTableModel agar kolom ke-3 (Kehadiran) menjadi Checkbox
+        // 2. Inisialisasi tabmode agar checkbox bisa diklik
         tabmode = new DefaultTableModel(null, baris) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                // Index 3 adalah kolom "Kehadiran" (Dimulai dari 0, 1, 2, 3)
                 if (columnIndex == 2) { 
                     return Boolean.class; 
                 }
@@ -79,24 +80,27 @@ ResultSet rs;
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Hanya kolom index 3 ("Kehadiran") yang bisa diklik/diedit oleh user
                 return column == 2 || column == 5; 
             }
         };
 
+        // 3. Masukkan tabmode ke dalam tabel UI Anda
         tbluser.setModel(tabmode);
 
+        // 4. Proses memanggil data dari database
         try {
-            // Menggunakan query LEFT JOIN yang jauh lebih aman dan cepat
+            String nipLogin = UserSession.getNip();
             String sql = "SELECT u.nip, u.nama, " +
                          "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
                          "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir " +
                          "FROM users u " +
                          "LEFT JOIN tbl_absen_user a ON u.nip = a.nip " +
+                         "WHERE u.nip = ? " +
                          "GROUP BY u.nip, u.nama";
 
-            Statement stat = con.createStatement();
-            ResultSet hasil = stat.executeQuery(sql);
+            PreparedStatement stat = con.prepareStatement(sql);
+            stat.setString(1, nipLogin);
+            ResultSet hasil = stat.executeQuery();
 
             while (hasil.next()) {
                 Object[] data = {
@@ -107,22 +111,20 @@ ResultSet rs;
                     hasil.getInt("total_tidak_hadir"),
                     ""
                 };
-                tabmode.addRow(data);
+                tabmode.addRow(data); // Sekarang baris ini tidak akan error lagi
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Mencetak error di console NetBeans
+            e.printStackTrace(); 
             JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
-        }    
+        }
     }
-    
-    private void aturHakAkses() {
+private void aturHakAkses() {
         String levelUser = UserSession.getLevel();
         if (levelUser != null && !levelUser.equals("1")) {           
             bcetak.setVisible(false); 
         }
     }
-
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
