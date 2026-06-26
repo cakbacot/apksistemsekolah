@@ -59,6 +59,7 @@ private Connection conn = new koneksi().getConnection();
     setFixedIcon(tranksaksi, "/resource/tranksaksi.png");
     setFixedIcon(jdwl,"/resource/jadwal.png");
     setFixedIcon(absenuser,"/resource/user.png");
+    setFixedIcon(absenguru,"/resource/logoguru.png");
     sethome(home,"/resource/home.png");
     setleave(keluar,"/resource/keluar.png");
     setadmin(admin,"/resource/admin.png");
@@ -322,6 +323,7 @@ private void setadmin(javax.swing.JButton btn, String path) {
         tranksaksi = new javax.swing.JButton();
         keluar = new javax.swing.JButton();
         jdwl = new javax.swing.JButton();
+        absenguru = new javax.swing.JButton();
         absenuser = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
@@ -481,9 +483,26 @@ private void setadmin(javax.swing.JButton btn, String path) {
             }
         });
 
+        absenguru.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
+        absenguru.setForeground(new java.awt.Color(255, 255, 255));
+        absenguru.setText("Absen Guru");
+        absenguru.setToolTipText("");
+        absenguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        absenguru.setFocusPainted(false);
+        absenguru.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                absenguruMouseClicked(evt);
+            }
+        });
+        absenguru.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                absenguruActionPerformed(evt);
+            }
+        });
+
         absenuser.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
         absenuser.setForeground(new java.awt.Color(255, 255, 255));
-        absenuser.setText("Absen");
+        absenuser.setText("Absen User");
         absenuser.setToolTipText("");
         absenuser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         absenuser.setFocusPainted(false);
@@ -511,7 +530,8 @@ private void setadmin(javax.swing.JButton btn, String path) {
                     .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, 142, Short.MAX_VALUE)
                     .addComponent(tranksaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jdwl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(absenuser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(absenguru, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(absenuser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -527,8 +547,10 @@ private void setadmin(javax.swing.JButton btn, String path) {
                 .addComponent(jdwl, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(tranksaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(absenuser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(absenguru, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(keluar)
                 .addContainerGap())
@@ -714,8 +736,38 @@ private void setadmin(javax.swing.JButton btn, String path) {
     }// Agar muncul di teng
     }//GEN-LAST:event_jdwlActionPerformed
 
-    private void absenuserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_absenuserActionPerformed
+    private void absenguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_absenguruActionPerformed
     desktop.removeAll();
+    desktop.repaint();
+    
+    // 2. Buat objek dari JInternalFrame menu_siswa
+    menu_absenGuru mu = new menu_absenGuru();
+    
+    // 3. Masukkan objek tersebut ke dalam JDesktopPane
+    desktop.add(mu);
+    
+    // 4. Tampilkan formnya
+    mu.setVisible(true);
+    
+    try {
+        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
+        mu.setMaximum(true);
+    } catch (java.beans.PropertyVetoException e) {
+        // Jika gagal dimaksimalkan, tampilkan pesan error di console
+        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
+    }// Agar muncul di teng
+    }//GEN-LAST:event_absenguruActionPerformed
+
+    private void absenguruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenguruMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_absenguruMouseClicked
+
+    private void absenuserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenuserMouseClicked
+        // TODO add your handling code here:
+    }//GEN-LAST:event_absenuserMouseClicked
+
+    private void absenuserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_absenuserActionPerformed
+     desktop.removeAll();
     desktop.repaint();
     
     // 2. Buat objek dari JInternalFrame menu_siswa
@@ -736,10 +788,6 @@ private void setadmin(javax.swing.JButton btn, String path) {
     }// Agar muncul di teng
     }//GEN-LAST:event_absenuserActionPerformed
 
-    private void absenuserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenuserMouseClicked
-        // TODO add your handling code here:
-    }//GEN-LAST:event_absenuserMouseClicked
-
     /**
      * @param args the command line arguments
      */
@@ -759,6 +807,7 @@ private void setadmin(javax.swing.JButton btn, String path) {
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton absenguru;
     private javax.swing.JButton absenuser;
     private javax.swing.JButton admin;
     private javax.swing.JDesktopPane desktop;
