@@ -42,7 +42,6 @@ ResultSet rs;
     public menu_absenGuru() {
         initComponents();
         String KD = GuruSession.getKdGuru();
-        
         System.out.println(KD);
         datatable();
         aktif();
@@ -50,7 +49,7 @@ ResultSet rs;
     }
      protected void datatable(){
         // 1. Definisikan header/judul kolom (Ada 4 kolom)
-        String[] baris = {"NIP", "Nama guru", "Kehadiran", "Total Hadir", "Total Tidak Hadir", "Keterangan"};
+        String[] baris = {"Kode Guru", "Nama guru", "Kehadiran", "Total Hadir", "Total Tidak Hadir", "Keterangan"};
 
         // 2. Buat Custom DefaultTableModel agar kolom ke-3 (Kehadiran) menjadi Checkbox
         tabmode = new DefaultTableModel(null, baris) {
@@ -73,20 +72,22 @@ ResultSet rs;
         tblguru.setModel(tabmode);
 
         try {
+            String guruLogin = GuruSession.getKdGuru();
             // Menggunakan query LEFT JOIN yang jauh lebih aman dan cepat
-            String sql = "SELECT u.nip_g, u.nama, " +
-                         "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
-                         "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir " +
-                         "FROM users u " +
-                         "LEFT JOIN tbl_absen_guru a ON u.nip_g = a.nip_g " +
-                         "GROUP BY u.nip_g, u.nama";
-
-            Statement stat = con.createStatement();
-            ResultSet hasil = stat.executeQuery(sql);
+            String sql = "SELECT u.kd_guru, u.nama, " +
+             "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
+             "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir " +
+             "FROM guru u " +
+             "LEFT JOIN tbl_absen_guru a ON u.kd_guru = a.kd_guru " +
+             "WHERE u.kd_guru = ? " +  // <-- PASTIKAN BARIS INI ADA
+             "GROUP BY u.kd_guru, u.nama"; // <-- GROUP BY HARUS DI BAWAH WHERE
+            PreparedStatement stat = con.prepareStatement(sql);
+            stat.setString(1, guruLogin);
+            ResultSet hasil = stat.executeQuery();
 
             while (hasil.next()) {
                 Object[] data = {
-                    hasil.getString("nip_g"),
+                    hasil.getString("kd_guru"),
                     hasil.getString("nama"),
                     false, // Checkbox default belum dicentang
                     hasil.getInt("total_hadir"),
@@ -326,7 +327,7 @@ ResultSet rs;
 
         String sql =
                 "INSERT INTO tbl_absen_guru " +
-                "(nip_g,tgl,kehadiran,keterangan) " +
+                "(kd_guru,tgl,kehadiran,keterangan) " +
                 "VALUES (?,?,?,?)";
 
         PreparedStatement pst =
