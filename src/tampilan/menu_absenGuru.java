@@ -42,21 +42,21 @@ ResultSet rs;
     public menu_absenGuru() {
         initComponents();
         String KD = GuruSession.getKdGuru();
-        jLabel2.setText(KD);
+        
         System.out.println(KD);
         datatable();
         aktif();
         kosong();
     }
-    protected void datatable(){ 
-        // 1. Definisikan header/judul kolom (4 Kolom utama)
-        String[] baris = {"Kode Guru", "Tanggal", "Kehadiran", "Keterangan"};
+     protected void datatable(){
+        // 1. Definisikan header/judul kolom (Ada 4 kolom)
+        String[] baris = {"NIP", "Nama guru", "Kehadiran", "Total Hadir", "Total Tidak Hadir", "Keterangan"};
 
         // 2. Buat Custom DefaultTableModel agar kolom ke-3 (Kehadiran) menjadi Checkbox
         tabmode = new DefaultTableModel(null, baris) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                // Index 2 adalah kolom "Kehadiran" (Dimulai dari 0, 1, 2)
+                // Index 3 adalah kolom "Kehadiran" (Dimulai dari 0, 1, 2, 3)
                 if (columnIndex == 2) { 
                     return Boolean.class; 
                 }
@@ -65,54 +65,41 @@ ResultSet rs;
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Hanya kolom index 2 (Kehadiran) dan index 3 (Keterangan) yang bisa diubah di tabel
-                return column == 2 || column == 3; 
+                // Hanya kolom index 3 ("Kehadiran") yang bisa diklik/diedit oleh user
+                return column == 2 || column == 5; 
             }
         };
 
         tblguru.setModel(tabmode);
 
         try {
-            // Query mengunci data berdasarkan guru yang sedang login
-            String sql = "SELECT g.kd_guru, a.tgl, a.kehadiran, a.keterangan " +
-                         "FROM guru g " +
-                         "LEFT JOIN tbl_absen_guru a ON g.kd_guru = a.kd_guru " +
-                         "WHERE g.kd_guru = ?"; 
+            // Menggunakan query LEFT JOIN yang jauh lebih aman dan cepat
+            String sql = "SELECT u.nip_g, u.nama, " +
+                         "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
+                         "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir " +
+                         "FROM users u " +
+                         "LEFT JOIN tbl_absen_guru a ON u.nip_g = a.nip_g " +
+                         "GROUP BY u.nip_g, u.nama";
 
-            PreparedStatement stat = con.prepareStatement(sql);
-            
-            // --- CUKUP GANTI BAGIAN INI ---
-            // Mengambil langsung Kode Guru yang aktif dari GuruSession
-            stat.setString(1, GuruSession.getKdGuru()); 
-            
-            ResultSet hasil = stat.executeQuery();
-
-            // Bersihkan baris lama sebelum load data baru
-            tabmode.setRowCount(0);
+            Statement stat = con.createStatement();
+            ResultSet hasil = stat.executeQuery(sql);
 
             while (hasil.next()) {
-                String kdGuru = hasil.getString("kd_guru");
-                String tgl = hasil.getString("tgl") != null ? hasil.getString("tgl") : "-";
-                
-                int statusDb = hasil.getInt("kehadiran");
-                boolean isHadir = (statusDb == 1); 
-                
-                String keterangan = hasil.getString("keterangan") != null ? hasil.getString("keterangan") : "";
-
                 Object[] data = {
-                    kdGuru,
-                    tgl,
-                    isHadir,      
-                    keterangan    
+                    hasil.getString("nip_g"),
+                    hasil.getString("nama"),
+                    false, // Checkbox default belum dicentang
+                    hasil.getInt("total_hadir"),
+                    hasil.getInt("total_tidak_hadir"),
+                    ""
                 };
                 tabmode.addRow(data);
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); 
-            JOptionPane.showMessageDialog(this, "Gagal memuat data tabel: " + e.getMessage());
-        }   
-    }
+            e.printStackTrace(); // Mencetak error di console NetBeans
+            JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
+        }    }
 
        
         
@@ -121,7 +108,7 @@ ResultSet rs;
     }
     
     protected void kosong(){
-        jTemu.setValue(1);
+       
         tglTemu.setDate(new Date());
 
     }
@@ -153,10 +140,7 @@ ResultSet rs;
         tblguru = new javax.swing.JTable();
         jPanel1 = new javax.swing.JPanel();
         jLabel7 = new javax.swing.JLabel();
-        jLabel8 = new javax.swing.JLabel();
         tglTemu = new com.toedter.calendar.JDateChooser();
-        jTemu = new javax.swing.JSpinner();
-        jLabel2 = new javax.swing.JLabel();
         bbatal = new javax.swing.JButton();
         bsimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
@@ -196,19 +180,11 @@ ResultSet rs;
         });
         jScrollPane1.setViewportView(tblguru);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(1, 1, 1))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16), new java.awt.Color(1, 1, 1))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
         jLabel7.setText("Tanggal  : ");
-
-        jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel8.setText("Pertemuan ke- : ");
-
-        jTemu.setFont(new java.awt.Font("Times New Roman", 0, 12)); // NOI18N
-        jTemu.setModel(new javax.swing.SpinnerNumberModel(1, 1, 48, 1));
-
-        jLabel2.setText("jLabel2");
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -219,27 +195,17 @@ ResultSet rs;
                 .addComponent(jLabel7)
                 .addGap(18, 18, 18)
                 .addComponent(tglTemu, javax.swing.GroupLayout.PREFERRED_SIZE, 164, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(51, 51, 51)
-                .addComponent(jLabel8)
-                .addGap(18, 18, 18)
-                .addComponent(jTemu, javax.swing.GroupLayout.PREFERRED_SIZE, 52, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(188, Short.MAX_VALUE))
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addComponent(jLabel2)
-                .addGap(49, 49, 49))
+                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(jLabel2)
-                .addGap(8, 8, 8)
+                .addGap(28, 28, 28)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
                     .addComponent(jLabel7)
-                    .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                        .addComponent(jLabel8)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
                         .addComponent(tglTemu, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addComponent(jTemu)))
+                        .addGap(2, 2, 2)))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -288,7 +254,7 @@ ResultSet rs;
                         .addGap(35, 35, 35))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(bprint, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 318, Short.MAX_VALUE)
                         .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -307,7 +273,7 @@ ResultSet rs;
                     .addComponent(bsimpan)
                     .addComponent(bbatal)
                     .addComponent(bprint))
-                .addContainerGap(181, Short.MAX_VALUE))
+                .addContainerGap(185, Short.MAX_VALUE))
         );
 
         pack();
@@ -335,82 +301,73 @@ ResultSet rs;
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-        if (tglTemu.getDate() == null) {
-            JOptionPane.showMessageDialog(this, "Pilih tanggal pertemuan terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-        int pertemuan_ke = (Integer) jTemu.getValue();
-        if (pertemuan_ke <= 0) {
-            JOptionPane.showMessageDialog(this, "Pertemuan tidak boleh 0!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
+        DefaultTableModel model =
+            (DefaultTableModel) tblguru.getModel();
 
-        // 2. Ambil Data Model dari JTable
-        DefaultTableModel model = (DefaultTableModel) tblguru.getModel();
-        int jumlahBaris = model.getRowCount();
+    int jumlahBaris = model.getRowCount();
 
-        if (jumlahBaris == 0) {
-            JOptionPane.showMessageDialog(this, "Tabel data guru masih kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-            return;
-        }
-
-        // 3. Prompt Dialog Konfirmasi
-        int konfirmasi = JOptionPane.showConfirmDialog(this,
-            "Apakah Anda yakin data kehadiran sudah benar dan ingin disimpan?",
-            "Konfirmasi Simpan",
-            JOptionPane.YES_NO_OPTION,
-            JOptionPane.QUESTION_MESSAGE);
-
-        if (konfirmasi != JOptionPane.YES_OPTION) {
-            return; 
-        }
-
-        // 4. Konversi format tanggal ke SQL Date
-        java.sql.Date sqlDate = new java.sql.Date(tglTemu.getDate().getTime());
-
-try {
-    // UPDATE: Query disesuaikan persis dengan 5 kolom asli di database (id_absen otomatis AUTO_INCREMENT)
-    String sql = "INSERT INTO tbl_absen_guru (kd_guru, tgl, kehadiran, keterangan) " +
-                 "VALUES (?, ?, ?, ?) " +
-                 "ON DUPLICATE KEY UPDATE kehadiran = VALUES(kehadiran), keterangan = VALUES(keterangan)";
-                 
-    PreparedStatement pst = con.prepareStatement(sql);
-
-    // 5. Perulangan membaca baris JTable
-    for (int i = 0; i < jumlahBaris; i++) {
-        String kdGuru = model.getValueAt(i, 0).toString();
-
-        // Kolom ke-2 (Index 2) adalah Boolean Checkbox Kehadiran
-        Object objKehadiran = model.getValueAt(i, 2);
-        boolean isChecked = (objKehadiran != null && (Boolean) objKehadiran);
-        int status_hadir = isChecked ? 1 : 0; // Masuk ke int(1) di database
-
-        // Kolom ke-3 (Index 3) adalah String Keterangan
-        Object objKeterangan = model.getValueAt(i, 3);
-        String keterangan = (objKeterangan != null) ? objKeterangan.toString() : "";
-
-        // PEMETAAN BARU (Wajib Berurutan):
-        pst.setString(1, kdGuru);       // Mengisi kd_guru (varchar)
-        pst.setDate(2, sqlDate);        // Mengisi tgl (date)
-        pst.setInt(3, status_hadir);    // Mengisi kehadiran (int)
-        pst.setString(4, keterangan);   // Mengisi keterangan (varchar)
-
-        pst.addBatch(); 
+    if (jumlahBaris == 0) {
+        JOptionPane.showMessageDialog(this,
+                "Data masih kosong!");
+        return;
     }
 
-    // 6. Eksekusi batch
-    pst.executeBatch();
+    int konfirmasi = JOptionPane.showConfirmDialog(
+            this,
+            "Yakin ingin menyimpan data absensi?",
+            "Konfirmasi",
+            JOptionPane.YES_NO_OPTION);
 
-    JOptionPane.showMessageDialog(this, "Data absensi guru berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
+    if (konfirmasi != JOptionPane.YES_OPTION) {
+        return;
+    }
 
-    // 7. Bersihkan dan segarkan form
-    kosong();
-    
+    try {
 
-} catch (Exception e) {
-    e.printStackTrace();
-    JOptionPane.showMessageDialog(this, "Gagal menyimpan data absensi:\n" + e.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
-}
+        String sql =
+                "INSERT INTO tbl_absen_guru " +
+                "(nip_g,tgl,kehadiran,keterangan) " +
+                "VALUES (?,?,?,?)";
+
+        PreparedStatement pst =
+                con.prepareStatement(sql);
+
+       java.sql.Date tgl =
+            new java.sql.Date(tglTemu.getDate().getTime());
+
+        for (int i = 0; i < jumlahBaris; i++) {
+
+            String nip =
+                    model.getValueAt(i, 0).toString();
+
+            boolean hadir =
+                    (Boolean) model.getValueAt(i, 2);
+
+            String keterangan =
+                    model.getValueAt(i, 5).toString();
+
+            pst.setString(1, nip);
+            pst.setDate(2, tgl);
+            pst.setInt(3, hadir ? 1 : 0);
+            pst.setString(4, keterangan);
+
+            pst.addBatch();
+        }
+
+        pst.executeBatch();
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Data absensi berhasil disimpan");
+
+        datatable();
+
+    } catch (Exception e) {
+
+        JOptionPane.showMessageDialog(
+                this,
+                "Error : " + e.getMessage());
+    }
     
         // TODO add your handling code here:
     }//GEN-LAST:event_bsimpanActionPerformed
@@ -425,12 +382,9 @@ try {
     private javax.swing.JButton bprint;
     private javax.swing.JButton bsimpan;
     private javax.swing.JLabel jLabel1;
-    private javax.swing.JLabel jLabel2;
     private javax.swing.JLabel jLabel7;
-    private javax.swing.JLabel jLabel8;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JSpinner jTemu;
     private javax.swing.JTable tblguru;
     private com.toedter.calendar.JDateChooser tglTemu;
     // End of variables declaration//GEN-END:variables
