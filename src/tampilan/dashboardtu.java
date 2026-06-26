@@ -58,6 +58,7 @@ private Connection conn = new koneksi().getConnection();
     setFixedIcon(menusiswa, "/resource/murid.png");
     setFixedIcon(tranksaksi, "/resource/tranksaksi.png");
     setFixedIcon(jdwl,"/resource/jadwal.png");
+    setFixedIcon(absenuser,"/resource/user.png");
     sethome(home,"/resource/home.png");
     setleave(keluar,"/resource/keluar.png");
     setadmin(admin,"/resource/admin.png");
