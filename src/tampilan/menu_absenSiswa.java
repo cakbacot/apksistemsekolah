@@ -51,7 +51,7 @@ ResultSet rs;
             return;
         }
 
-        String path = "./src/report/reportSiswa.jasper"; // Sesuaikan path-nya
+        String path = "/report/reportSiswa.jasper"; // Sesuaikan path-nya
         HashMap<String, Object> parameter = new HashMap<>();
         System.out.println("NIP Guru yang dikirim: '" + idGuruLogin + "'");
         System.out.println("Kelas yang dikirim: '" + kelasYangDipilih + "'");

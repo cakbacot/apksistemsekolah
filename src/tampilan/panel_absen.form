@@ -78,6 +78,7 @@
         <Component class="javax.swing.JLabel" name="absenguru">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="absenguruMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="absenguruMouseEntered"/>
           </Events>
         </Component>
       </SubComponents>
@@ -119,6 +120,7 @@
         <Component class="javax.swing.JLabel" name="absensiswa">
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="absensiswaMouseClicked"/>
+            <EventHandler event="mouseEntered" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="absensiswaMouseEntered"/>
           </Events>
         </Component>
       </SubComponents>

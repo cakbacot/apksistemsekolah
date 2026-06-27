@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="38e1a44c-8e18-47ce-a162-3fb8a86adddf">
-	<property name="ireport.zoom" value="1.1"/>
+	<property name="ireport.zoom" value="1.6105100000000014"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<style name="Crosstab Data Text" hAlign="Center"/>
@@ -29,8 +29,7 @@
     ) AS persentase_kehadiran
 FROM users u
 LEFT JOIN tbl_absen_user a ON u.nip = a.nip
-GROUP BY u.nip, u.nama, u.lvl, u.status;
-]]>
+GROUP BY u.nip, u.nama, u.lvl, u.status;]]>
 		</queryString>
 	</subDataset>
 	<queryString>
@@ -57,8 +56,7 @@ GROUP BY u.nip, u.nama, u.lvl, u.status;
     ) AS persentase_kehadiran
 FROM users u
 LEFT JOIN tbl_absen_user a ON u.nip = a.nip
-GROUP BY u.nip, u.nama, u.lvl, u.status;
-]]>
+GROUP BY u.nip, u.nama, u.lvl, u.status;]]>
 	</queryString>
 	<field name="nip" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -73,10 +71,10 @@ GROUP BY u.nip, u.nama, u.lvl, u.status;
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="72" splitType="Stretch">
+		<band height="38" splitType="Stretch">
 			<staticText>
-				<reportElement x="212" y="0" width="136" height="25" uuid="8a05d217-b8f1-4800-9c6a-2c022aecdc45"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="8a05d217-b8f1-4800-9c6a-2c022aecdc45" x="212" y="0" width="136" height="25"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
 				<text><![CDATA[REKAP ABSEN TU]]></text>
@@ -87,66 +85,80 @@ GROUP BY u.nip, u.nama, u.lvl, u.status;
 		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch">
+		<band height="35" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="2" width="100" height="20" uuid="52c4de54-6e15-4dad-b84c-be9aa29ab0f8"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="52c4de54-6e15-4dad-b84c-be9aa29ab0f8" x="0" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NIP]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="122" y="0" width="100" height="20" uuid="b8063d43-e4ab-43e2-8a44-6f1c8242eaa4"/>
-				<textElement>
+				<reportElement uuid="b8063d43-e4ab-43e2-8a44-6f1c8242eaa4" x="100" y="0" width="112" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama Pegawai]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="248" y="0" width="100" height="20" uuid="c5de22ca-de5f-4251-8bd1-a2329ce9c9dc"/>
-				<textElement>
+				<reportElement uuid="c5de22ca-de5f-4251-8bd1-a2329ce9c9dc" x="212" y="0" width="115" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jabatan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="372" y="2" width="100" height="20" uuid="7f1a3116-c996-4d7b-9a3e-53179b737f6f"/>
-				<textElement>
+				<reportElement uuid="7f1a3116-c996-4d7b-9a3e-53179b737f6f" x="327" y="0" width="128" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="483" y="2" width="100" height="20" uuid="2428d098-e18f-41ab-9fd3-e98b34942109"/>
-				<textElement>
+				<reportElement uuid="2428d098-e18f-41ab-9fd3-e98b34942109" x="455" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Presentas]]></text>
 			</staticText>
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="0" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="34" width="555" height="1"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="125" splitType="Stretch">
+		<band height="44" splitType="Stretch">
 			<textField>
-				<reportElement x="0" y="5" width="100" height="20" uuid="93d97c0f-9f7d-434d-881b-c8461be6ac29"/>
+				<reportElement uuid="93d97c0f-9f7d-434d-881b-c8461be6ac29" x="0" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nip}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="122" y="5" width="100" height="20" uuid="e82c0d1b-5dea-4e5f-b9a5-a216a353e0e8"/>
+				<reportElement uuid="e82c0d1b-5dea-4e5f-b9a5-a216a353e0e8" x="100" y="0" width="112" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="248" y="5" width="100" height="20" uuid="fc6b79e2-6d81-46a2-b54f-03babb79fb71"/>
+				<reportElement uuid="fc6b79e2-6d81-46a2-b54f-03babb79fb71" x="212" y="0" width="115" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{jabatan}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="372" y="5" width="100" height="20" uuid="d6223d7e-f58b-4339-be85-c17769933070"/>
+				<reportElement uuid="d6223d7e-f58b-4339-be85-c17769933070" x="327" y="0" width="128" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{status_teks}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="483" y="5" width="100" height="20" uuid="43e49bf0-367b-4b19-a28d-ac9f316d741c"/>
+				<reportElement uuid="43e49bf0-367b-4b19-a28d-ac9f316d741c" x="455" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{persentase_kehadiran}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="30" width="555" height="1"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>
@@ -155,11 +167,13 @@ GROUP BY u.nip, u.nama, u.lvl, u.status;
 	<pageFooter>
 		<band height="73" splitType="Stretch">
 			<staticText>
-				<reportElement x="419" y="0" width="100" height="20" uuid="924f031f-4020-4643-a448-2352371e88b0"/>
+				<reportElement uuid="924f031f-4020-4643-a448-2352371e88b0" x="419" y="0" width="100" height="20"/>
+				<textElement/>
 				<text><![CDATA[Mengetahui :]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="419" y="42" width="111" height="20" uuid="8af305d6-3d9e-45f9-b2d4-248fa6c64d68"/>
+				<reportElement uuid="8af305d6-3d9e-45f9-b2d4-248fa6c64d68" x="419" y="42" width="111" height="20"/>
+				<textElement/>
 				<text><![CDATA[(.....................................)]]></text>
 			</staticText>
 		</band>

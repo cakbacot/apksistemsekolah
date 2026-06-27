@@ -65,7 +65,7 @@ public class panel_absen extends javax.swing.JInternalFrame {
     private void scaleImage1() {
     try {
         // Alamat logo kamu
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/user.png"));
+        ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/murid.png"));
         Image imgLama = iconAwal.getImage();
         
         // Mengambil ukuran lbl_logo saat ini
@@ -120,41 +120,25 @@ public class panel_absen extends javax.swing.JInternalFrame {
   // --- FITUR HOVER: UBAH WARNA BACKGROUND PANEL ---
     private void aktifkanHoverWarnaPanel() {
         // 1. Warna untuk PANEL USER (jPanel1)
-        java.awt.Color warnaAsliUser = new java.awt.Color(0, 0, 255);    // Biru Terang Asli
-        java.awt.Color warnaHoverUser = new java.awt.Color(0, 10, 135); // Biru Lebih Muda (Hover)
-        java.awt.Color warnaKlikUser = new java.awt.Color(0, 0, 150);    // Biru Gelap (Saat Diklik)
+        java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);     // Biru Terang Asli
+        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); // Biru Lebih Muda (Hover)
 
         jpanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jpanel1.setBackground(warnaHoverUser);
+                jpanel1.setBackground(warnaHoverSiswa);
                 jpanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                jpanel1.setBackground(warnaAsliUser);
+                jpanel1.setBackground(warnaAsliSiswa);
             }
 
-            @Override
-            public void mousePressed(java.awt.event.MouseEvent evt) {
-                // Ketika tombol mouse ditekan/diklik, panel berubah menjadi gelap
-                jpanel1.setBackground(warnaKlikUser);
-            }
-
-            @Override
-            public void mouseReleased(java.awt.event.MouseEvent evt) {
-                // Ketika klik dilepas, kembali ke warna hover jika mouse masih di dalam panel
-                if (jpanel1.getBounds().contains(evt.getPoint())) {
-                    jpanel1.setBackground(warnaHoverUser);
-                } else {
-                    jpanel1.setBackground(warnaAsliUser);
-                }
-            }
         });
 
         // 2. Warna untuk PANEL GURU (jPanel2) - Tetap normal seperti sebelumnya
-        java.awt.Color warnaAsliGuru = new java.awt.Color(0, 8, 97);     // Biru Gelap Asli
+        java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     // Biru Gelap Asli
         java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  // Biru Agak Terang Saat Disentuh
 
         jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -191,6 +175,9 @@ public class panel_absen extends javax.swing.JInternalFrame {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 absenguruMouseClicked(evt);
             }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                absenguruMouseEntered(evt);
+            }
         });
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -221,6 +208,9 @@ public class panel_absen extends javax.swing.JInternalFrame {
         absensiswa.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 absensiswaMouseClicked(evt);
+            }
+            public void mouseEntered(java.awt.event.MouseEvent evt) {
+                absensiswaMouseEntered(evt);
             }
         });
 
@@ -307,6 +297,18 @@ public class panel_absen extends javax.swing.JInternalFrame {
     private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
         bukaFormGuru();
     }//GEN-LAST:event_jPanel2MouseClicked
+
+    private void absensiswaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absensiswaMouseEntered
+       java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);    // Biru Terang Asli
+        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); // Biru Lebih Muda (Hover)
+        jpanel1.setBackground(warnaHoverSiswa);
+    }//GEN-LAST:event_absensiswaMouseEntered
+
+    private void absenguruMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenguruMouseEntered
+    java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     
+        java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  
+        jPanel2.setBackground(warnaHoverGuru);
+    }//GEN-LAST:event_absenguruMouseEntered
 
 //public static void main(String args[]) {
 //        /* Set the Nimbus look and feel */

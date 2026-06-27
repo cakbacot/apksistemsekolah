@@ -14,6 +14,7 @@ public class GuruSession {
     private static String nama;
     private static String jkel;
     private static String Nip;
+    private static String kelas;
 
     // Getter & Setter kd_guru
     public static String getKdGuru() {
@@ -42,9 +43,15 @@ public class GuruSession {
     public static String getNip() {
         return Nip;
     }
-    
     public static void setNip(String Nip) {
         GuruSession.Nip = Nip;
+    }
+    
+    public static String getKelas(){
+        return kelas;
+    }
+    public static void setKelas(String kelas){
+        GuruSession.kelas = kelas;
     }
     
     

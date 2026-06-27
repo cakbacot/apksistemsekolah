@@ -34,6 +34,7 @@ public class loginguru extends javax.swing.JFrame {
            setResizable(false);
            scaleImage();
            setFixedIcon(login, "/resource/login2.png");
+           setFixedIcon(kembali,"/resource/kembali.png");
     }
 
     
@@ -119,6 +120,7 @@ public class loginguru extends javax.swing.JFrame {
         jPanel1 = new javax.swing.JPanel();
         lbl_logo = new javax.swing.JLabel();
         pass = new javax.swing.JPasswordField();
+        kembali = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
 
@@ -195,6 +197,14 @@ public class loginguru extends javax.swing.JFrame {
             }
         });
 
+        kembali.setText("Kembali");
+        kembali.setBorderPainted(false);
+        kembali.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                kembaliActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -202,18 +212,20 @@ public class loginguru extends javax.swing.JFrame {
             .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                            .addComponent(nip)
-                            .addComponent(login, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 144, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                            .addComponent(pass))
-                        .addContainerGap())
                     .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
                         .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))))
+                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addGroup(layout.createSequentialGroup()
+                        .addGap(61, 61, 61)
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addComponent(kembali, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
+                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                                .addComponent(nip)
+                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
+                                .addComponent(pass)
+                                .addComponent(login, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                        .addContainerGap())))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -229,7 +241,9 @@ public class loginguru extends javax.swing.JFrame {
                 .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(131, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(kembali, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(75, Short.MAX_VALUE))
             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
@@ -246,7 +260,11 @@ public class loginguru extends javax.swing.JFrame {
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         nip.requestFocus();
 try {
-    String sql = "SELECT * FROM guru WHERE nip_g=? AND password=?"; 
+//    String sql = "SELECT * FROM guru WHERE nip_g=? AND password=?"; 
+String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
+            "FROM guru g " +
+            "LEFT JOIN tbl_kelas k ON g.kd_guru = k.kd_guru " +
+            "WHERE g.nip_g = ? AND g.password = ?";
     java.sql.Connection conn = new koneksi().getConnection();
     java.sql.PreparedStatement pst = conn.prepareStatement(sql);
 
@@ -263,6 +281,13 @@ try {
             GuruSession.setNip(rs.getString("nip_g"));
             GuruSession.setNama(rs.getString("nama"));
             GuruSession.setJkel(rs.getString("jkel")); 
+            GuruSession.setKelas(rs.getString("kelas"));
+            System.out.println(rs.getString("kd_guru"));
+            System.out.println(rs.getString("nip_g"));
+            System.out.println(rs.getString("nama"));
+            System.out.println(rs.getString("jkel"));
+            System.out.println(rs.getString("kelas"));
+            
             
             JOptionPane.showMessageDialog(null, "Login Berhasil!\nSelamat Datang, "
                     + GuruSession.getSapaan() + (", ") + GuruSession.getNama());
@@ -287,6 +312,12 @@ try {
             login.doClick();
         }// TODO add your handling code here:
     }//GEN-LAST:event_passKeyPressed
+
+    private void kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kembaliActionPerformed
+        running.dashboardRunning dr = new running.dashboardRunning();
+    kembali.setVisible(true);
+    this.dispose(); 
+    }//GEN-LAST:event_kembaliActionPerformed
 
     /**
      * @param args the command line arguments
@@ -333,6 +364,7 @@ try {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
+    private javax.swing.JButton kembali;
     private javax.swing.JLabel lbl_logo;
     private javax.swing.JButton login;
     private javax.swing.JTextField nip;

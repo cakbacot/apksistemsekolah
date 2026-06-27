@@ -21,6 +21,9 @@ public class dashboardguru extends javax.swing.JFrame {
      */
     public dashboardguru() {
         initComponents();
+        String kelas = GuruSession.getKelas();
+        System.out.println(kelas);
+        tampilkanHomeAwal();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
         lab_login.setText(("SELAMAT DATANG ")+GuruSession.getSapaan()+ (", ") + GuruSession.getNama());
         setFixedIcon(babsen,"/resource/absen.png");
@@ -28,6 +31,35 @@ public class dashboardguru extends javax.swing.JFrame {
         setFixedIcon(bnilai,"/resource/nilai.png");
         setleave(logout,"/resource/keluar.png");
     }
+    
+    public void tampilkanHomeAwal() {
+    try {
+        // Hapus isi desktop jika ada sisa frame lain
+        desktop.removeAll();
+        
+        homedashboardguru h = new homedashboardguru();
+        
+        // Setting tampilan (tanpa border & bar judul)
+        h.setBorder(null);
+        ((javax.swing.plaf.basic.BasicInternalFrameUI)h.getUI()).setNorthPane(null);
+        
+        desktop.add(h);
+        
+        // Ambil ukuran desktop yang sudah di-render oleh sistem
+        h.setSize(desktop.getWidth(), desktop.getHeight());
+        h.setVisible(true);
+        
+        // Panggil diagram (pastikan method ini public di homedashboardtu)
+        h.tampilkanDiagramSiswa();
+        h.tampilkanDiagramAbsensi();
+        
+        desktop.repaint();
+        desktop.revalidate();
+    } catch (Exception e) {
+        System.err.println("Gagal memuat home awal: " + e.getMessage());
+    }
+}
+
     
    private void setFixedIcon(javax.swing.JButton btn, String path) {
     try {
@@ -399,7 +431,7 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     }//GEN-LAST:event_logoComponentResized
 
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
-    
+        tampilkanHomeAwal();
     }//GEN-LAST:event_homeActionPerformed
 
     private void bnilaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnilaiActionPerformed

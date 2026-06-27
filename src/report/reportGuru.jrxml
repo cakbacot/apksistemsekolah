@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="76cf4268-e232-4115-b997-57f8d4903947">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.4641000000000008"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<queryString>
@@ -11,8 +11,7 @@
     ROUND((SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END) / COUNT(a.id_absen)) * 100, 2) AS persentase_kehadiran
 FROM tbl_absen_guru a
 JOIN guru g ON a.kd_guru = g.kd_guru
-GROUP BY a.kd_guru, g.nama
-]]>
+GROUP BY a.kd_guru, g.nama]]>
 	</queryString>
 	<field name="kd_guru" class="java.lang.String">
 		<fieldDescription><![CDATA[]]></fieldDescription>
@@ -26,45 +25,49 @@ GROUP BY a.kd_guru, g.nama
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="53" splitType="Stretch">
 			<staticText>
-				<reportElement x="228" y="0" width="100" height="20" uuid="b306c65b-a4d0-40fc-8605-5780f86ee280"/>
-				<textElement textAlignment="Center">
-					<font size="15" isBold="true"/>
+				<reportElement uuid="b306c65b-a4d0-40fc-8605-5780f86ee280" x="199" y="0" width="158" height="43"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Report Guru]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="35" splitType="Stretch">
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="34" width="555" height="1"/>
+			</line>
+		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch">
+		<band height="35" splitType="Stretch">
 			<staticText>
-				<reportElement x="23" y="0" width="100" height="20" uuid="31d15a17-a6dd-4b8c-8277-80fe1697e6be"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="31d15a17-a6dd-4b8c-8277-80fe1697e6be" x="0" y="0" width="113" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Kode Guru]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="148" y="0" width="100" height="20" uuid="65f7259e-5c42-4191-8e8c-2b2474abf3fe"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="65f7259e-5c42-4191-8e8c-2b2474abf3fe" x="113" y="0" width="244" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="286" y="0" width="100" height="20" uuid="6f2918bb-8ced-4f53-a377-7a96fbb9250b"/>
-				<textElement textAlignment="Center">
+				<reportElement uuid="6f2918bb-8ced-4f53-a377-7a96fbb9250b" x="355" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Hari]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="426" y="0" width="100" height="20" uuid="1dab9e80-b6e2-4e94-bf69-7efe0d111743"/>
-				<textElement>
+				<reportElement uuid="1dab9e80-b6e2-4e94-bf69-7efe0d111743" x="455" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Presentase Kehadiran]]></text>
@@ -74,33 +77,39 @@ GROUP BY a.kd_guru, g.nama
 	<detail>
 		<band height="125" splitType="Stretch">
 			<textField>
-				<reportElement x="23" y="0" width="100" height="20" uuid="9753aa3c-510c-45f1-b36a-bfa301ac9bc2"/>
-				<textElement>
+				<reportElement uuid="9753aa3c-510c-45f1-b36a-bfa301ac9bc2" x="0" y="0" width="113" height="20"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{kd_guru}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="148" y="0" width="100" height="20" uuid="d8195a60-f02a-4375-a570-53a0911d38c8"/>
-				<textElement>
+				<reportElement uuid="d8195a60-f02a-4375-a570-53a0911d38c8" x="113" y="0" width="242" height="20"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="286" y="0" width="100" height="20" uuid="8b194853-7389-4876-ad12-9df8d441f45a"/>
-				<textElement>
+				<reportElement uuid="8b194853-7389-4876-ad12-9df8d441f45a" x="357" y="0" width="98" height="20"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{total_hari_kerja}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="426" y="0" width="100" height="20" uuid="d549d33b-0dbd-4792-831d-54e1059378f9"/>
-				<textElement>
+				<reportElement uuid="d549d33b-0dbd-4792-831d-54e1059378f9" x="455" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle">
 					<font size="12"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{persentase_kehadiran} + "%"]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="33" width="555" height="1"/>
+			</line>
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="0" width="555" height="1"/>
+			</line>
 		</band>
 	</detail>
 	<columnFooter>

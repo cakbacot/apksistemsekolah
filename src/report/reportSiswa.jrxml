@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6686fa3d-c74e-4f38-9633-2330b361876f">
-	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.zoom" value="1.9487171000000014"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="paramIdGuru" class="java.lang.String"/>
@@ -63,67 +63,78 @@ GROUP BY s.nisn, s.nama, k.kelas, g.nama;]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="79" splitType="Stretch">
+		<band height="90" splitType="Stretch">
 			<staticText>
-				<reportElement x="239" y="0" width="100" height="20" uuid="3c1b2ac9-1100-4c1a-971d-7bbdc1ba2a6c"/>
-				<textElement textAlignment="Center">
-					<font isBold="true"/>
+				<reportElement uuid="3c1b2ac9-1100-4c1a-971d-7bbdc1ba2a6c" x="160" y="0" width="216" height="56"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font size="24" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Report Kelas]]></text>
+				<text><![CDATA[REPORT KELAS]]></text>
 			</staticText>
 		</band>
 	</title>
 	<pageHeader>
-		<band height="35" splitType="Stretch"/>
+		<band height="35" splitType="Stretch">
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="34" width="555" height="1"/>
+			</line>
+		</band>
 	</pageHeader>
 	<columnHeader>
-		<band height="61" splitType="Stretch">
+		<band height="29" splitType="Stretch">
 			<staticText>
-				<reportElement x="139" y="0" width="100" height="20" uuid="35d7e35f-b64c-41fa-a7fc-de6d21f6bff3"/>
-				<textElement>
+				<reportElement uuid="35d7e35f-b64c-41fa-a7fc-de6d21f6bff3" x="139" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama Siswa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="289" y="0" width="100" height="20" uuid="006e93f9-49be-453e-b3f8-7005125161a3"/>
-				<textElement>
+				<reportElement uuid="006e93f9-49be-453e-b3f8-7005125161a3" x="289" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Pertemuan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="0" width="100" height="20" uuid="03c4bffb-875b-4c40-9b68-568b90703ba2"/>
-				<textElement>
+				<reportElement uuid="03c4bffb-875b-4c40-9b68-568b90703ba2" x="455" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Persentase Kehadiran]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="5b193d95-e298-4c9e-b730-770857ef85a4"/>
-				<textElement>
+				<reportElement uuid="5b193d95-e298-4c9e-b730-770857ef85a4" x="0" y="0" width="100" height="20"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[NISN]]></text>
 			</staticText>
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="20" width="555" height="1"/>
+			</line>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="27" splitType="Stretch">
+		<band height="45" splitType="Stretch">
 			<textField>
-				<reportElement x="139" y="0" width="100" height="20" uuid="2989fb7d-57d5-4ece-b6bb-f12ce9880951"/>
+				<reportElement uuid="2989fb7d-57d5-4ece-b6bb-f12ce9880951" x="139" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nama_siswa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="289" y="0" width="100" height="20" uuid="017b1dc9-ac21-4509-b73f-d1b7192a1f79"/>
+				<reportElement uuid="017b1dc9-ac21-4509-b73f-d1b7192a1f79" x="289" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{total_pertemuan}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="455" y="0" width="100" height="20" uuid="8368ade4-1f17-4d8a-9173-b43e43e3f2a1"/>
+				<reportElement uuid="8368ade4-1f17-4d8a-9173-b43e43e3f2a1" x="455" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{persentase_kehadiran}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="3f82f4dd-69c7-49ce-8e4a-8ad1174c465b"/>
+				<reportElement uuid="3f82f4dd-69c7-49ce-8e4a-8ad1174c465b" x="0" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
 			</textField>
 		</band>
@@ -134,17 +145,23 @@ GROUP BY s.nisn, s.nama, k.kelas, g.nama;]]>
 	<pageFooter>
 		<band height="92" splitType="Stretch">
 			<staticText>
-				<reportElement x="355" y="0" width="100" height="20" uuid="0b82d92c-c4bb-4a6d-9a62-d277be1c39d6"/>
+				<reportElement uuid="0b82d92c-c4bb-4a6d-9a62-d277be1c39d6" x="355" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Walikelas]]></text>
 			</staticText>
 			<textField>
-				<reportElement x="455" y="0" width="100" height="20" uuid="7b1ab471-ffe6-4932-9a49-3637098e65bc"/>
+				<reportElement uuid="7b1ab471-ffe6-4932-9a49-3637098e65bc" x="455" y="0" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{kelas}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement x="413" y="68" width="100" height="20" uuid="839d5644-330c-4087-b51a-052f095b07af"/>
+				<reportElement uuid="839d5644-330c-4087-b51a-052f095b07af" x="413" y="68" width="100" height="20"/>
+				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nama_guru}]]></textFieldExpression>
 			</textField>
+			<line>
+				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="0" width="555" height="1"/>
+			</line>
 		</band>
 	</pageFooter>
 	<summary>
