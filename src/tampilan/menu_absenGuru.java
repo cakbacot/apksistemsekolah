@@ -46,6 +46,31 @@ ResultSet rs;
         datatable();
         aktif();
         kosong();
+        aturHakAkses();
+    }
+    
+    private void aturHakAkses() {
+    // 1. Sembunyikan kedua tombol di awal (Default)
+    bprint.setVisible(false); 
+    bprint1.setVisible(false); 
+
+    // 2. Ambil session Admin (yang nyimpen level)
+    String levelAdmin = UserSession.getLevel(); 
+    
+    // 3. Ambil session Guru 
+    // (GANTI INI: Sesuaikan dengan cara lo manggil session punya guru. 
+    // Misal: GuruSession.getNip() atau UserSession.getNipGuru())
+    String sessionGuru = GuruSession.getNip(); 
+
+    // 4. Cek siapa yang lagi login
+        if (levelAdmin != null && levelAdmin.equals("1")) {
+            // Jika Admin yang login
+            bprint1.setVisible(true); // Munculkan tombol Admin
+
+        } else if (sessionGuru != null && !sessionGuru.isEmpty()) {
+            // Jika Guru yang login (NIP-nya ada isinya)
+            bprint.setVisible(true); // Munculkan tombol Guru
+        }
     }
      protected void datatable(){
         // 1. Definisikan header/judul kolom (Ada 4 kolom)
@@ -118,7 +143,7 @@ ResultSet rs;
         try{
             String path="./src/report/reportGuruprib.jasper";
             HashMap parameter = new HashMap();
-            String guruLogin = GuruSession.getKdGuru();
+            String guruLogin = GuruSession.getNip();
             System.out.println("=== DEBUG LOG === Kode Guru dari Session: " + guruLogin); 
             parameter.put("paramKdGuru", guruLogin); 
             JasperPrint print = JasperFillManager.fillReport(path, parameter,con);
@@ -128,6 +153,26 @@ ResultSet rs;
             JOptionPane.showMessageDialog(rootPane,"Dokumen tidak ada" +ex);
         }
     }
+    
+    public void cetakAbsenGuru() {
+    try {
+        // 1. Tentukan path file jasper khusus laporan guru ini
+        // (Pastikan path dan nama file .jasper-nya sudah benar)
+        String path = "./src/report/reportGuru.jasper"; 
+        
+        // 2. Siapkan parameter (DIBIARKAN KOSONG)
+        // Karena SQL-nya menampilkan semua data tanpa filter khusus
+        HashMap<String, Object> parameter = new HashMap<>();
+
+        // 3. Eksekusi pencetakan menggunakan koneksi database (con)
+        JasperPrint print = JasperFillManager.fillReport(path, parameter, con);
+        JasperViewer.viewReport(print, false);
+        
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(rootPane, "Dokumen gagal dicetak: " + ex.getMessage());
+            ex.printStackTrace(); // Biar gampang ngecek error di console
+        }
+    } 
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -146,6 +191,7 @@ ResultSet rs;
         bsimpan = new javax.swing.JButton();
         jLabel1 = new javax.swing.JLabel();
         bprint = new javax.swing.JButton();
+        bprint1 = new javax.swing.JButton();
 
         tblguru.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
         tblguru.setModel(new javax.swing.table.DefaultTableModel(
@@ -181,7 +227,7 @@ ResultSet rs;
         });
         jScrollPane1.setViewportView(tblguru);
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16), new java.awt.Color(1, 1, 1))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(1, 1, 1))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
@@ -237,6 +283,14 @@ ResultSet rs;
             }
         });
 
+        bprint1.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        bprint1.setText("PRINT TU");
+        bprint1.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bprint1ActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -255,7 +309,9 @@ ResultSet rs;
                         .addGap(35, 35, 35))
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(bprint, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 318, Short.MAX_VALUE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(bprint1, javax.swing.GroupLayout.PREFERRED_SIZE, 229, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 82, Short.MAX_VALUE)
                         .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 115, javax.swing.GroupLayout.PREFERRED_SIZE)
@@ -273,8 +329,9 @@ ResultSet rs;
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bsimpan)
                     .addComponent(bbatal)
-                    .addComponent(bprint))
-                .addContainerGap(185, Short.MAX_VALUE))
+                    .addComponent(bprint)
+                    .addComponent(bprint1))
+                .addContainerGap(189, Short.MAX_VALUE))
         );
 
         pack();
@@ -377,10 +434,15 @@ ResultSet rs;
         cetak();
     }//GEN-LAST:event_bprintActionPerformed
 
+    private void bprint1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bprint1ActionPerformed
+        cetakAbsenGuru();
+    }//GEN-LAST:event_bprint1ActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
     private javax.swing.JButton bprint;
+    private javax.swing.JButton bprint1;
     private javax.swing.JButton bsimpan;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JLabel jLabel7;

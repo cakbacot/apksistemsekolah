@@ -252,7 +252,7 @@ public class loginuser extends javax.swing.JFrame {
                 String statusUser = rs.getString("status");
                 String namaDariDB = rs.getString("nama");
 
-                if (statusUser.equalsIgnoreCase("no")) {
+                if (statusUser.equalsIgnoreCase("N")) {
                     JOptionPane.showMessageDialog(null, "Maaf, status Anda tidak aktif!");
                     nip.setText("");
                     pass.setText("");

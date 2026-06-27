@@ -1,29 +1,153 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<!DOCTYPE jasperReport PUBLIC "-//JasperReports//DTD JasperReport//EN" "http://jasperreports.sourceforge.net/dtds/jasperreport.dtd">
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="6686fa3d-c74e-4f38-9633-2330b361876f">
+	<property name="ireport.zoom" value="1.0"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<parameter name="paramIdGuru" class="java.lang.String"/>
+	<parameter name="paramKelas" class="java.lang.String"/>
+	<queryString>
+		<![CDATA[SELECT 
+    s.nisn,
+    s.nama AS nama_siswa,
+    k.kelas AS kelas, 
+    
+    -- Menghitung jumlah hadir
+    SUM(CASE WHEN a.status_hadir = 1 THEN 1 ELSE 0 END) AS jumlah_hadir,
+    
+    -- Menghitung total pertemuan
+    COUNT(a.id_absen) AS total_pertemuan,
+    
+    -- Menghitung persentase kehadiran
+    ROUND(
+        COALESCE(
+            (SUM(CASE WHEN a.status_hadir = 1 THEN 1 ELSE 0 END) * 100.0) / NULLIF(COUNT(a.id_absen), 0), 
+            0
+        ), 1
+    ) AS persentase_kehadiran,
+    
+    g.nama AS nama_guru
+    
+FROM tbl_siswa s
 
-<jasperReport name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20">
-    <background>
-        <band/>
-    </background>
-    <title>
-        <band height="79"/>
-    </title>
-    <pageHeader>
-        <band height="35"/>
-    </pageHeader>
-    <columnHeader>
-        <band height="61"/>
-    </columnHeader>
-    <detail>
-        <band height="125"/>
-    </detail>
-    <columnFooter>
-        <band height="45"/>
-    </columnFooter>
-    <pageFooter>
-        <band height="54"/>
-    </pageFooter>
-    <summary>
-        <band height="42"/>
-    </summary>
+-- Join ke tabel absen
+LEFT JOIN tbl_absen a ON s.nisn = a.nisn
+
+-- Join ke tabel master kelas
+-- (Sesuaikan nama 'tbl_kelas', 'kd_kelas', dan 'nama_kelas' dengan nama asli di database lo ya!)
+LEFT JOIN tbl_kelas k ON s.kelas = k.id_kelas 
+
+-- Cross join untuk TTD guru
+CROSS JOIN (
+    SELECT nama 
+    FROM guru 
+    WHERE nip_g = $P{paramIdGuru} 
+) g
+
+-- INI YANG BERUBAH: Kita filter berdasarkan Nama Kelas, bukan Kode Kelas!
+WHERE k.kelas = $P{paramKelas}
+
+GROUP BY s.nisn, s.nama, k.kelas, g.nama;]]>
+	</queryString>
+	<field name="nisn" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="nama_siswa" class="java.lang.String"/>
+	<field name="kelas" class="java.lang.String">
+		<fieldDescription><![CDATA[]]></fieldDescription>
+	</field>
+	<field name="jumlah_hadir" class="java.math.BigDecimal"/>
+	<field name="total_pertemuan" class="java.lang.Long"/>
+	<field name="persentase_kehadiran" class="java.math.BigDecimal"/>
+	<field name="nama_guru" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="79" splitType="Stretch">
+			<staticText>
+				<reportElement x="239" y="0" width="100" height="20" uuid="3c1b2ac9-1100-4c1a-971d-7bbdc1ba2a6c"/>
+				<textElement textAlignment="Center">
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Report Kelas]]></text>
+			</staticText>
+		</band>
+	</title>
+	<pageHeader>
+		<band height="35" splitType="Stretch"/>
+	</pageHeader>
+	<columnHeader>
+		<band height="61" splitType="Stretch">
+			<staticText>
+				<reportElement x="139" y="0" width="100" height="20" uuid="35d7e35f-b64c-41fa-a7fc-de6d21f6bff3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Siswa]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="289" y="0" width="100" height="20" uuid="006e93f9-49be-453e-b3f8-7005125161a3"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Total Pertemuan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="455" y="0" width="100" height="20" uuid="03c4bffb-875b-4c40-9b68-568b90703ba2"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[Persentase Kehadiran]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="0" y="0" width="100" height="20" uuid="5b193d95-e298-4c9e-b730-770857ef85a4"/>
+				<textElement>
+					<font isBold="true"/>
+				</textElement>
+				<text><![CDATA[NISN]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="27" splitType="Stretch">
+			<textField>
+				<reportElement x="139" y="0" width="100" height="20" uuid="2989fb7d-57d5-4ece-b6bb-f12ce9880951"/>
+				<textFieldExpression><![CDATA[$F{nama_siswa}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="289" y="0" width="100" height="20" uuid="017b1dc9-ac21-4509-b73f-d1b7192a1f79"/>
+				<textFieldExpression><![CDATA[$F{total_pertemuan}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20" uuid="8368ade4-1f17-4d8a-9173-b43e43e3f2a1"/>
+				<textFieldExpression><![CDATA[$F{persentase_kehadiran}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="0" y="0" width="100" height="20" uuid="3f82f4dd-69c7-49ce-8e4a-8ad1174c465b"/>
+				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band splitType="Stretch"/>
+	</columnFooter>
+	<pageFooter>
+		<band height="92" splitType="Stretch">
+			<staticText>
+				<reportElement x="355" y="0" width="100" height="20" uuid="0b82d92c-c4bb-4a6d-9a62-d277be1c39d6"/>
+				<text><![CDATA[Walikelas]]></text>
+			</staticText>
+			<textField>
+				<reportElement x="455" y="0" width="100" height="20" uuid="7b1ab471-ffe6-4932-9a49-3637098e65bc"/>
+				<textFieldExpression><![CDATA[$F{kelas}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="413" y="68" width="100" height="20" uuid="839d5644-330c-4087-b51a-052f095b07af"/>
+				<textFieldExpression><![CDATA[$F{nama_guru}]]></textFieldExpression>
+			</textField>
+		</band>
+	</pageFooter>
+	<summary>
+		<band height="75" splitType="Stretch"/>
+	</summary>
 </jasperReport>

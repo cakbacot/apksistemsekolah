@@ -36,7 +36,9 @@
                   </Group>
                   <Group type="102" attributes="0">
                       <Component id="bprint" min="-2" pref="229" max="-2" attributes="0"/>
-                      <EmptySpace pref="318" max="32767" attributes="0"/>
+                      <EmptySpace max="-2" attributes="0"/>
+                      <Component id="bprint1" min="-2" pref="229" max="-2" attributes="0"/>
+                      <EmptySpace pref="82" max="32767" attributes="0"/>
                       <Component id="bsimpan" min="-2" pref="115" max="-2" attributes="0"/>
                       <EmptySpace type="separate" max="-2" attributes="0"/>
                       <Component id="bbatal" min="-2" pref="115" max="-2" attributes="0"/>
@@ -59,8 +61,9 @@
                   <Component id="bsimpan" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bbatal" alignment="3" min="-2" max="-2" attributes="0"/>
                   <Component id="bprint" alignment="3" min="-2" max="-2" attributes="0"/>
+                  <Component id="bprint1" alignment="3" min="-2" max="-2" attributes="0"/>
               </Group>
-              <EmptySpace pref="185" max="32767" attributes="0"/>
+              <EmptySpace pref="189" max="32767" attributes="0"/>
           </Group>
       </Group>
     </DimensionLayout>
@@ -191,6 +194,17 @@
       </Properties>
       <Events>
         <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bprintActionPerformed"/>
+      </Events>
+    </Component>
+    <Component class="javax.swing.JButton" name="bprint1">
+      <Properties>
+        <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+          <Font name="Times New Roman" size="18" style="1"/>
+        </Property>
+        <Property name="text" type="java.lang.String" value="PRINT TU"/>
+      </Properties>
+      <Events>
+        <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bprint1ActionPerformed"/>
       </Events>
     </Component>
   </SubComponents>

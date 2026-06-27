@@ -12,9 +12,13 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
 import java.util.Date;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 
 /**
  *
@@ -36,6 +40,33 @@ ResultSet rs;
         datatable();
         
     }
+    
+    public void cetak() {
+    try {
+        String kelasYangDipilih = cbkelas.getSelectedItem().toString(); 
+        String idGuruLogin = GuruSession.getNip(); 
+        
+        if (kelasYangDipilih.equals("Item 1") || kelasYangDipilih.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Pilih kelas terlebih dahulu!");
+            return;
+        }
+
+        String path = "./src/report/reportSiswa.jasper"; // Sesuaikan path-nya
+        HashMap<String, Object> parameter = new HashMap<>();
+        System.out.println("NIP Guru yang dikirim: '" + idGuruLogin + "'");
+        System.out.println("Kelas yang dikirim: '" + kelasYangDipilih + "'");
+        
+        parameter.put("paramKelas", kelasYangDipilih); 
+        parameter.put("paramIdGuru", idGuruLogin);     
+
+        JasperPrint print = JasperFillManager.fillReport(path, parameter, con);
+        JasperViewer.viewReport(print, false);
+        
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(rootPane, "Gagal mencetak: " + ex.getMessage());
+            ex.printStackTrace();
+        }
+    }   
     
     protected void aktif(){
         txtcarisiswa.requestFocus();
@@ -221,7 +252,7 @@ ResultSet rs;
             tblsiswa.getColumnModel().getColumn(3).setResizable(false);
         }
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16), new java.awt.Color(1, 1, 1))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Detail Pertemuan", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 13), new java.awt.Color(1, 1, 1))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
 
         jLabel7.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
@@ -502,7 +533,7 @@ ResultSet rs;
     }//GEN-LAST:event_txtcarisiswaKeyPressed
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
-        // TODO add your handling code here:
+        cetak();
     }//GEN-LAST:event_printActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
