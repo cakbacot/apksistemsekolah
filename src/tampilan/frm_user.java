@@ -47,7 +47,6 @@ bcari.setIcon(new ImageIcon(
     new ImageIcon(getClass().getResource("/resource/search.png"))
         .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
-    // WARNA TOMBOL
     bsimpan.setBackground(new java.awt.Color(34, 197, 94));
     bsimpan.setForeground(java.awt.Color.WHITE);
 
@@ -63,7 +62,6 @@ bcari.setIcon(new ImageIcon(
    bcari.setBackground(new java.awt.Color(59, 130, 246));
    bcari.setForeground(java.awt.Color.WHITE);
 
-    // STYLE BUTTON
     bsimpan.setFocusPainted(false);
     bubah.setFocusPainted(false);
     bhapus.setFocusPainted(false);
@@ -437,7 +435,7 @@ bcari.setIcon(new ImageIcon(
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "data gagal disimpan " + e);
         }
-        datatable();        // TODO add your handling code here:
+        datatable();        
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void bubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bubahActionPerformed
@@ -457,7 +455,7 @@ bcari.setIcon(new ImageIcon(
         } catch (SQLException e) {
             JOptionPane.showMessageDialog(null, "data gagal diubah " + e);
         }
-        datatable();        // TODO add your handling code here:
+        datatable();        
     }//GEN-LAST:event_bubahActionPerformed
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
@@ -474,26 +472,26 @@ bcari.setIcon(new ImageIcon(
                 JOptionPane.showMessageDialog(null, "data gagal dihapus " + e);
             }
             datatable();
-        }        // TODO add your handling code here:
+        }        
     }//GEN-LAST:event_bhapusActionPerformed
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
          kosong();
-         datatable();                // TODO add your handling code here:
+         datatable();                
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void bkeluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkeluarActionPerformed
-        dispose();         // TODO add your handling code here:
+        dispose();         
     }//GEN-LAST:event_bkeluarActionPerformed
 
     private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcariKeyPressed
         if (evt.getKeyCode()== KeyEvent.VK_ENTER){
            datatable();
-       }        // TODO add your handling code here:
+       }        
     }//GEN-LAST:event_txtcariKeyPressed
 
     private void bcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcariActionPerformed
-        datatable();          // TODO add your handling code here:
+        datatable();          
     }//GEN-LAST:event_bcariActionPerformed
 
     private void tbluserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbluserMouseClicked
@@ -511,7 +509,6 @@ txtpw.setText(c);
 cblvl.setSelectedItem(d);
 cbstatus.setSelectedItem(e);
 
-        // TODO add your handling code here:
     }//GEN-LAST:event_tbluserMouseClicked
 
     /**

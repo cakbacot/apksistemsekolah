@@ -16,7 +16,6 @@ public class GuruSession {
     private static String Nip;
     private static String kelas;
 
-    // Getter & Setter kd_guru
     public static String getKdGuru() {
         return kd_guru;
     }
@@ -24,7 +23,6 @@ public class GuruSession {
         GuruSession.kd_guru = kdGuru;
     }
 
-    // Getter & Setter nama
     public static String getNama() {
         return nama;
     }
@@ -32,7 +30,6 @@ public class GuruSession {
         GuruSession.nama = nama;
     }
 
-    // Getter & Setter jkel
     public static String getJkel() {
         return jkel;
     }
@@ -55,12 +52,10 @@ public class GuruSession {
     }
     
     
-    // Method pembuat sapaan otomatis
     public static String getSapaan() {
         String panggilan = "";
         
         if (jkel != null) {
-            // Harus sama persis dengan ENUM di database: 'Laki - laki'
             if (jkel.equals("Laki - laki")) {
                 panggilan = "Bapak ";
             } else if (jkel.equals("Perempuan")) {

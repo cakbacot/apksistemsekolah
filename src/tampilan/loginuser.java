@@ -41,11 +41,8 @@ public class loginuser extends javax.swing.JFrame {
     
     private void scaleImage() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/user.png"));
         Image imgLama = iconAwal.getImage();
-        
-        // Mengambil ukuran lbl_logo saat ini
         int width = lbl_logo.getWidth();
         int height = lbl_logo.getHeight();
         
@@ -64,8 +61,6 @@ public class loginuser extends javax.swing.JFrame {
         ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
         Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         btn.setIcon(new ImageIcon(imgBaru));
-
-        // Styling Dasar
         btn.setForeground(java.awt.Color.BLACK);
         btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btn.setContentAreaFilled(false);
@@ -77,22 +72,18 @@ public class loginuser extends javax.swing.JFrame {
         btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
         btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
         btn.setIconTextGap(20);
-
-        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
                 btn.setContentAreaFilled(true);
                 btn.setOpaque(true); 
-                btn.setBackground(new java.awt.Color(10, 161, 12)); // Hijau
+                btn.setBackground(new java.awt.Color(10, 161, 12)); 
                 btn.setForeground(java.awt.Color.WHITE);;
                 
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
                btn.setContentAreaFilled(false);
                 btn.setOpaque(false);
                 btn.setForeground(java.awt.Color.BLACK);
@@ -294,16 +285,14 @@ public class loginuser extends javax.swing.JFrame {
 
     private void nipKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nipKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-        // Pindah fokus ke kotak password
         pass.requestFocus();
-    }// TODO add your handling code here:
+    }
     }//GEN-LAST:event_nipKeyPressed
 
     private void passKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-        // Panggil fungsi login Anda di sini
          login.doClick(); 
-    }// TODO add your handling code here:
+    }
     }//GEN-LAST:event_passKeyPressed
 
     private void kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kembaliActionPerformed

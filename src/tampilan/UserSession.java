@@ -1,14 +1,12 @@
 package tampilan;
 
 public class UserSession {
-    // Tambahkan variabel nip di sini
     private static String nip;
     
     private static String level;
     private static String nama;
     private static String status; 
 
-    // Tambahkan Method Setter & Getter untuk NIP
     public static void setNip(String nip) {
         UserSession.nip = nip;
     }
@@ -17,7 +15,6 @@ public class UserSession {
         return nip;
     }
 
-    // Bagian bawah ini tetap sama seperti milik Anda
     public static void setLevel(String level) {
         UserSession.level = level;
     }

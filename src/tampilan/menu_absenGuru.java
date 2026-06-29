@@ -52,37 +52,22 @@ ResultSet rs;
     }
     
     private void aturHakAkses() {
-    // 1. Sembunyikan kedua tombol di awal (Default)
     bprint.setVisible(false); 
     bprint1.setVisible(false); 
-
-    // 2. Ambil session Admin (yang nyimpen level)
     String levelAdmin = UserSession.getLevel(); 
-    
-    // 3. Ambil session Guru 
-    // (GANTI INI: Sesuaikan dengan cara lo manggil session punya guru. 
-    // Misal: GuruSession.getNip() atau UserSession.getNipGuru())
     String sessionGuru = GuruSession.getNip(); 
-
-    // 4. Cek siapa yang lagi login
         if (levelAdmin != null && levelAdmin.equals("1")) {
-            // Jika Admin yang login
-            bprint1.setVisible(true); // Munculkan tombol Admin
+            bprint1.setVisible(true); 
 
         } else if (sessionGuru != null && !sessionGuru.isEmpty()) {
-            // Jika Guru yang login (NIP-nya ada isinya)
-            bprint.setVisible(true); // Munculkan tombol Guru
+            bprint.setVisible(true); 
         }
     }
      protected void datatable(){
-        // 1. Definisikan header/judul kolom (Ada 4 kolom)
         String[] baris = {"Kode Guru", "Nama guru", "Kehadiran", "Total Hadir", "Total Tidak Hadir", "Keterangan"};
-
-        // 2. Buat Custom DefaultTableModel agar kolom ke-3 (Kehadiran) menjadi Checkbox
         tabmode = new DefaultTableModel(null, baris) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
-                // Index 3 adalah kolom "Kehadiran" (Dimulai dari 0, 1, 2, 3)
                 if (columnIndex == 2) { 
                     return Boolean.class; 
                 }
@@ -91,7 +76,6 @@ ResultSet rs;
 
             @Override
             public boolean isCellEditable(int row, int column) {
-                // Hanya kolom index 3 ("Kehadiran") yang bisa diklik/diedit oleh user
                 return column == 2 || column == 5; 
             }
         };
@@ -100,14 +84,13 @@ ResultSet rs;
 
         try {
             String guruLogin = GuruSession.getKdGuru();
-            // Menggunakan query LEFT JOIN yang jauh lebih aman dan cepat
             String sql = "SELECT u.kd_guru, u.nama, " +
              "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
              "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir " +
              "FROM guru u " +
              "LEFT JOIN tbl_absen_guru a ON u.kd_guru = a.kd_guru " +
-             "WHERE u.kd_guru = ? " +  // <-- PASTIKAN BARIS INI ADA
-             "GROUP BY u.kd_guru, u.nama"; // <-- GROUP BY HARUS DI BAWAH WHERE
+             "WHERE u.kd_guru = ? " +  
+             "GROUP BY u.kd_guru, u.nama"; 
             PreparedStatement stat = con.prepareStatement(sql);
             stat.setString(1, guruLogin);
             ResultSet hasil = stat.executeQuery();
@@ -116,7 +99,7 @@ ResultSet rs;
                 Object[] data = {
                     hasil.getString("kd_guru"),
                     hasil.getString("nama"),
-                    false, // Checkbox default belum dicentang
+                    false, 
                     hasil.getInt("total_hadir"),
                     hasil.getInt("total_tidak_hadir"),
                     ""
@@ -125,7 +108,7 @@ ResultSet rs;
             }
 
         } catch (Exception e) {
-            e.printStackTrace(); // Mencetak error di console NetBeans
+            e.printStackTrace(); 
             JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
         }    }
 
@@ -158,21 +141,15 @@ ResultSet rs;
     
     public void cetakAbsenGuru() {
     try {
-        // 1. Tentukan path file jasper khusus laporan guru ini
-        // (Pastikan path dan nama file .jasper-nya sudah benar)
         String path = "./src/report/reportGuru.jasper"; 
-        
-        // 2. Siapkan parameter (DIBIARKAN KOSONG)
-        // Karena SQL-nya menampilkan semua data tanpa filter khusus
-        HashMap<String, Object> parameter = new HashMap<>();
 
-        // 3. Eksekusi pencetakan menggunakan koneksi database (con)
+        HashMap<String, Object> parameter = new HashMap<>();
         JasperPrint print = JasperFillManager.fillReport(path, parameter, con);
         JasperViewer.viewReport(print, false);
         
         } catch (Exception ex) {
             javax.swing.JOptionPane.showMessageDialog(rootPane, "Dokumen gagal dicetak: " + ex.getMessage());
-            ex.printStackTrace(); // Biar gampang ngecek error di console
+            ex.printStackTrace(); 
         }
     } 
     /**
@@ -340,7 +317,6 @@ ResultSet rs;
     }//GEN-LAST:event_tblguruMouseClicked
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
-        // Memunculkan dialog konfirmasi (opsional, tapi disarankan)
         int konfirmasi = JOptionPane.showConfirmDialog(this,
             "Batal melakukan absensi? Semua isian dan centang akan dikosongkan.",
             "Konfirmasi Batal",
@@ -348,12 +324,11 @@ ResultSet rs;
             JOptionPane.QUESTION_MESSAGE);
 
         if (konfirmasi == JOptionPane.YES_OPTION) {
-            // Panggil method yang sudah Anda buat untuk mereset tampilan
-            kosong();     // Mengosongkan textfield dan tanggal
-            datatable();  // Me-refresh tabel agar semua checkbox kembali kosong
+            kosong();
+            datatable(); 
 
             JOptionPane.showMessageDialog(this, "Form berhasil dibersihkan.", "Batal", JOptionPane.INFORMATION_MESSAGE);
-        }        // TODO add your handling code here:
+        }        
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
@@ -424,8 +399,7 @@ ResultSet rs;
                 this,
                 "Error : " + e.getMessage());
     }
-    
-        // TODO add your handling code here:
+
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void bprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bprintActionPerformed

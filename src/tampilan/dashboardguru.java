@@ -34,22 +34,18 @@ public class dashboardguru extends javax.swing.JFrame {
     
     public void tampilkanHomeAwal() {
     try {
-        // Hapus isi desktop jika ada sisa frame lain
         desktop.removeAll();
         
         homedashboardguru h = new homedashboardguru();
         
-        // Setting tampilan (tanpa border & bar judul)
         h.setBorder(null);
         ((javax.swing.plaf.basic.BasicInternalFrameUI)h.getUI()).setNorthPane(null);
         
         desktop.add(h);
         
-        // Ambil ukuran desktop yang sudah di-render oleh sistem
         h.setSize(desktop.getWidth(), desktop.getHeight());
         h.setVisible(true);
         
-        // Panggil diagram (pastikan method ini public di homedashboardtu)
         h.tampilkanDiagramSiswa();
         h.tampilkanDiagramAbsensi();
         
@@ -67,7 +63,6 @@ public class dashboardguru extends javax.swing.JFrame {
         Image imgBaru = iconAwal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         btn.setIcon(new ImageIcon(imgBaru));
 
-        // Styling Dasar
         btn.setForeground(java.awt.Color.WHITE);
         btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btn.setContentAreaFilled(false);
@@ -80,19 +75,16 @@ public class dashboardguru extends javax.swing.JFrame {
         btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
         btn.setIconTextGap(20);
 
-        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
                 btn.setContentAreaFilled(true);
-                btn.setBackground(new java.awt.Color(255, 255, 0)); // Kuning Terang
+                btn.setBackground(new java.awt.Color(255, 255, 0)); 
                 btn.setForeground(java.awt.Color.BLACK); 
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
                 btn.setContentAreaFilled(false);
                 btn.setForeground(java.awt.Color.WHITE);
             }
@@ -108,7 +100,6 @@ public class dashboardguru extends javax.swing.JFrame {
         Image imgBaru = iconAwal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
         btn.setIcon(new ImageIcon(imgBaru));
 
-        // Styling Dasar
         btn.setForeground(java.awt.Color.WHITE);
         btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btn.setContentAreaFilled(false);
@@ -121,19 +112,16 @@ public class dashboardguru extends javax.swing.JFrame {
         btn.setMargin(new java.awt.Insets(10, 10, 10, 10));
         btn.setIconTextGap(10);
 
-        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
                 btn.setContentAreaFilled(true);
-                btn.setBackground(new java.awt.Color(255, 255, 255)); // Putih Terang
+                btn.setBackground(new java.awt.Color(255, 255, 255));
                 btn.setForeground(java.awt.Color.BLACK); 
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
                 btn.setContentAreaFilled(false);
                 btn.setForeground(java.awt.Color.WHITE);
             }
@@ -150,7 +138,6 @@ public class dashboardguru extends javax.swing.JFrame {
         Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         btn.setIcon(new ImageIcon(imgBaru));
 
-        // Styling Dasar
         btn.setForeground(java.awt.Color.WHITE);
         btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
         btn.setContentAreaFilled(false);
@@ -163,19 +150,16 @@ public class dashboardguru extends javax.swing.JFrame {
         btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
         btn.setIconTextGap(20);
 
-        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
                 btn.setContentAreaFilled(true);
-                btn.setBackground(new java.awt.Color(255, 0, 0)); //Merah Terang
+                btn.setBackground(new java.awt.Color(255, 0, 0)); 
                 btn.setForeground(java.awt.Color.WHITE); 
             }
 
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
-                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
                 btn.setContentAreaFilled(false);
                 btn.setForeground(java.awt.Color.WHITE);
             }
@@ -185,7 +169,6 @@ public class dashboardguru extends javax.swing.JFrame {
         System.err.println("Gagal set hover: " + e.getMessage());
     }
 }
-// Method satu untuk semua JLabel dan Gambar
 public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar) {
     try {
         java.net.URL imgURL = getClass().getResource(pathGambar);
@@ -198,14 +181,12 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
         javax.swing.ImageIcon icon = new javax.swing.ImageIcon(imgURL);
         java.awt.Image img = icon.getImage();
         
-        // Mengambil ukuran dari komponen (bisa JButton / JLabel) dengan jarak aman -6 pixel
         int width = komponenTarget.getWidth() > 0 ? (komponenTarget.getWidth() - 6) : 100;
         int height = komponenTarget.getHeight() > 0 ? (komponenTarget.getHeight() - 6) : 100;
         
         java.awt.Image imgScale = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
         javax.swing.ImageIcon scaledIcon = new javax.swing.ImageIcon(imgScale);
         
-        // CEK NYATA: Apakah komponennya berupa JLabel atau JButton?
         if (komponenTarget instanceof javax.swing.JLabel) {
             ((javax.swing.JLabel) komponenTarget).setIcon(scaledIcon);
         } else if (komponenTarget instanceof javax.swing.JButton) {
@@ -375,34 +356,23 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
     }// </editor-fold>//GEN-END:initComponents
 
     private void babsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_babsenActionPerformed
-        // 1. Bersihkan area desktop agar tidak ada form yang tumpang tindih
     desktop.removeAll();
     
-    // 2. Buat objek internal frame baru
     panel_absen pa = new panel_absen(desktop);
     
-    // 3. Hilangkan border/dekorasi bawaan internal frame jika ingin menyatu mulus dengan dashboard
-    // fa.setBorder(null); // Buka komen ini jika ingin menghilangkan border luar JInternalFrame
-    
-    // 4. Masukkan ke desktop
     desktop.add(pa);
     pa.setVisible(true);
     
-    // 5. Set ukuran mengikuti panel penampung agar pas
-//    ma.setSize(desktop.getWidth(), desktop.getHeight());
     try {
-        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
         pa.setMaximum(true);
     } catch (java.beans.PropertyVetoException e) {
-        // Jika gagal dimaksimalkan, tampilkan pesan error di console
         System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-    }// Agar muncul di tengah layar       
+    }   
     }//GEN-LAST:event_babsenActionPerformed
 
     private void desktopComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_desktopComponentResized
 for (JInternalFrame frame : desktop.getAllFrames()) {
         try {
-            // Memaksa setiap frame untuk menyesuaikan diri ke ukuran maksimal desktop yang baru
             frame.setMaximum(true);
         } catch (PropertyVetoException e) {
             System.err.println("Gagal resize internal frame: " + e.getMessage());
@@ -411,19 +381,16 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     }//GEN-LAST:event_desktopComponentResized
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
-        // 1. Tampilkan konfirmasi (Opsional tapi disarankan)
+
     int pilih = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
     
     if (pilih == JOptionPane.YES_OPTION) {
-        // 2. Bersihkan Session (Penting!)
         UserSession.setNama(null);
         
-        // 3. Tutup Dashboard
         this.dispose(); 
         
-        // 4. Buka kembali form login
         new loginguru().setVisible(true);
-    }// TODO add your handling code here:
+    }
     }//GEN-LAST:event_logoutActionPerformed
 
     private void logoComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_logoComponentResized
@@ -435,43 +402,28 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     }//GEN-LAST:event_homeActionPerformed
 
     private void bnilaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnilaiActionPerformed
-        // 1. Bersihkan area desktop agar tidak ada form yang tumpang tindih
     desktop.removeAll();
-    
-    // 2. Buat objek internal frame baru
     menu_nilai mn = new menu_nilai();
-    
-    // 3. Hilangkan border/dekorasi bawaan internal frame jika ingin menyatu mulus dengan dashboard
-    // fa.setBorder(null); // Buka komen ini jika ingin menghilangkan border luar JInternalFrame
-    
-    // 4. Masukkan ke desktop
+
     desktop.add(mn);
     mn.setVisible(true);
-    
-    // 5. Set ukuran mengikuti panel penampung agar pas
-//    ma.setSize(desktop.getWidth(), desktop.getHeight());
     try {
-        // 5. Buat form otomatis memenuhi seluruh area desktop (Full Screen di dalam panel)
         mn.setMaximum(true);
-    } catch (java.beans.PropertyVetoException e) {
-        // Jika gagal dimaksimalkan, tampilkan pesan error di console
-        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-    }// Agar muncul di tengah layar
+        } catch (java.beans.PropertyVetoException e) {
+            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
+        }
     }//GEN-LAST:event_bnilaiActionPerformed
 
   public static void main(String args[]) {
     try {
-        // Mengaktifkan tema modern FlatLaf
         com.formdev.flatlaf.FlatLightLaf.setup();
     } catch (Exception ex) {
         System.err.println("Gagal memuat tema FlatLaf");
     }
 
-    // Kode bawaan NetBeans untuk memunculkan form
     java.awt.EventQueue.invokeLater(new Runnable() {
         public void run() {
             new dashboardguru().setVisible(true);
-//            new loginguru().setVisible(true);
         }
     });
 }

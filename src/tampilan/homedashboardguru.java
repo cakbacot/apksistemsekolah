@@ -62,35 +62,27 @@ public class homedashboardguru extends javax.swing.JInternalFrame {
         }
         JFreeChart chart = ChartFactory.createPieChart(null, dataset, true, true, false);
 
-        // --- PENGATURAN TRANSPARAN & UKURAN ---
-        
-        // 1. Menghilangkan Background Chart Utama
-        chart.setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); // Transparan total
-        chart.getLegend().setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); // Legend transparan
-        chart.getLegend().setItemPaint(java.awt.Color.BLACK); // Teks legend jadi putih agar kontras
+        chart.setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); 
+        chart.getLegend().setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); 
+        chart.getLegend().setItemPaint(java.awt.Color.BLACK); 
 
-        // 2. Menghilangkan Background Plot (Area Lingkaran)
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setBackgroundPaint(null); // Menghapus warna background plot
-        plot.setOutlineVisible(false); // Menghapus garis kotak di sekitar lingkaran
-        plot.setShadowPaint(null);     // Menghilangkan bayangan agar lebih flat/minimalis
-        
-      // 3. Warna Section (Navy & Pink)
-        // Kita harus mengambil key/label yang persis sama dengan yang ada di dataset
+        plot.setBackgroundPaint(null); 
+        plot.setOutlineVisible(false); 
+        plot.setShadowPaint(null);    
+
         for (Object key : dataset.getKeys()) {
             String label = key.toString();
             if (label.startsWith("Laki - laki")) {
-                plot.setSectionPaint((Comparable) key, new java.awt.Color(44, 62, 80)); // Navy
+                plot.setSectionPaint((Comparable) key, new java.awt.Color(44, 62, 80)); 
             } else if (label.startsWith("Perempuan")) {
-                plot.setSectionPaint((Comparable) key, new java.awt.Color(255, 105, 180)); // Pink
+                plot.setSectionPaint((Comparable) key, new java.awt.Color(255, 105, 180)); 
             }
         }
-        // 5. Render ke Panel dengan Ukuran Otomatis
         ChartPanel chartPanel = new ChartPanel(chart);
-        
-        // KUNCI: Agar ukuran mengikuti ukuran JPanel di Design
+
         chartPanel.setPreferredSize(new java.awt.Dimension(panelDiagram.getWidth(), panelDiagram.getHeight()));
-        chartPanel.setOpaque(false); // ChartPanel juga dibuat transparan
+        chartPanel.setOpaque(false); 
         
         panelDiagram.removeAll();
         panelDiagram.setLayout(new java.awt.BorderLayout());
@@ -113,9 +105,6 @@ public void tampilkanDiagramAbsensi() {
         String kg = GuruSession.getKelas();
         
         if (kg != null && !kg.trim().isEmpty()) {
-            
-            // --- UPDATE QUERY ---
-            // Kita gabungkan tbl_absen ke tbl_siswa (lewat nisn), lalu ke tbl_kelas (lewat kelas/id_kelas)
             String sql = "SELECT a.status_hadir, COUNT(*) as total " +
                          "FROM tbl_absen a " +
                          "JOIN tbl_siswa s ON a.nisn = s.nisn " +
@@ -131,11 +120,9 @@ public void tampilkanDiagramAbsensi() {
             int totalTidakHadir = 0;
 
             while (res.next()) {
-                // Menggunakan kolom baru: status_hadir
                 int statusAbsen = res.getInt("status_hadir"); 
                 int total = res.getInt("total");
 
-                // Asumsi di database Anda: 1 = Hadir, 0 = Tidak Hadir
                 if (statusAbsen == 1) {
                     totalHadir += total;
                 } else {
@@ -143,7 +130,6 @@ public void tampilkanDiagramAbsensi() {
                 }
             }
 
-            // --- PENGAMAN JIKA DATA KOSONG ---
             if (totalHadir == 0 && totalTidakHadir == 0) {
                 dataset.setValue("Belum ada data absensi", 1); 
             } else {
@@ -153,7 +139,6 @@ public void tampilkanDiagramAbsensi() {
 
             JFreeChart chart = ChartFactory.createPieChart(null, dataset, true, true, false);
 
-            // --- STYLING TRANSPARAN ---
             chart.setBackgroundPaint(new java.awt.Color(255, 255, 255, 255));
             chart.getLegend().setBackgroundPaint(new java.awt.Color(255, 255, 255, 255));
             chart.getLegend().setItemPaint(java.awt.Color.BLACK); 
@@ -162,28 +147,24 @@ public void tampilkanDiagramAbsensi() {
             plot.setBackgroundPaint(null);
             plot.setOutlineVisible(false);
             plot.setShadowPaint(null);
-            
-            // --- PEWARNAAN OTOMATIS ---
+
             for (Object key : dataset.getKeys()) {
                 String label = key.toString().toLowerCase();
                 
                 if (label.contains("tidak hadir")) {
-                    plot.setSectionPaint((Comparable) key, new java.awt.Color(231, 76, 60));  // Merah
+                    plot.setSectionPaint((Comparable) key, new java.awt.Color(231, 76, 60));  
                 } else if (label.contains("hadir")) {
-                    plot.setSectionPaint((Comparable) key, new java.awt.Color(46, 204, 113)); // Hijau
+                    plot.setSectionPaint((Comparable) key, new java.awt.Color(46, 204, 113)); 
                 } else {
-                    plot.setSectionPaint((Comparable) key, new java.awt.Color(189, 195, 199)); // Abu-abu
+                    plot.setSectionPaint((Comparable) key, new java.awt.Color(189, 195, 199)); 
                 }
             }
-            
-            // Teks Label
+
             plot.setLabelPaint(java.awt.Color.BLACK);
             plot.setLabelFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
             plot.setLabelBackgroundPaint(new java.awt.Color(0, 0, 0, 0));
             plot.setLabelOutlinePaint(null);
 
-            // --- MASUKKAN KE PANEL ---
-            // Ingat: Ganti 'pnlAbsen' dengan nama panel Anda sendiri!
             ChartPanel chartPanel = new ChartPanel(chart);
             chartPanel.setPreferredSize(new java.awt.Dimension(pnlAbsen.getWidth(), pnlAbsen.getHeight()));
             chartPanel.setOpaque(false);

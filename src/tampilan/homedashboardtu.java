@@ -50,36 +50,27 @@ public class homedashboardtu extends javax.swing.JInternalFrame {
         }
 
         JFreeChart chart = ChartFactory.createPieChart(null, dataset, true, true, false);
+        chart.setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); 
+        chart.getLegend().setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); 
+        chart.getLegend().setItemPaint(java.awt.Color.BLACK); 
 
-        // --- PENGATURAN TRANSPARAN & UKURAN ---
-        
-        // 1. Menghilangkan Background Chart Utama
-        chart.setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); // Transparan total
-        chart.getLegend().setBackgroundPaint(new java.awt.Color(255, 255, 255, 255)); // Legend transparan
-        chart.getLegend().setItemPaint(java.awt.Color.BLACK); // Teks legend jadi putih agar kontras
-
-        // 2. Menghilangkan Background Plot (Area Lingkaran)
         PiePlot plot = (PiePlot) chart.getPlot();
-        plot.setBackgroundPaint(null); // Menghapus warna background plot
-        plot.setOutlineVisible(false); // Menghapus garis kotak di sekitar lingkaran
-        plot.setShadowPaint(null);     // Menghilangkan bayangan agar lebih flat/minimalis
-        
-      // 3. Warna Section (Navy & Pink)
-        // Kita harus mengambil key/label yang persis sama dengan yang ada di dataset
+        plot.setBackgroundPaint(null); 
+        plot.setOutlineVisible(false); 
+        plot.setShadowPaint(null);     
+ 
         for (Object key : dataset.getKeys()) {
             String label = key.toString();
             if (label.startsWith("Laki - laki")) {
-                plot.setSectionPaint((Comparable) key, new java.awt.Color(44, 62, 80)); // Navy
+                plot.setSectionPaint((Comparable) key, new java.awt.Color(44, 62, 80)); 
             } else if (label.startsWith("Perempuan")) {
-                plot.setSectionPaint((Comparable) key, new java.awt.Color(255, 105, 180)); // Pink
+                plot.setSectionPaint((Comparable) key, new java.awt.Color(255, 105, 180)); 
             }
         }
-        // 5. Render ke Panel dengan Ukuran Otomatis
         ChartPanel chartPanel = new ChartPanel(chart);
-        
-        // KUNCI: Agar ukuran mengikuti ukuran JPanel di Design
+
         chartPanel.setPreferredSize(new java.awt.Dimension(panelDiagram.getWidth(), panelDiagram.getHeight()));
-        chartPanel.setOpaque(false); // ChartPanel juga dibuat transparan
+        chartPanel.setOpaque(false); 
         
         panelDiagram.removeAll();
         panelDiagram.setLayout(new java.awt.BorderLayout());
@@ -98,8 +89,7 @@ public void tampilkanDiagramGuru() {
         if (this.conn == null || this.conn.isClosed()) {
             this.conn = new koneksi().getConnection(); 
         }
-        
-        // Query untuk tabel guru
+
         String sql = "SELECT jkel, COUNT(*) as jumlah FROM guru GROUP BY jkel";
         java.sql.PreparedStatement ps = conn.prepareStatement(sql);
         java.sql.ResultSet res = ps.executeQuery();
@@ -107,25 +97,22 @@ public void tampilkanDiagramGuru() {
         while (res.next()) {
             String gender = res.getString("jkel");
             int jumlah = res.getInt("jumlah");
-            
-            // Logika agar variasi tulisan "Laki-Laki" tetap masuk kategori yang sama
+
             String label = (gender.toLowerCase().startsWith("l")) ? "Laki - laki" : "Perempuan";
             dataset.setValue(label + " (" + jumlah + ")", jumlah);
         }
 
         JFreeChart chart = ChartFactory.createPieChart(null, dataset, true, true, false);
 
-        // --- STYLING TRANSPARAN & WARNA ---
         chart.setBackgroundPaint(new java.awt.Color(255, 255, 255, 255));
         chart.getLegend().setBackgroundPaint(new java.awt.Color(255, 255, 255, 255));
-        chart.getLegend().setItemPaint(java.awt.Color.BLACK); // Teks Legend Hitam
+        chart.getLegend().setItemPaint(java.awt.Color.BLACK); 
 
         PiePlot plot = (PiePlot) chart.getPlot();
         plot.setBackgroundPaint(null);
         plot.setOutlineVisible(false);
         plot.setShadowPaint(null);
         
-        // Loop untuk set warna Navy & Pink berdasarkan label
         for (Object key : dataset.getKeys()) {
             String l = key.toString();
             if (l.startsWith("Laki - laki")) {
@@ -134,14 +121,12 @@ public void tampilkanDiagramGuru() {
                 plot.setSectionPaint((Comparable) key, new java.awt.Color(135, 206, 250)); 
             }
         }
-        
-        // Teks Label Hitam
+
         plot.setLabelPaint(java.awt.Color.BLACK);
         plot.setLabelFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 12));
         plot.setLabelBackgroundPaint(new java.awt.Color(0, 0, 0, 0));
         plot.setLabelOutlinePaint(null);
 
-        // --- TAMPILKAN KE PANEL pnlgr ---
         ChartPanel chartPanel = new ChartPanel(chart);
         chartPanel.setPreferredSize(new java.awt.Dimension(pnlgr.getWidth(), pnlgr.getHeight()));
         chartPanel.setOpaque(false);

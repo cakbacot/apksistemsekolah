@@ -40,11 +40,9 @@ public class loginguru extends javax.swing.JFrame {
     
     private void scaleImage() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/loginguru.png"));
         Image imgLama = iconAwal.getImage();
-        
-        // Mengambil ukuran lbl_logo saat ini
+
         int width = lbl_logo.getWidth();
         int height = lbl_logo.getHeight();
         
@@ -62,8 +60,6 @@ public class loginguru extends javax.swing.JFrame {
         ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
         Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
         btn.setIcon(new ImageIcon(imgBaru));
-
-        // Styling Dasar
         btn.setForeground(java.awt.Color.BLACK);
         btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
  btn.setContentAreaFilled(false);
@@ -76,11 +72,9 @@ public class loginguru extends javax.swing.JFrame {
         btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
         btn.setIconTextGap(20);
 
-        // --- CARA MANUAL: MOUSE LISTENER UNTUK HOVER KUNING ---
         btn.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
-                // Saat mouse masuk: Background jadi kuning, teks jadi hitam agar kontras
                 btn.setContentAreaFilled(true);
                 btn.setOpaque(true); 
                 btn.setBackground(new java.awt.Color(10, 161, 12)); // Hijau
@@ -252,31 +246,24 @@ public class loginguru extends javax.swing.JFrame {
 
     private void nipKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nipKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            // Pindah fokus ke kotak password
             pass.requestFocus();
-        }// TODO add your handling code here:
+        }
     }//GEN-LAST:event_nipKeyPressed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
         nip.requestFocus();
 try {
-//    String sql = "SELECT * FROM guru WHERE nip_g=? AND password=?"; 
 String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
             "FROM guru g " +
             "LEFT JOIN tbl_kelas k ON g.kd_guru = k.kd_guru " +
             "WHERE g.nip_g = ? AND g.password = ?";
     java.sql.Connection conn = new koneksi().getConnection();
     java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-
-    // Mengambil input dari TextField NIP dan Password
     pst.setString(1, nip.getText());
     pst.setString(2, pass.getText());
 
     java.sql.ResultSet rs = pst.executeQuery();
-
-    // 1. Cek apakah data NIP dan Password ada di database
    if (rs.next()) {
-            // 3. JIKA BERHASIL, SIMPAN KE SESSION
             GuruSession.setKdGuru(rs.getString("kd_guru"));
             GuruSession.setNip(rs.getString("nip_g"));
             GuruSession.setNama(rs.getString("nama"));
@@ -296,9 +283,8 @@ String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
             menu.setVisible(true);
             
             
-            this.dispose(); // Tutup form login
+            this.dispose(); 
         } else {
-            // Jika salah password/kode guru
             JOptionPane.showMessageDialog(null, "Kode Guru atau Password salah!", "Gagal Login", JOptionPane.ERROR_MESSAGE);
         }
 } catch (Exception e) {
@@ -308,9 +294,8 @@ String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
 
     private void passKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passKeyPressed
         if (evt.getKeyCode() == java.awt.event.KeyEvent.VK_ENTER) {
-            // Panggil fungsi login Anda di sini
             login.doClick();
-        }// TODO add your handling code here:
+        }
     }//GEN-LAST:event_passKeyPressed
 
     private void kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kembaliActionPerformed
