@@ -33,7 +33,6 @@ ResultSet rs;
         loadcombo();
         loadcomboMapel();
         loadjenisnilai();
-       //datatable();
     }
 public void datatable() {
     DefaultTableModel tabmode = new DefaultTableModel();
@@ -43,23 +42,19 @@ public void datatable() {
     tabmode.addColumn("UTS");
     tabmode.addColumn("UAS");
     tblsiswa.setModel(tabmode);
-
-    // UBAH IF INI: Hanya wajibkan pilih kelas
+    
     if (cbkelas.getSelectedIndex() <= 0) {
         return;
     }
 
     String kelasDipilih = cbkelas.getSelectedItem().toString();
     String idGuru = GuruSession.getKdGuru();
-    
-    // Cek apakah mapel sudah dipilih
     String idMapel = "";
     if (cbmapel.getSelectedIndex() > 0) {
         idMapel = cariIdMapel(cbmapel.getSelectedItem().toString());
     }
 
     try {
-        // Jika Mapel belum dipilih, kita beri nilai kosong agar Left Join tidak error
         String sql = "SELECT s.nisn, s.nama, " +
                      "MAX(CASE WHEN n.jenis_nilai = 'Tugas' THEN n.skor ELSE 0 END) AS Tugas, " +
                      "MAX(CASE WHEN n.jenis_nilai = 'UTS' THEN n.skor ELSE 0 END) AS UTS, " +
@@ -72,7 +67,7 @@ public void datatable() {
                      "ORDER BY s.nama ASC";
 
         PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, idMapel); // Jika kosong, dia akan mencari nilai yang tidak punya ID (alias null)
+        pst.setString(1, idMapel); 
         pst.setString(2, kelasDipilih);
         
         ResultSet rs = pst.executeQuery();
@@ -105,46 +100,38 @@ private void loadjenisnilai() {
 private String cariIdMapel(String namaMapel) {
     String id = "";
     try {
-        // Query untuk mencari kode (ID) berdasarkan nama yang dipilih
         String sql = "SELECT id_mapel FROM tbl_jadwal WHERE nama_mapel = ? AND kd_guru = ?";
         PreparedStatement pst = con.prepareStatement(sql);
         pst.setString(1, namaMapel);
-        pst.setString(2, GuruSession.getKdGuru()); // Pastikan guru yang login dicocokkan
+        pst.setString(2, GuruSession.getKdGuru()); 
         ResultSet rs = pst.executeQuery();
         
         if (rs.next()) {
-            id = rs.getString("id_mapel"); // Mengambil ID dari database
+            id = rs.getString("id_mapel"); 
         }
     } catch (Exception e) {
         System.out.println("Error cari ID Mapel: " + e.getMessage());
     }
-    return id; // Mengembalikan hasil (ID) ke fungsi yang memanggil
+    return id; 
 }
 
     
     private void loadcombo() {
         try {
-            // 1. Ambil Kode Guru yang sedang login dari GuruSession (Karena 1 package, langsung panggil nama class-nya)
             String idGuruLogin = GuruSession.getKdGuru();
-
-            // 2. Modifikasi Query: Ambil nama kelas berdasarkan kd_guru yang sedang login
             String sql = "SELECT kelas FROM tbl_kelas WHERE kd_guru = '" + idGuruLogin + "' ORDER BY kelas ASC"; 
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
 
-            // Bersihkan item lama dan siapkan opsi default
             cbkelas.removeAllItems(); 
             cbkelas.addItem("-- Pilih Kelas --"); 
 
-            boolean punyaKelas = false; // Penanda apakah guru ini memegang suatu kelas
-
-            // 3. Masukkan hasil query ke dalam Combo Box
+            boolean punyaKelas = false; 
             while(rs.next()) {
                 cbkelas.addItem(rs.getString("kelas")); 
                 punyaKelas = true;
             }
             
-            // 4. (Opsional) Peringatan jika guru yang login tidak terdaftar di kelas manapun
             if (!punyaKelas && idGuruLogin != null) {
                 JOptionPane.showMessageDialog(this, "Anda belum ditugaskan untuk mengajar/wali di kelas manapun.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -158,8 +145,6 @@ private String cariIdMapel(String namaMapel) {
     try {
         String idGuru = GuruSession.getKdGuru();
         String kelasDipilih = cbkelas.getSelectedItem().toString();
-
-        // Query ini akan menghasilkan baris sesuai jumlah mapel yang diajar guru tsb
         String sql = "SELECT j.nama_mapel FROM tbl_jadwal j " +
                      "JOIN tbl_kelas k ON j.kelas = k.id_kelas " +
                      "WHERE j.kd_guru = ? AND k.kelas = ?";
@@ -169,12 +154,10 @@ private String cariIdMapel(String namaMapel) {
         pst.setString(2, kelasDipilih);
         ResultSet rs = pst.executeQuery();
 
-        cbmapel.removeAllItems(); // Bersihkan dulu item lama
+        cbmapel.removeAllItems(); 
         cbmapel.addItem("-- Pilih Mapel --");
 
         while(rs.next()) {
-            // Jika guru mengajar 2 mapel, maka perulangan ini akan berjalan 2x
-            // dan menambahkan 2 item ke combobox
             cbmapel.addItem(rs.getString("nama_mapel")); 
         }
     } catch (Exception e) {
@@ -470,25 +453,16 @@ private String cariIdMapel(String namaMapel) {
     int baris = tblsiswa.getSelectedRow();
     
     if (baris != -1) {
-        // 1. Mengambil data dari kolom tabel (berdasarkan index kolom)
-        // Index 0: NISN, 1: Nama, 2: Mapel, 3: Tugas, 4: UTS, 5: UAS
         String nisn = tblsiswa.getValueAt(baris, 0).toString();
         String nama = tblsiswa.getValueAt(baris, 1).toString();
         String mapel = cbmapel.getSelectedItem().toString();
         
-        // 2. Mengisi Label (Data Identitas)
         lblnisn.setText(nisn);
         lblnama.setText(nama);
         lblmapel.setText(mapel);
-        lblguru.setText(GuruSession.getNama()); // Mengambil nama guru dari Session
-        
-        // 3. Reset/Siapkan Form Input (Opsional tapi disarankan)
-        // Agar setelah diklik, guru bisa langsung memilih jenis nilai baru
+        lblguru.setText(GuruSession.getNama()); 
         cbjnsnilai.setSelectedIndex(0); 
         txnilai.setText("");
-        
-        // Jika kamu ingin guru bisa langsung update nilai yang ada di tabel,
-        // kamu bisa menambahkan logika di sini untuk mengecek isi kolom 3, 4, atau 5.
     }
     }//GEN-LAST:event_tblsiswaMouseClicked
 
@@ -511,10 +485,9 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
     String jenisNilai = cbjnsnilai.getSelectedItem().toString();
     int skor = Integer.parseInt(txnilai.getText());
     String idMapel = cariIdMapel(lblmapel.getText()); 
-    String idGuru = GuruSession.getKdGuru(); // Ambil kode guru yang login
+    String idGuru = GuruSession.getKdGuru(); 
 
     try {
-        // Cek data
         String cekSql = "SELECT * FROM tbl_nilai WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
         PreparedStatement psCek = con.prepareStatement(cekSql);
         psCek.setString(1, nisn);
@@ -523,7 +496,6 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
         ResultSet rs = psCek.executeQuery();
 
         if (rs.next()) {
-            // Update
             String updateSql = "UPDATE tbl_nilai SET skor = ? WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
             PreparedStatement psUpdate = con.prepareStatement(updateSql);
             psUpdate.setInt(1, skor);
@@ -533,14 +505,13 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
             psUpdate.executeUpdate();
             JOptionPane.showMessageDialog(this, "Data berhasil diupdate!");
         } else {
-            // INSERT (Tambahkan kd_guru di sini)
             String insertSql = "INSERT INTO tbl_nilai (nisn, id_mapel, jenis_nilai, skor, kd_guru) VALUES (?, ?, ?, ?, ?)";
             PreparedStatement psInsert = con.prepareStatement(insertSql);
             psInsert.setString(1, nisn);
             psInsert.setString(2, idMapel);
             psInsert.setString(3, jenisNilai);
             psInsert.setInt(4, skor);
-            psInsert.setString(5, idGuru); // Tambahkan ini!
+            psInsert.setString(5, idGuru);
             psInsert.executeUpdate();
             JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
         }
@@ -565,13 +536,10 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
 
     String nisn = lblnisn.getText();
     String jenisNilai = cbjnsnilai.getSelectedItem().toString();
-    String idMapel = cariIdMapel(lblmapel.getText()); // Ambil ID Mapel
+    String idMapel = cariIdMapel(lblmapel.getText()); 
     
     try {
-        // Validasi: Apakah skor berupa angka?
         int skor = Integer.parseInt(txnilai.getText());
-
-        // 2. Query Update
         String sql = "UPDATE tbl_nilai SET skor = ? WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
         PreparedStatement ps = con.prepareStatement(sql);
         
@@ -584,8 +552,8 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
 
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(this, "Data berhasil diubah!");
-            datatable(); // Refresh tabel
-            txnilai.setText(""); // Bersihkan input
+            datatable(); 
+            txnilai.setText(""); 
             cbjnsnilai.setSelectedIndex(0);
         } else {
             JOptionPane.showMessageDialog(this, "Gagal mengubah data. Pastikan data tersebut sudah ada/tersimpan sebelumnya.");

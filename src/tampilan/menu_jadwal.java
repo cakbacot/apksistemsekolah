@@ -84,18 +84,14 @@ ResultSet rs;
     
     private void loadcombo() {
         try {
-            // 1. Query untuk mengambil data unik dari tabel kelas
             String sql = "SELECT id_kelas FROM tbl_kelas";
 
             java.sql.Connection conn = (Connection)koneksi.getConnection();
             java.sql.PreparedStatement pst = conn.prepareStatement(sql);
             java.sql.ResultSet rs = pst.executeQuery();
-
-            // 2. Bersihkan item lama agar tidak double
             ckelas.removeAllItems(); 
-            ckelas.addItem("-- Pilih Kelas --"); // Item pertama sebagai petunjuk
+            ckelas.addItem("-- Pilih Kelas --"); 
 
-            // 3. Masukkan hasil query ke dalam Combo Box
             while(rs.next()) {
                 ckelas.addItem(rs.getString("id_kelas"));
             }
@@ -438,12 +434,10 @@ ResultSet rs;
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
         int ok = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin menghapus data ini?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-        if (ok == 0) { // Jika user memilih tombol YES
+        if (ok == 0) { 
             String sql = "delete from tbl_jadwal where id_mapel=?";
             try {
                 PreparedStatement stat = con.prepareStatement(sql);
-
-                // Ambil ID Mapel dari TextField sebagai acuan hapus
                 stat.setString(1, txidm.getText());
 
                 stat.executeUpdate();

@@ -26,7 +26,6 @@ private DefaultTableModel tabmode;
     javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
     ui.setNorthPane(null);
 
-    // FlatLaf
     try {
         com.formdev.flatlaf.FlatLightLaf.setup();
     } catch (Exception e) {
@@ -51,7 +50,6 @@ bcari.setIcon(new ImageIcon(
     new ImageIcon(getClass().getResource("/resource/search.png"))
         .getImage().getScaledInstance(20, 20, Image.SCALE_SMOOTH)));
 
-    // WARNA TOMBOL
     bsimpan.setBackground(new java.awt.Color(34, 197, 94));
     bsimpan.setForeground(java.awt.Color.WHITE);
 
@@ -67,7 +65,6 @@ bcari.setIcon(new ImageIcon(
    bcari.setBackground(new java.awt.Color(59, 130, 246));
    bcari.setForeground(java.awt.Color.WHITE);
 
-    // STYLE BUTTON
     bsimpan.setFocusPainted(false);
     bubah.setFocusPainted(false);
     bhapus.setFocusPainted(false);
@@ -594,16 +591,14 @@ while (rs.next()) {
     }
     
     try {
-        // --- BAGIAN TAMBAHAN UNTUK MENCARI ID KELAS ---
         String namaKelas = cbkls.getSelectedItem().toString();
         String idKelas = "";
         String sqlCariID = "SELECT id_kelas FROM tbl_kelas WHERE kelas = '" + namaKelas + "'";
         Statement st = con.createStatement();
         ResultSet rsID = st.executeQuery(sqlCariID);
         if (rsID.next()) {
-            idKelas = rsID.getString("id_kelas"); // Mendapatkan KLS001, KLS002, dst.
+            idKelas = rsID.getString("id_kelas");
         }
-        // ----------------------------------------------
 
         String sql = "INSERT INTO tbl_siswa (nisn,nama,tgl_lahir,alamat,notelp,jkel,angkatan,nama_wali,no_wali,jurusan,kelas) VALUES (?,?,?,?,?,?,?,?,?,?,?)";
         PreparedStatement stat = con.prepareStatement(sql);
@@ -649,7 +644,6 @@ while (rs.next()) {
             return;
         }
 
-        // --- BAGIAN TAMBAHAN UNTUK MENCARI ID KELAS ---
         String namaKelas = cbkls.getSelectedItem().toString();
         String idKelas = "";
         String sqlCariID = "SELECT id_kelas FROM tbl_kelas WHERE kelas = '" + namaKelas + "'";
@@ -658,7 +652,7 @@ while (rs.next()) {
         if (rsID.next()) {
             idKelas = rsID.getString("id_kelas");
         }
-        // ----------------------------------------------
+        
 
         String sql = "UPDATE tbl_siswa SET nama=?, tgl_lahir=?, alamat=?, notelp=?, jkel=?, angkatan=?, nama_wali=?, no_wali=?, jurusan=?, kelas=? WHERE nisn=?";
         PreparedStatement stat = con.prepareStatement(sql);
@@ -672,10 +666,7 @@ while (rs.next()) {
         stat.setString(7, txtnmwali.getText());
         stat.setString(8, txtnowali.getText());
         stat.setString(9, cbjurusan.getSelectedItem().toString());
-        
-        // --- BAGIAN YANG DIPERBAIKI ---
-        stat.setString(10, idKelas); // Masukkan variabel idKelas
-        // ------------------------------
+        stat.setString(10, idKelas); 
         
         stat.setString(11, txtnisn.getText());
         stat.executeUpdate();

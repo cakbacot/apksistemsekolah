@@ -34,7 +34,6 @@ public class panel_absen extends javax.swing.JInternalFrame {
         javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
     ui.setNorthPane(null);
         
-        // Sisa kode kamu yang lain tetap sama...
         java.awt.EventQueue.invokeLater(new Runnable() {
             @Override
             public void run() {
@@ -47,11 +46,9 @@ public class panel_absen extends javax.swing.JInternalFrame {
     
     private void scaleImage() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/logoguru.png"));
         Image imgLama = iconAwal.getImage();
         
-        // Mengambil ukuran lbl_logo saat ini
         int width = absenguru.getWidth();
         int height = absenguru.getHeight();
         
@@ -66,11 +63,9 @@ public class panel_absen extends javax.swing.JInternalFrame {
     
     private void scaleImage1() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/murid.png"));
         Image imgLama = iconAwal.getImage();
         
-        // Mengambil ukuran lbl_logo saat ini
         int width = absensiswa.getWidth();
         int height = absensiswa.getHeight();
         
@@ -92,12 +87,11 @@ public class panel_absen extends javax.swing.JInternalFrame {
         } catch (java.beans.PropertyVetoException e) {
             System.err.println("Gagal memaksimalkan: " + e.getMessage());
         }
-        desktop.repaint(); // Menyegarkan tampilan desktop pane
+        desktop.repaint(); 
     }
     
     private void bukaFormGuru() {
         desktop.removeAll();
-        // Ganti 'menu_absenGuru' sesuai dengan nama class JInternalFrame Guru Anda
         menu_absenGuru mg = new menu_absenGuru(); 
         desktop.add(mg);
         mg.setVisible(true);
@@ -106,24 +100,21 @@ public class panel_absen extends javax.swing.JInternalFrame {
         } catch (java.beans.PropertyVetoException e) {
             System.err.println("Gagal memaksimalkan: " + e.getMessage());
         }
-        desktop.repaint(); // Menyegarkan tampilan desktop pane
+        desktop.repaint();
     }
     
     private void tampilkanGambar() {
         try {
-            // Memasang gambar secara manual dari folder resource
             absensiswa.setIcon(new ImageIcon(getClass().getResource("/resource/user.png")));
             absenguru.setIcon(new ImageIcon(getClass().getResource("/resource/logoguru.png")));
         } catch (Exception e) {
             System.err.println("Gambar tidak ditemukan! Pastikan folder resource sudah benar.");
         }
     }
-    
-  // --- FITUR HOVER: UBAH WARNA BACKGROUND PANEL ---
+   
     private void aktifkanHoverWarnaPanel() {
-        // 1. Warna untuk PANEL USER (jPanel1)
-        java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);     // Biru Terang Asli
-        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); // Biru Lebih Muda (Hover)
+        java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);     
+        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); 
 
         jpanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -139,9 +130,8 @@ public class panel_absen extends javax.swing.JInternalFrame {
 
         });
 
-        // 2. Warna untuk PANEL GURU (jPanel2) - Tetap normal seperti sebelumnya
-        java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     // Biru Gelap Asli
-        java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  // Biru Agak Terang Saat Disentuh
+        java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     
+        java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  
 
         jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -301,8 +291,8 @@ public class panel_absen extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jPanel2MouseClicked
 
     private void absensiswaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absensiswaMouseEntered
-       java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);    // Biru Terang Asli
-        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); // Biru Lebih Muda (Hover)
+       java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);    
+        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); 
         jpanel1.setBackground(warnaHoverSiswa);
     }//GEN-LAST:event_absensiswaMouseEntered
 
@@ -312,41 +302,6 @@ public class panel_absen extends javax.swing.JInternalFrame {
         jPanel2.setBackground(warnaHoverGuru);
     }//GEN-LAST:event_absenguruMouseEntered
 
-//public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(panel_absen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(panel_absen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(panel_absen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(panel_absen.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//    try {
-//        com.formdev.flatlaf.FlatLightLaf.setup();
-//    } catch (Exception ex) {
-//    System.err.println("Gagal memuat tema FlatLaf");
-//}
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new panel_absen().setVisible(true);
-//            }
-//        });
-//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel absenguru;
     private javax.swing.JLabel absensiswa;

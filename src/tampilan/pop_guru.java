@@ -107,13 +107,8 @@ public class pop_guru extends javax.swing.JFrame {
 
     private void tbl_guruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_guruMouseClicked
         int baris = tbl_guru.getSelectedRow();
-        // Ambil nilai kode guru dari baris yang diklik
         String kd = tbl_guru.getValueAt(baris, 0).toString();
-
-        // Set nilai tersebut ke TextField di form utama (CRUD Jadwal)
         fieldTarget.setText(kd);
-
-        // Tutup popup
         this.dispose();
     }//GEN-LAST:event_tbl_guruMouseClicked
 

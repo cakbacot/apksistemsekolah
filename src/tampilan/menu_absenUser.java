@@ -67,10 +67,10 @@ ResultSet rs;
     }
     
     protected void datatable(){
-        // 1. Definisikan header/judul kolom (BAGIAN INI YANG SEBELUMNYA HILANG)
+        
         String[] baris = {"NIP", "Nama User", "Kehadiran", "Total Hadir", "Total Tidak Hadir", "Keterangan"};
 
-        // 2. Inisialisasi tabmode agar checkbox bisa diklik
+        
         tabmode = new DefaultTableModel(null, baris) {
             @Override
             public Class<?> getColumnClass(int columnIndex) {
@@ -86,10 +86,10 @@ ResultSet rs;
             }
         };
 
-        // 3. Masukkan tabmode ke dalam tabel UI Anda
+        
         tbluser.setModel(tabmode);
 
-        // 4. Proses memanggil data dari database
+        
         try {
             String nipLogin = UserSession.getNip();
             String sql = "SELECT u.nip, u.nama, " +
@@ -108,12 +108,12 @@ ResultSet rs;
                 Object[] data = {
                     hasil.getString("nip"),
                     hasil.getString("nama"),
-                    false, // Checkbox default belum dicentang
+                    false, 
                     hasil.getInt("total_hadir"),
                     hasil.getInt("total_tidak_hadir"),
                     ""
                 };
-                tabmode.addRow(data); // Sekarang baris ini tidak akan error lagi
+                tabmode.addRow(data); 
             }
 
         } catch (Exception e) {
@@ -280,7 +280,7 @@ private void aturHakAkses() {
     }// </editor-fold>//GEN-END:initComponents
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
-        // Memunculkan dialog konfirmasi (opsional, tapi disarankan)
+        
         int konfirmasi = JOptionPane.showConfirmDialog(this,
             "Batal melakukan absensi? Semua isian dan centang akan dikosongkan.",
             "Konfirmasi Batal",
@@ -288,9 +288,8 @@ private void aturHakAkses() {
             JOptionPane.QUESTION_MESSAGE);
 
         if (konfirmasi == JOptionPane.YES_OPTION) {
-            // Panggil method yang sudah Anda buat untuk mereset tampilan
-            kosong();     // Mengosongkan textfield dan tanggal
-            datatable();  // Me-refresh tabel agar semua checkbox kembali kosong
+            kosong();     
+            datatable();  
 
             JOptionPane.showMessageDialog(this, "Form berhasil dibersihkan.", "Batal", JOptionPane.INFORMATION_MESSAGE);
         }        // TODO add your handling code here:

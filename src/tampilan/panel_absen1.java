@@ -35,7 +35,6 @@ public class panel_absen1 extends javax.swing.JFrame {
         setVisible(true);
         setResizable(false);
         tampilkanGambar();
-        // Jalankan fungsi efek warna hover panel
         aktifkanHoverWarnaPanel();
         scaleImage();
         scaleImage1();
@@ -43,11 +42,9 @@ public class panel_absen1 extends javax.swing.JFrame {
     
     private void scaleImage() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/logoguru.png"));
         Image imgLama = iconAwal.getImage();
         
-        // Mengambil ukuran lbl_logo saat ini
         int width = menu_absenGuru.getWidth();
         int height = menu_absenGuru.getHeight();
         
@@ -62,11 +59,9 @@ public class panel_absen1 extends javax.swing.JFrame {
     
     private void scaleImage1() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/user.png"));
         Image imgLama = iconAwal.getImage();
         
-        // Mengambil ukuran lbl_logo saat ini
         int width = menu_absenSiswa.getWidth();
         int height = menu_absenSiswa.getHeight();
         
@@ -81,20 +76,17 @@ public class panel_absen1 extends javax.swing.JFrame {
     
     private void tampilkanGambar() {
         try {
-            // Memasang gambar secara manual dari folder resource
             menu_absenSiswa.setIcon(new ImageIcon(getClass().getResource("/resource/user.png")));
             menu_absenSiswa.setIcon(new ImageIcon(getClass().getResource("/resource/logoguru.png")));
         } catch (Exception e) {
             System.err.println("Gambar tidak ditemukan! Pastikan folder resource sudah benar.");
         }
     }
-    
-  // --- FITUR HOVER: UBAH WARNA BACKGROUND PANEL ---
+ 
     private void aktifkanHoverWarnaPanel() {
-        // 1. Warna untuk PANEL USER (jPanel1)
-        java.awt.Color warnaAsliUser = new java.awt.Color(0, 0, 255);    // Biru Terang Asli
-        java.awt.Color warnaHoverUser = new java.awt.Color(0, 10, 135); // Biru Lebih Muda (Hover)
-        java.awt.Color warnaKlikUser = new java.awt.Color(0, 0, 150);    // Biru Gelap (Saat Diklik)
+        java.awt.Color warnaAsliUser = new java.awt.Color(0, 0, 255);    
+        java.awt.Color warnaHoverUser = new java.awt.Color(0, 10, 135); 
+        java.awt.Color warnaKlikUser = new java.awt.Color(0, 0, 150);    
 
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -110,13 +102,11 @@ public class panel_absen1 extends javax.swing.JFrame {
 
             @Override
             public void mousePressed(java.awt.event.MouseEvent evt) {
-                // Ketika tombol mouse ditekan/diklik, panel berubah menjadi gelap
                 jPanel1.setBackground(warnaKlikUser);
             }
 
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                // Ketika klik dilepas, kembali ke warna hover jika mouse masih di dalam panel
                 if (jPanel1.getBounds().contains(evt.getPoint())) {
                     jPanel1.setBackground(warnaHoverUser);
                 } else {
@@ -125,9 +115,8 @@ public class panel_absen1 extends javax.swing.JFrame {
             }
         });
 
-        // 2. Warna untuk PANEL GURU (jPanel2) - Tetap normal seperti sebelumnya
-        java.awt.Color warnaAsliGuru = new java.awt.Color(0, 8, 97);     // Biru Gelap Asli
-        java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  // Biru Agak Terang Saat Disentuh
+        java.awt.Color warnaAsliGuru = new java.awt.Color(0, 8, 97);     
+        java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150); 
 
         jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
             @Override
@@ -240,41 +229,6 @@ public class panel_absen1 extends javax.swing.JFrame {
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-//public static void main(String args[]) {
-//        /* Set the Nimbus look and feel */
-//        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-//        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-//         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-//         */
-//        try {
-//            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-//                if ("Nimbus".equals(info.getName())) {
-//                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-//                    break;
-//                }
-//            }
-//        } catch (ClassNotFoundException ex) {
-//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (InstantiationException ex) {
-//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (IllegalAccessException ex) {
-//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-//            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-//        }
-//        //</editor-fold>
-//    try {
-//        com.formdev.flatlaf.FlatLightLaf.setup();
-//    } catch (Exception ex) {
-//    System.err.println("Gagal memuat tema FlatLaf");
-//}
-//        /* Create and display the form */
-//        java.awt.EventQueue.invokeLater(new Runnable() {
-//            public void run() {
-//                new panel_absen().setVisible(true);
-//            }
-//        });
-//    }
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel1;

@@ -20,11 +20,9 @@ public class pop_up_siswa extends javax.swing.JFrame {
 
   private menu_tranksaksi parentForm;
 
-    // Constructor untuk memanggil dari menu_tranksaksi
     public pop_up_siswa(menu_tranksaksi parent) {
         initComponents();
         this.parentForm = parent;
-        //loadData();
         datatable();
     }
     public pop_up_siswa() {
@@ -32,46 +30,19 @@ public class pop_up_siswa extends javax.swing.JFrame {
         datatable();
     }
     
-    
-//public void loadData() {
-  //  DefaultTableModel model = new DefaultTableModel();
-    //model.addColumn("NISN");
-    //model.addColumn("Nama");
-    //model.addColumn("Kelas");
- //   
-   // try {
-        // Asumsi 'con' adalah variabel koneksi database kamu
-     //   String sql = "SELECT nisn, nama, kelas FROM tbl_siswa";
-       // Statement st = con.createStatement();
-       // ResultSet rs = st.executeQuery(sql);
-        
-       // while (rs.next()) {
-         //   model.addRow(new Object[]{
-           //     rs.getString("nisn"),
-             //   rs.getString("nama"),
-               // rs.getString("kelas")
-          //  });
-        //}
-        //tblsiswa.setModel(model); // Sesuai nama variabel tabel kamu
-    //} catch (Exception e) {
-      //  JOptionPane.showMessageDialog(this, "Gagal load: " + e.getMessage());
-    //}
-//}
 protected void datatable() {
-        // Cek koneksi
         if (koneksi.getConnection() == null) {
             JOptionPane.showMessageDialog(null, "Koneksi database tidak ditemukan!");
             return;
         }
 
-        Object[] Baris = {"NISN", "Nama", "Kelas"}; // Sederhanakan header agar muat
+        Object[] Baris = {"NISN", "Nama", "Kelas"}; 
         DefaultTableModel tabmode = new DefaultTableModel(null, Baris);
         tblsiswa.setModel(tabmode);
 
         String cariitem = txtcari.getText();
 
         try {
-            // Menggunakan JOIN agar nama kelas tampil, bukan ID
             String sql = "SELECT s.nisn, s.nama, k.kelas AS nama_kelas " +
                          "FROM tbl_siswa s " +
                          "LEFT JOIN tbl_kelas k ON s.kelas = k.id_kelas " +
@@ -86,7 +57,7 @@ protected void datatable() {
                 tabmode.addRow(new Object[]{
                     hasil.getString("nisn"),
                     hasil.getString("nama"),
-                    hasil.getString("nama_kelas") // Nama kelas dari hasil JOIN
+                    hasil.getString("nama_kelas") 
                 });
             }
         } catch (Exception e) {
@@ -196,9 +167,8 @@ protected void datatable() {
         
         String nisn = tblsiswa.getValueAt(baris, 0).toString();
         String namaSiswa = tblsiswa.getValueAt(baris, 1).toString();
-        String kelasSiswa = tblsiswa.getValueAt(baris, 2).toString(); // Ambil nama kelas
-        
-        // Kirim data ke menu_tranksaksi
+        String kelasSiswa = tblsiswa.getValueAt(baris, 2).toString(); 
+   
         if (parentForm != null) {
             parentForm.setSiswa(nisn, namaSiswa, kelasSiswa);
         }
@@ -210,34 +180,8 @@ protected void datatable() {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(pop_up_siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(pop_up_siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(pop_up_siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(pop_up_siswa.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-        //</editor-fold>
-
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
-                //new pop_up_siswa().setVisible(true);
             }
         });
     }

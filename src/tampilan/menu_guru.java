@@ -509,12 +509,12 @@ private DefaultTableModel tabmode;
             if (d instanceof java.util.Date) {
                 dctgl.setDate((java.util.Date) d);
             } else {
-                // Sesuaikan format "yyyy-MM-dd" dengan format yang ada di tabel kamu
+                
                 java.util.Date date = new java.text.SimpleDateFormat("yyyy-MM-dd").parse(d.toString());
                 dctgl.setDate(date);
             }
         } catch (Exception ex) {
-            // Jika kolom tanggal kosong, kosongkan juga DateChooser-nya
+        
             dctgl.setDate(null);
         }
         txtalamat.setText(e);

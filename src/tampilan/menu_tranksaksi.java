@@ -34,7 +34,6 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
         String pendek = time.substring(time.length() - 4);
         trank.setText("TRX-" + pendek);
         trank.setEnabled(false);
-        //cetakData(trank.getText());
         datatable();
     }
     
@@ -56,7 +55,6 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
     model.addColumn("Nominal");
 
     try {
-        // Gunakan nama kolom yang tepat (bulan_bayar, tahun_bayar)
         String sql = "SELECT t.*, s.nama FROM tbl_transaksi t " +
                      "LEFT JOIN tbl_siswa s ON t.nisn = s.nisn " +
                      "ORDER BY t.no_transaksi DESC";
@@ -69,8 +67,8 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
                 rs.getString("no_transaksi"),
                 rs.getString("nisn"),
                 rs.getString("nama"),
-                rs.getString("bulan_bayar"), // Ambil dari kolom yang benar
-                rs.getString("tahun_bayar"), // Ambil dari kolom yang benar
+                rs.getString("bulan_bayar"), 
+                rs.getString("tahun_bayar"), 
                 rs.getString("jumlah_bayar")
             });
         }
@@ -85,13 +83,10 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
     nama.setText(namaSiswa);
     kelas.setText(kelasSiswa);
     
-    // Kita bersihkan string agar tidak ada spasi tambahan & huruf besar semua
     String k = kelasSiswa.toUpperCase().trim();
     
     int nominalBayar = 0;
     
-    // URUTAN ADALAH KUNCI! 
-    // Cek "XII" dulu, baru "XI", terakhir "X"
     if (k.contains("XII")) {
         nominalBayar = 250000;
     } else if (k.contains("XI")) {
@@ -99,30 +94,22 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
     } else if (k.contains("X")) {
         nominalBayar = 150000;
     } else {
-        nominalBayar = 0; // Jika kelas tidak terdeteksi
+        nominalBayar = 0; 
     }
     
     nominal.setText(String.valueOf(nominalBayar));
 }
   public void cetakData(String text) {
     try {
-        // Path disesuaikan untuk pembacaan GetResourceAsStream
         String path = "/report/nota.jasper"; 
-        
-        // PERBAIKAN: Menggunakan tanda < > (bukan kurung biasa)
         java.util.Map<String, Object> map = new java.util.HashMap<>();
-        
-        // PERBAIKAN: Mengambil data dari textfield 'trank', bukan variabel 'noTrx' yang ghoib
         map.put("no_transaksi", trank.getText());
-        
-        // PERBAIKAN: Memperbaiki salah ketik package dan menyusun fungsi JasperFillManager dengan benar
         net.sf.jasperreports.engine.JasperPrint printReport = JasperFillManager.fillReport(
             getClass().getResourceAsStream(path), 
             map, 
             koneksi.koneksi.getConnection()
         );
         
-        // Menampilkan nota pembayaran
         JasperViewer.viewReport(printReport, false);
         
     } catch (Exception e) {
@@ -132,15 +119,12 @@ public class menu_tranksaksi extends javax.swing.JInternalFrame {
   
  public void cetak() {
     try {
-        // Menggunakan getResourceAsStream agar path aman saat aplikasi dijalankan
         String path = "/report/reportkeuangan.jasper";
         java.util.HashMap<String, Object> parameter = new java.util.HashMap<>();
-        
-        // PERBAIKAN: Mengganti variabel 'con' yang null menjadi 'koneksi.koneksi.getConnection()'
         net.sf.jasperreports.engine.JasperPrint print = JasperFillManager.fillReport(
             getClass().getResourceAsStream(path),
             parameter,
-            koneksi.koneksi.getConnection() // Menggunakan koneksi terpusat yang sudah pasti aktif
+            koneksi.koneksi.getConnection() 
         );
         
         JasperViewer.viewReport(print, false);
@@ -420,19 +404,13 @@ pop_up_siswa popup = new pop_up_siswa(this);
         
         ps.executeUpdate();
         JOptionPane.showMessageDialog(this, "Pembayaran Berhasil Disimpan!");
-        
-        // 1. Cetak data yang BARU SAJA sukses disimpan ke database
         cetakData(trank.getText());
-        
-        // 2. Kosongkan field inputan
         kosong();
         
-        // 3. GENERATE KEMBALI nomor transaksi baru untuk transaksi berikutnya setelah dikosongkan
         String time = String.valueOf(System.currentTimeMillis());
         String pendek = time.substring(time.length() - 4);
         trank.setText("TRX-" + pendek);
         
-        // 4. Refresh isi tabel
         datatable(); 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal Simpan: " + e.getMessage());
