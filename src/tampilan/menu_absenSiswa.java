@@ -53,7 +53,7 @@ ResultSet rs;
             return;
         }
 
-        String path = "/report/reportSiswa.jasper"; // Sesuaikan path-nya
+        String path = "./src/report/reportSiswa.jasper"; 
         HashMap<String, Object> parameter = new HashMap<>();
         System.out.println("NIP Guru yang dikirim: '" + idGuruLogin + "'");
         System.out.println("Kelas yang dikirim: '" + kelasYangDipilih + "'");
@@ -85,14 +85,10 @@ ResultSet rs;
     }
     
     protected void datatable(){
-        // 1. Definisikan header/judul kolom (Ada 4 kolom)
     String[] baris = {"NISN", "Nama Siswa", "Jenis Kelamin (L/P)", "Kehadiran"};
-
-    // 2. Buat Custom DefaultTableModel agar kolom ke-3 (Kehadiran) menjadi Checkbox
     DefaultTableModel tabmode = new DefaultTableModel(null, baris) {
         @Override
         public Class<?> getColumnClass(int columnIndex) {
-            // Index 3 adalah kolom "Kehadiran" (Dimulai dari 0, 1, 2, 3)
             if (columnIndex == 3) { 
                 return Boolean.class; 
             }
@@ -101,15 +97,12 @@ ResultSet rs;
 
         @Override
         public boolean isCellEditable(int row, int column) {
-            // Hanya kolom index 3 ("Kehadiran") yang bisa diklik/diedit oleh user
             return column == 3; 
         }
     };
 
-    // 3. Terapkan model yang sudah dimodifikasi ke tabel (sekaligus mengosongkan tabel)
     tblsiswa.setModel(tabmode);
 
-    // 4. Ambil kata kunci pencarian
     String cariitem = txtcarisiswa.getText();
     String kelasTerpilih = "";
     
@@ -118,19 +111,15 @@ ResultSet rs;
         }
     
     try {
-        // 5. Query mengambil data dari tbl_siswa dengan fitur pencarian
         String sql = "SELECT nisn, nama, jkel FROM tbl_siswa " +
                      "WHERE nisn LIKE '%" + cariitem + "%' OR nama LIKE '%" + cariitem + "%' " +
                      "ORDER BY nisn ASC";
         
-        // Logika Filter SQL
         if (kelasTerpilih.equals("-- Pilih Kelas --") || kelasTerpilih.isEmpty()) {
-            // Jika belum milih kelas, tampilkan semua siswa yang cocok dengan pencarian
             sql = "SELECT nisn, nama, jkel FROM tbl_siswa " +
                   "WHERE (nisn LIKE '%" + cariitem + "%' OR nama LIKE '%" + cariitem + "%') " +
                   "ORDER BY nisn ASC";
         } else {
-            // Jika kelas dipilih, filter berdasarkan kelas TERSEBUT dan hasil pencarian
             sql = "SELECT a.nisn, a.nama, a.jkel FROM tbl_siswa a " +
                       "JOIN tbl_kelas b ON a.kelas = b.id_kelas " +
                       "WHERE b.kelas = '" + kelasTerpilih + "' " +
@@ -138,16 +127,15 @@ ResultSet rs;
                       "ORDER BY a.nisn ASC";
         }
 
-        Statement stat = con.createStatement(); // Pastikan 'con' sudah terhubung
+        Statement stat = con.createStatement();
         ResultSet hasil = stat.executeQuery(sql);
 
-        // 6. Masukkan data ke dalam tabel baris demi baris
         while (hasil.next()) {
             tabmode.addRow(new Object[]{
-                hasil.getString("nisn"), // Index 0: NISN
-                hasil.getString("nama"), // Index 1: Nama Siswa
-                hasil.getString("jkel"), // Index 2: Jenis Kelamin
-                false                    // Index 3: Checkbox Kehadiran (Default: belum dicentang)
+                hasil.getString("nisn"), 
+                hasil.getString("nama"), 
+                hasil.getString("jkel"), 
+                false                    
             });
         }
         } catch (Exception e) {
@@ -157,27 +145,21 @@ ResultSet rs;
     
     private void loadcombo() {
         try {
-            // 1. Ambil Kode Guru yang sedang login dari GuruSession (Karena 1 package, langsung panggil nama class-nya)
             String idGuruLogin = GuruSession.getKdGuru();
 
-            // 2. Modifikasi Query: Ambil nama kelas berdasarkan kd_guru yang sedang login
             String sql = "SELECT kelas FROM tbl_kelas WHERE kd_guru = '" + idGuruLogin + "' ORDER BY kelas ASC"; 
             PreparedStatement pst = con.prepareStatement(sql);
             ResultSet rs = pst.executeQuery();
 
-            // Bersihkan item lama dan siapkan opsi default
             cbkelas.removeAllItems(); 
             cbkelas.addItem("-- Pilih Kelas --"); 
 
-            boolean punyaKelas = false; // Penanda apakah guru ini memegang suatu kelas
-
-            // 3. Masukkan hasil query ke dalam Combo Box
+            boolean punyaKelas = false; 
             while(rs.next()) {
                 cbkelas.addItem(rs.getString("kelas")); 
                 punyaKelas = true;
             }
             
-            // 4. (Opsional) Peringatan jika guru yang login tidak terdaftar di kelas manapun
             if (!punyaKelas && idGuruLogin != null) {
                 JOptionPane.showMessageDialog(this, "Anda belum ditugaskan untuk mengajar/wali di kelas manapun.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
             }
@@ -431,7 +413,7 @@ ResultSet rs;
     }//GEN-LAST:event_txtcarisiswaActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-    // 1. Validasi Input Dasar
+
     if (tglTemu.getDate() == null) {
         JOptionPane.showMessageDialog(this, "Pilih tanggal pertemuan terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
         return;
@@ -441,41 +423,29 @@ ResultSet rs;
         JOptionPane.showMessageDialog(this, "Pertemuan tidak boleh 0!", "Peringatan", JOptionPane.WARNING_MESSAGE);
     return;
     }
-
-    // 2. Ambil Model Tabel
+    
     DefaultTableModel model = (DefaultTableModel) tblsiswa.getModel();
     int jumlahBaris = model.getRowCount();
-
-    // Validasi jika tabel masih kosong
     if (jumlahBaris == 0) {
         JOptionPane.showMessageDialog(this, "Tabel data siswa masih kosong. Silakan pilih kelas terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
         return;
     }
 
-    // =========================================================
-    // --- TAMBAHAN CROSSCHECK / KONFIRMASI SIMPAN ---
-    // =========================================================
     int konfirmasi = JOptionPane.showConfirmDialog(this, 
             "Apakah Anda yakin data kehadiran sudah benar dan ingin disimpan?", 
             "Konfirmasi Simpan", 
             JOptionPane.YES_NO_OPTION, 
             JOptionPane.QUESTION_MESSAGE);
             
-    // Jika user mengeklik "No" (Tidak) atau menutup dialog (X)
     if (konfirmasi != JOptionPane.YES_OPTION) {
-        return; // Hentikan proses simpan
+        return; 
     }
-    // =========================================================
 
-    // 3. Konversi format tanggal dari JDateChooser ke SQL Date
     java.sql.Date sqlDate = new java.sql.Date(tglTemu.getDate().getTime());
 
     try {
-        // Siapkan Query INSERT
         String sql = "INSERT INTO tbl_absen (nisn, tanggal, pertemuan_ke, status_hadir)" + "VALUES (?, ?, ?, ?)" + "ON DUPLICATE KEY UPDATE status_hadir = VALUES(status_hadir)";
         PreparedStatement pst = con.prepareStatement(sql);
-
-        // 4. Looping untuk membaca isi tabel baris demi baris
         for (int i = 0; i < jumlahBaris; i++) {
             String nisn = model.getValueAt(i, 0).toString();
             
@@ -492,12 +462,10 @@ ResultSet rs;
             pst.addBatch();
         }
 
-        // 5. Eksekusi semua antrean query ke database
         pst.executeBatch();
         
         JOptionPane.showMessageDialog(this, "Data absensi kelas berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
         
-        // 6. Reset form agar bersih untuk pertemuan berikutnya
         kosong();     
         datatable();  
         
@@ -512,7 +480,7 @@ ResultSet rs;
     }//GEN-LAST:event_tblsiswaMouseClicked
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
-        // Memunculkan dialog konfirmasi (opsional, tapi disarankan)
+
     int konfirmasi = JOptionPane.showConfirmDialog(this, 
             "Batal melakukan absensi? Semua isian dan centang akan dikosongkan.", 
             "Konfirmasi Batal", 
@@ -520,9 +488,8 @@ ResultSet rs;
             JOptionPane.QUESTION_MESSAGE);
             
     if (konfirmasi == JOptionPane.YES_OPTION) {
-        // Panggil method yang sudah Anda buat untuk mereset tampilan
-        kosong();     // Mengosongkan textfield dan tanggal
-        datatable();  // Me-refresh tabel agar semua checkbox kembali kosong
+        kosong();     
+        datatable();  
         
         JOptionPane.showMessageDialog(this, "Form berhasil dibersihkan.", "Batal", JOptionPane.INFORMATION_MESSAGE);
     }        // TODO add your handling code here:
