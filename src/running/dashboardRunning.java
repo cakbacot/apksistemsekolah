@@ -36,7 +36,6 @@ public class dashboardRunning extends javax.swing.JFrame {
         setVisible(true);
         setResizable(false);
         tampilkanGambar();
-        // Jalankan fungsi efek warna hover panel
         aktifkanHoverWarnaPanel();
         scaleImage();
         scaleImage1();
@@ -44,11 +43,9 @@ public class dashboardRunning extends javax.swing.JFrame {
     
     private void scaleImage() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/logoguru.png"));
         Image imgLama = iconAwal.getImage();
-        
-        // Mengambil ukuran lbl_logo saat ini
+     
         int width = loginguru.getWidth();
         int height = loginguru.getHeight();
         
@@ -63,11 +60,8 @@ public class dashboardRunning extends javax.swing.JFrame {
     
     private void scaleImage1() {
     try {
-        // Alamat logo kamu
         ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/user.png"));
         Image imgLama = iconAwal.getImage();
-        
-        // Mengambil ukuran lbl_logo saat ini
         int width = loginuser.getWidth();
         int height = loginuser.getHeight();
         
@@ -82,19 +76,17 @@ public class dashboardRunning extends javax.swing.JFrame {
     
     private void tampilkanGambar() {
         try {
-            // Memasang gambar secara manual dari folder resource
             loginuser.setIcon(new ImageIcon(getClass().getResource("/resource/user.png")));
             loginguru.setIcon(new ImageIcon(getClass().getResource("/resource/logoguru.png")));
         } catch (Exception e) {
             System.err.println("Gambar tidak ditemukan! Pastikan folder resource sudah benar.");
         }
     }
-    
-  // --- FITUR HOVER: UBAH WARNA BACKGROUND PANEL ---
+
     private void aktifkanHoverWarnaPanel() {
-        // 1. Warna untuk PANEL USER (jPanel1)
-        java.awt.Color warnaAsliUser = new java.awt.Color(0, 153, 204);    // Biru Terang Asli
-        java.awt.Color warnaHoverUser = new java.awt.Color(0, 50, 135); // Biru Lebih Muda (Hover)
+   
+        java.awt.Color warnaAsliUser = new java.awt.Color(0, 153, 204);    
+        java.awt.Color warnaHoverUser = new java.awt.Color(0, 50, 135); 
         
 
         jPanel1.addMouseListener(new java.awt.event.MouseAdapter() {
@@ -111,7 +103,6 @@ public class dashboardRunning extends javax.swing.JFrame {
 
             @Override
             public void mouseReleased(java.awt.event.MouseEvent evt) {
-                // Ketika klik dilepas, kembali ke warna hover jika mouse masih di dalam panel
                 if (jPanel1.getBounds().contains(evt.getPoint())) {
                     jPanel1.setBackground(warnaHoverUser);
                 } else {
@@ -120,7 +111,6 @@ public class dashboardRunning extends javax.swing.JFrame {
             }
         });
 
-        // 2. Warna untuk PANEL GURU (jPanel2) - Tetap normal seperti sebelumnya
         java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     
         java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  
 
@@ -289,26 +279,21 @@ public class dashboardRunning extends javax.swing.JFrame {
     private void loginuserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginuserMouseClicked
         tampilan.loginuser lu = new tampilan.loginuser(); 
     
-    // 2. Tampilkan FormB ke layar
     loginuser.setVisible(true);
-    
-    // 3. Tutup FormA saat ini (menghapus dari memori)
+
     this.dispose(); 
     }//GEN-LAST:event_loginuserMouseClicked
 
     private void loginguruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginguruMouseClicked
         tampilan.loginguru lg = new tampilan.loginguru(); 
     
-    // 2. Tampilkan FormB ke layar
     loginuser.setVisible(true);
-    
-    // 3. Tutup FormA saat ini (menghapus dari memori)
     this.dispose(); 
     }//GEN-LAST:event_loginguruMouseClicked
 
     private void loginuserMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_loginuserMouseEntered
-        java.awt.Color warnaAsliUser = new java.awt.Color(0, 153, 204);    // Biru Terang Asli
-        java.awt.Color warnaHoverUser = new java.awt.Color(0, 50, 135); // Biru Lebih Muda (Hover)
+        java.awt.Color warnaAsliUser = new java.awt.Color(0, 153, 204);    
+        java.awt.Color warnaHoverUser = new java.awt.Color(0, 50, 135); 
         jPanel1.setBackground(warnaHoverUser);
     }//GEN-LAST:event_loginuserMouseEntered
 
@@ -322,7 +307,6 @@ public class dashboardRunning extends javax.swing.JFrame {
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
         //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
         /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
          * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
@@ -349,7 +333,6 @@ try {
     } catch (Exception ex) {
     System.err.println("Gagal memuat tema FlatLaf");
 }
-        /* Create and display the form */
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new dashboardRunning().setVisible(true);
