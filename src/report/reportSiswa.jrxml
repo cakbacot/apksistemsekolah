@@ -10,14 +10,11 @@
     s.nisn,
     s.nama AS nama_siswa,
     k.kelas AS kelas, 
-    
-    -- Menghitung jumlah hadir
+
     SUM(CASE WHEN a.status_hadir = 1 THEN 1 ELSE 0 END) AS jumlah_hadir,
-    
-    -- Menghitung total pertemuan
+
     COUNT(a.id_absen) AS total_pertemuan,
-    
-    -- Menghitung persentase kehadiran
+
     ROUND(
         COALESCE(
             (SUM(CASE WHEN a.status_hadir = 1 THEN 1 ELSE 0 END) * 100.0) / NULLIF(COUNT(a.id_absen), 0), 
@@ -29,21 +26,16 @@
     
 FROM tbl_siswa s
 
--- Join ke tabel absen
 LEFT JOIN tbl_absen a ON s.nisn = a.nisn
 
--- Join ke tabel master kelas
--- (Sesuaikan nama 'tbl_kelas', 'kd_kelas', dan 'nama_kelas' dengan nama asli di database lo ya!)
 LEFT JOIN tbl_kelas k ON s.kelas = k.id_kelas 
 
--- Cross join untuk TTD guru
 CROSS JOIN (
     SELECT nama 
     FROM guru 
     WHERE nip_g = $P{paramIdGuru} 
 ) g
 
--- INI YANG BERUBAH: Kita filter berdasarkan Nama Kelas, bukan Kode Kelas!
 WHERE k.kelas = $P{paramKelas}
 
 GROUP BY s.nisn, s.nama, k.kelas, g.nama;]]>
@@ -65,7 +57,7 @@ GROUP BY s.nisn, s.nama, k.kelas, g.nama;]]>
 	<title>
 		<band height="90" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="3c1b2ac9-1100-4c1a-971d-7bbdc1ba2a6c" x="160" y="0" width="216" height="56"/>
+				<reportElement x="160" y="0" width="216" height="56" uuid="3c1b2ac9-1100-4c1a-971d-7bbdc1ba2a6c"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="24" isBold="true"/>
 				</textElement>
@@ -76,64 +68,64 @@ GROUP BY s.nisn, s.nama, k.kelas, g.nama;]]>
 	<pageHeader>
 		<band height="35" splitType="Stretch">
 			<line>
-				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="34" width="555" height="1"/>
+				<reportElement x="0" y="34" width="555" height="1" uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6"/>
 			</line>
 		</band>
 	</pageHeader>
 	<columnHeader>
 		<band height="29" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="35d7e35f-b64c-41fa-a7fc-de6d21f6bff3" x="139" y="0" width="100" height="20"/>
+				<reportElement x="139" y="0" width="100" height="20" uuid="35d7e35f-b64c-41fa-a7fc-de6d21f6bff3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama Siswa]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="006e93f9-49be-453e-b3f8-7005125161a3" x="289" y="0" width="100" height="20"/>
+				<reportElement x="289" y="0" width="100" height="20" uuid="006e93f9-49be-453e-b3f8-7005125161a3"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Total Pertemuan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="03c4bffb-875b-4c40-9b68-568b90703ba2" x="455" y="0" width="100" height="20"/>
+				<reportElement x="455" y="0" width="100" height="20" uuid="03c4bffb-875b-4c40-9b68-568b90703ba2"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[Persentase Kehadiran]]></text>
 			</staticText>
 			<staticText>
-				<reportElement uuid="5b193d95-e298-4c9e-b730-770857ef85a4" x="0" y="0" width="100" height="20"/>
+				<reportElement x="0" y="0" width="100" height="20" uuid="5b193d95-e298-4c9e-b730-770857ef85a4"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font isBold="true"/>
 				</textElement>
 				<text><![CDATA[NISN]]></text>
 			</staticText>
 			<line>
-				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="20" width="555" height="1"/>
+				<reportElement x="0" y="20" width="555" height="1" uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6"/>
 			</line>
 		</band>
 	</columnHeader>
 	<detail>
 		<band height="45" splitType="Stretch">
 			<textField>
-				<reportElement uuid="2989fb7d-57d5-4ece-b6bb-f12ce9880951" x="139" y="0" width="100" height="20"/>
+				<reportElement x="139" y="0" width="100" height="20" uuid="2989fb7d-57d5-4ece-b6bb-f12ce9880951"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nama_siswa}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="017b1dc9-ac21-4509-b73f-d1b7192a1f79" x="289" y="0" width="100" height="20"/>
+				<reportElement x="289" y="0" width="100" height="20" uuid="017b1dc9-ac21-4509-b73f-d1b7192a1f79"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{total_pertemuan}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="8368ade4-1f17-4d8a-9173-b43e43e3f2a1" x="455" y="0" width="100" height="20"/>
+				<reportElement x="455" y="0" width="100" height="20" uuid="8368ade4-1f17-4d8a-9173-b43e43e3f2a1"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{persentase_kehadiran}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="3f82f4dd-69c7-49ce-8e4a-8ad1174c465b" x="0" y="0" width="100" height="20"/>
+				<reportElement x="0" y="0" width="100" height="20" uuid="3f82f4dd-69c7-49ce-8e4a-8ad1174c465b"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
 			</textField>
@@ -145,22 +137,22 @@ GROUP BY s.nisn, s.nama, k.kelas, g.nama;]]>
 	<pageFooter>
 		<band height="92" splitType="Stretch">
 			<staticText>
-				<reportElement uuid="0b82d92c-c4bb-4a6d-9a62-d277be1c39d6" x="355" y="0" width="100" height="20"/>
+				<reportElement x="355" y="0" width="100" height="20" uuid="0b82d92c-c4bb-4a6d-9a62-d277be1c39d6"/>
 				<textElement verticalAlignment="Middle"/>
 				<text><![CDATA[Walikelas]]></text>
 			</staticText>
 			<textField>
-				<reportElement uuid="7b1ab471-ffe6-4932-9a49-3637098e65bc" x="455" y="0" width="100" height="20"/>
+				<reportElement x="455" y="0" width="100" height="20" uuid="7b1ab471-ffe6-4932-9a49-3637098e65bc"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{kelas}]]></textFieldExpression>
 			</textField>
 			<textField>
-				<reportElement uuid="839d5644-330c-4087-b51a-052f095b07af" x="413" y="68" width="100" height="20"/>
+				<reportElement x="413" y="68" width="100" height="20" uuid="839d5644-330c-4087-b51a-052f095b07af"/>
 				<textElement verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nama_guru}]]></textFieldExpression>
 			</textField>
 			<line>
-				<reportElement uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6" x="0" y="0" width="555" height="1"/>
+				<reportElement x="0" y="0" width="555" height="1" uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6"/>
 			</line>
 		</band>
 	</pageFooter>
