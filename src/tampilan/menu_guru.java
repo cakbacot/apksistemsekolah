@@ -405,7 +405,7 @@ private DefaultTableModel tabmode;
 
         String jenis = null;
         if(rlaki.isSelected()){
-            jenis = "Laki-Laki";
+            jenis = "Laki - laki";
         }else if(rperempuan.isSelected()){
             jenis = "Perempuan";
         }
@@ -439,7 +439,7 @@ private DefaultTableModel tabmode;
 
         String jenis = null;
         if (rlaki.isSelected()){
-            jenis = "Laki - Laki";
+            jenis = "Laki - laki";
         } else if (rperempuan.isSelected()){
             jenis = "Perempuan";
         }

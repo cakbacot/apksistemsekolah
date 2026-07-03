@@ -75,9 +75,13 @@ private Connection conn = new koneksi().getConnection();
         menuguru.setEnabled(false);
         jdwl.setEnabled(false);
         admin.setEnabled(false);
+        absenuser.setEnabled(false);
+        absenguru.setEnabled(false);
     } else if (role.equals("3")) {
         tranksaksi.setEnabled(false);
         admin.setEnabled(false); 
+        absenuser.setEnabled(false);
+        absenguru.setEnabled(false);
     }
 }
     
