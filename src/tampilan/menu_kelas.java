@@ -98,6 +98,7 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         bcari = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_kelas = new javax.swing.JTable();
+        bcetak = new javax.swing.JButton();
 
         setBorder(null);
 
@@ -221,6 +222,14 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tbl_kelas);
 
+        bcetak.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        bcetak.setText("CETAK");
+        bcetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -253,6 +262,9 @@ public class menu_kelas extends javax.swing.JInternalFrame {
                             .addComponent(bbatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                         .addGap(64, 64, 64)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addComponent(bcetak)
+                                .addGap(0, 0, Short.MAX_VALUE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                             .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE))))
                 .addContainerGap())
@@ -288,7 +300,9 @@ public class menu_kelas extends javax.swing.JInternalFrame {
                         .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap(82, Short.MAX_VALUE))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                .addComponent(bcetak)
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         pack();
@@ -385,10 +399,15 @@ public class menu_kelas extends javax.swing.JInternalFrame {
 
     }//GEN-LAST:event_tbl_kelasMouseClicked
 
+    private void bcetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcetakActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bcetakActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
     private javax.swing.JButton bcari;
+    private javax.swing.JButton bcetak;
     private javax.swing.JButton bhapus;
     private javax.swing.JButton bsimpan;
     private javax.swing.JButton btn_cguru;

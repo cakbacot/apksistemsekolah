@@ -119,6 +119,7 @@ ResultSet rs;
         bcari = new javax.swing.JToggleButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_jadwal = new javax.swing.JTable();
+        bcetak = new javax.swing.JButton();
         bsimpan = new javax.swing.JToggleButton();
         bedit = new javax.swing.JToggleButton();
         bhapus = new javax.swing.JToggleButton();
@@ -194,6 +195,14 @@ ResultSet rs;
         });
         jScrollPane1.setViewportView(tbl_jadwal);
 
+        bcetak.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        bcetak.setText("CETAK");
+        bcetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcetakActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -206,6 +215,8 @@ ResultSet rs;
                         .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 130, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addGap(18, 18, 18)
                         .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 111, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(18, 18, 18)
+                        .addComponent(bcetak)
                         .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
@@ -215,7 +226,8 @@ ResultSet rs;
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 35, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bcetak))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
@@ -481,6 +493,10 @@ ResultSet rs;
         datatable();
     }//GEN-LAST:event_bcariActionPerformed
 
+    private void bcetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcetakActionPerformed
+        // TODO add your handling code here:
+    }//GEN-LAST:event_bcetakActionPerformed
+
     /**
      * @param args the command line arguments
      */
@@ -519,6 +535,7 @@ ResultSet rs;
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JToggleButton bbatal;
     private javax.swing.JToggleButton bcari;
+    private javax.swing.JButton bcetak;
     private javax.swing.JToggleButton bedit;
     private javax.swing.JToggleButton bhapus;
     private javax.swing.JToggleButton bkeluar;
