@@ -1,0 +1,175 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="null" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="3165074d-4083-429d-bd5a-7d4cb13c356e">
+	<property name="ireport.zoom" value="1.2100000000000004"/>
+	<property name="ireport.x" value="0"/>
+	<property name="ireport.y" value="0"/>
+	<queryString>
+		<![CDATA[SELECT
+     users.`nip` AS users_nip,
+     users.`nama` AS users_nama,
+     CASE 
+         WHEN users.`lvl` = '1' THEN 'Kepala Administrasi'
+         WHEN users.`lvl` = '2' THEN 'Admin'
+         WHEN users.`lvl` = '3' THEN 'Staff Keuangan'
+         ELSE 'Lainnya'
+     END AS users_lvl
+FROM
+     `users` users]]>
+	</queryString>
+	<field name="users_nip" class="java.lang.String"/>
+	<field name="users_nama" class="java.lang.String"/>
+	<field name="users_lvl" class="java.lang.String"/>
+	<background>
+		<band splitType="Stretch"/>
+	</background>
+	<title>
+		<band height="4" splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="178" splitType="Stretch">
+			<image>
+				<reportElement x="1" y="12" width="155" height="96" uuid="bffb0ce7-149d-4070-b741-677f0c41b75c"/>
+				<imageExpression><![CDATA["D:\\KULIAH\\logo sekolah.jpeg"]]></imageExpression>
+			</image>
+			<line>
+				<reportElement x="0" y="121" width="555" height="3" uuid="f59044a6-8508-4b83-b4b8-3d779be00e56"/>
+			</line>
+			<staticText>
+				<reportElement x="168" y="60" width="376" height="31" uuid="a149ac3d-8d91-40d1-ae2b-a593452df468"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jakarta, Jl. Laksamana VIII No.4, RT.15/RW.4, Bambu Apus, Kec. Cipayung, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13890]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="168" y="12" width="376" height="31" uuid="ba5a0002-0417-4f47-bb8e-3eb229b4b9d9"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SMPN 259 JAKARTA ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="91" y="134" width="376" height="31" uuid="42699ef6-66e0-4f03-92fe-62533fe8de32"/>
+				<textElement textAlignment="Center">
+					<font size="14" isBold="true"/>
+				</textElement>
+				<text><![CDATA[LAPORAN DATA STAFF SMPN 259 JAKARTA]]></text>
+			</staticText>
+		</band>
+	</pageHeader>
+	<columnHeader>
+		<band height="22" splitType="Stretch">
+			<staticText>
+				<reportElement x="115" y="2" width="100" height="20" uuid="dcc184da-0dfe-478d-9824-c0416fd35b4f"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NIP]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="215" y="2" width="112" height="20" uuid="7d85d832-06bc-423d-bc4a-1799354f1919"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama Guru]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="327" y="2" width="124" height="20" uuid="67e1e738-beef-48b6-b1da-0bfb51aa2141"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jabatan]]></text>
+			</staticText>
+		</band>
+	</columnHeader>
+	<detail>
+		<band height="20" splitType="Stretch">
+			<textField>
+				<reportElement x="115" y="0" width="100" height="20" uuid="6ed247f2-354f-4b74-9186-9d3836fc70a8"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{users_nip}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="215" y="0" width="112" height="20" uuid="a255f90d-ae73-4cbd-8426-773abc44a83c"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{users_nama}]]></textFieldExpression>
+			</textField>
+			<textField>
+				<reportElement x="327" y="0" width="124" height="20" uuid="82ad607f-8d3f-4371-ac90-4d17b9cf4b65"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[$F{users_lvl}]]></textFieldExpression>
+			</textField>
+		</band>
+	</detail>
+	<columnFooter>
+		<band height="141" splitType="Stretch">
+			<staticText>
+				<reportElement x="332" y="55" width="177" height="20" uuid="a111504b-d4d4-48f2-a700-3b0cdfed66f1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Kepala Sekolah SMPN 259 Jakarta]]></text>
+			</staticText>
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="362" y="16" width="130" height="19" uuid="6cb51f27-8a69-4869-a01a-425904d1d1f8"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="332" y="112" width="177" height="20" uuid="708e3016-e3a0-4399-9ffd-d2dabdf07274"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Hesti wahyuni, S.Pd.]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="375" y="35" width="100" height="20" uuid="d899db9c-b3c6-48dc-ade8-03b44f57c0ed"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Mengetahui]]></text>
+			</staticText>
+		</band>
+	</columnFooter>
+	<pageFooter>
+		<band splitType="Stretch"/>
+	</pageFooter>
+	<summary>
+		<band splitType="Stretch"/>
+	</summary>
+</jasperReport>

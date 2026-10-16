@@ -10,9 +10,13 @@ import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.sql.Statement;
+import java.util.HashMap;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import koneksi.koneksi;
+import net.sf.jasperreports.engine.JasperFillManager;
+import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.view.JasperViewer;
 import static tampilan.frm_jadwal.txkg;
 
 /**
@@ -44,6 +48,21 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         txkelas.setText("");
         txkg.setText("");
     }
+     
+    public void cetak() {
+    try {
+        String path = "./src/report/reportKelas.jasper"; 
+
+        HashMap<String, Object> parameter = new HashMap<>();
+        parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
+        JasperPrint print = JasperFillManager.fillReport(path, parameter, conn);
+        JasperViewer.viewReport(print, false);
+        
+        } catch (Exception ex) {
+            javax.swing.JOptionPane.showMessageDialog(rootPane, "Dokumen gagal dicetak: " + ex.getMessage());
+            ex.printStackTrace(); 
+        }
+    } 
      
     protected void datatable(){
         Object[] Baris = {"ID Kelas","Kelas","Kode Guru","Nama Guru"};
@@ -400,7 +419,7 @@ public class menu_kelas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_tbl_kelasMouseClicked
 
     private void bcetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcetakActionPerformed
-        // TODO add your handling code here:
+        cetak();
     }//GEN-LAST:event_bcetakActionPerformed
 
 
