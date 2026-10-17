@@ -3,6 +3,9 @@
 	<property name="ireport.zoom" value="1.3310000000000004"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
+	<parameter name="logo" class="java.io.InputStream">
+		<defaultValueExpression><![CDATA[$P{REPORT_CLASS_LOADER}.getResourceAsStream("logosekolah.jpeg")]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT
      tbl_jadwal.`id_mapel` AS tbl_jadwal_id_mapel,
@@ -33,7 +36,7 @@ FROM
 			</line>
 			<image>
 				<reportElement x="12" y="0" width="155" height="96" uuid="51283452-3e6f-44c2-abdd-be77c462acb9"/>
-				<imageExpression><![CDATA["D:\\KULIAH\\logo sekolah.jpeg"]]></imageExpression>
+				<imageExpression><![CDATA["$P{logo}"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="179" y="0" width="376" height="31" uuid="cf4a77bf-0bec-4ef9-a326-b0a091c76f6a"/>

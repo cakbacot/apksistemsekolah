@@ -5,6 +5,7 @@
  */
 package tampilan;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
@@ -55,6 +56,11 @@ public class menu_kelas extends javax.swing.JInternalFrame {
 
         HashMap<String, Object> parameter = new HashMap<>();
         parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
+        InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg"); 
+        if (logoStream == null) {
+            System.out.println("GAGAL: File gambar tidak ditemukan di resources!");
+        }
+        parameter.put("logo", logoStream);
         JasperPrint print = JasperFillManager.fillReport(path, parameter, conn);
         JasperViewer.viewReport(print, false);
         

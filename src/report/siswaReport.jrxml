@@ -31,14 +31,14 @@ FROM
 			</line>
 			<image>
 				<reportElement x="6" y="10" width="155" height="96" uuid="03e9eca9-fb86-4050-a60c-18ac861ee581"/>
-				<imageExpression><![CDATA["D:\\KULIAH\\logo sekolah.jpeg"]]></imageExpression>
+				<imageExpression><![CDATA["$P{logo}"]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="89" y="132" width="376" height="31" uuid="8c67446e-5c03-42fa-9821-156929b21065"/>
 				<textElement textAlignment="Center">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[LAPORAN DATA STAFF SMPN 259 JAKARTA]]></text>
+				<text><![CDATA[DATA SISWA/I SMPN 259 JAKARTA]]></text>
 			</staticText>
 			<staticText>
 				<reportElement x="173" y="58" width="376" height="31" uuid="8cda61f5-b3a2-41ca-ab60-034a737a6ddd"/>

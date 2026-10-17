@@ -10,6 +10,7 @@ import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import java.awt.event.KeyEvent;
+import java.io.InputStream;
 import java.util.HashMap;
 import koneksi.koneksi;
 import net.sf.jasperreports.engine.JasperFillManager;
@@ -124,6 +125,11 @@ if (cbkls.getItemCount() > 0) {
 
         HashMap<String, Object> parameter = new HashMap<>();
         parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
+        InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg"); 
+        if (logoStream == null) {
+            System.out.println("GAGAL: File gambar tidak ditemukan di resources!");
+        }
+        parameter.put("logo", logoStream);
         JasperPrint print = JasperFillManager.fillReport(path, parameter, con);
         JasperViewer.viewReport(print, false);
         
@@ -790,7 +796,7 @@ while (rs.next()) {
     }//GEN-LAST:event_txtnmActionPerformed
 
     private void bcetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcetakActionPerformed
-        // TODO add your handling code here:
+        cetak();
     }//GEN-LAST:event_bcetakActionPerformed
 
 
