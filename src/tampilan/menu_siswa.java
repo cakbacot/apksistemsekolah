@@ -35,6 +35,11 @@ private DefaultTableModel tabmode;
         com.formdev.flatlaf.FlatLightLaf.setup();
     } catch (Exception e) {
     }
+    
+    javax.swing.JScrollPane scrollUtama = new javax.swing.JScrollPane(getContentPane());
+    scrollUtama.setBorder(null);
+    scrollUtama.getVerticalScrollBar().setUnitIncrement(16);
+    setContentPane(scrollUtama);
 
     bsimpan.setIcon(new ImageIcon(
     new ImageIcon(getClass().getResource("/resource/save.png"))

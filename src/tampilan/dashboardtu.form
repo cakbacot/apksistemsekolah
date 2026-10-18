@@ -29,7 +29,7 @@
           <Component id="jPanel2" max="32767" attributes="0"/>
           <Group type="102" attributes="0">
               <Component id="jPanel1" min="-2" max="-2" attributes="0"/>
-              <EmptySpace min="0" pref="0" max="-2" attributes="0"/>
+              <EmptySpace min="-2" pref="0" max="-2" attributes="0"/>
               <Component id="desktop" max="32767" attributes="0"/>
           </Group>
       </Group>
@@ -159,7 +159,7 @@
         </DimensionLayout>
         <DimensionLayout dim="1">
           <Group type="103" groupAlignment="0" attributes="0">
-              <EmptySpace min="0" pref="449" max="32767" attributes="0"/>
+              <EmptySpace min="0" pref="0" max="32767" attributes="0"/>
           </Group>
         </DimensionLayout>
       </Layout>
@@ -183,11 +183,12 @@
                       <Component id="menukelas" max="32767" attributes="0"/>
                       <Component id="menusiswa" alignment="0" max="32767" attributes="0"/>
                       <Component id="menuguru" alignment="0" max="32767" attributes="0"/>
-                      <Component id="keluar" alignment="0" pref="142" max="32767" attributes="0"/>
+                      <Component id="keluar" alignment="0" max="32767" attributes="0"/>
                       <Component id="tranksaksi" alignment="0" max="32767" attributes="0"/>
                       <Component id="jdwl" alignment="0" max="32767" attributes="0"/>
-                      <Component id="absenguru" alignment="0" max="32767" attributes="0"/>
+                      <Component id="absenguru" linkSize="1" alignment="0" min="-2" pref="142" max="-2" attributes="0"/>
                       <Component id="absenuser" alignment="1" max="32767" attributes="0"/>
+                      <Component id="bpel" linkSize="1" alignment="1" min="-2" pref="142" max="-2" attributes="0"/>
                   </Group>
                   <EmptySpace max="-2" attributes="0"/>
               </Group>
@@ -198,21 +199,22 @@
               <Group type="102" attributes="0">
                   <EmptySpace min="-2" pref="34" max="-2" attributes="0"/>
                   <Component id="menukelas" min="-2" pref="40" max="-2" attributes="0"/>
-                  <EmptySpace type="separate" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="menusiswa" min="-2" pref="36" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="menuguru" min="-2" pref="38" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="jdwl" min="-2" pref="39" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
+                  <EmptySpace max="-2" attributes="0"/>
                   <Component id="tranksaksi" min="-2" pref="39" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="absenuser" min="-2" pref="39" max="-2" attributes="0"/>
-                  <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="absenguru" min="-2" pref="39" max="-2" attributes="0"/>
-                  <EmptySpace max="32767" attributes="0"/>
-                  <Component id="keluar" min="-2" max="-2" attributes="0"/>
                   <EmptySpace max="-2" attributes="0"/>
+                  <Component id="absenguru" linkSize="2" min="-2" pref="39" max="-2" attributes="0"/>
+                  <EmptySpace min="-2" max="-2" attributes="0"/>
+                  <Component id="bpel" linkSize="2" min="-2" max="-2" attributes="0"/>
+                  <EmptySpace pref="49" max="32767" attributes="0"/>
+                  <Component id="keluar" min="-2" max="-2" attributes="0"/>
               </Group>
           </Group>
         </DimensionLayout>
@@ -364,6 +366,18 @@
           <Events>
             <EventHandler event="mouseClicked" listener="java.awt.event.MouseListener" parameters="java.awt.event.MouseEvent" handler="absenuserMouseClicked"/>
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="absenuserActionPerformed"/>
+          </Events>
+        </Component>
+        <Component class="javax.swing.JButton" name="bpel">
+          <Properties>
+            <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
+              <Font name="Segoe UI" size="18" style="1"/>
+            </Property>
+            <Property name="text" type="java.lang.String" value="Kesiswaan"/>
+            <Property name="horizontalTextPosition" type="int" value="2"/>
+          </Properties>
+          <Events>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="bpelActionPerformed"/>
           </Events>
         </Component>
       </SubComponents>
