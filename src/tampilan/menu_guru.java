@@ -53,7 +53,7 @@ private DefaultTableModel tabmode;
         
     public void cetak() {
     try {
-        String path = "./src/report/reportJadwal.jasper"; 
+        String path = "./src/report/Gurureport.jasper"; 
 
         HashMap<String, Object> parameter = new HashMap<>();
         parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));

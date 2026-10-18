@@ -4,7 +4,8 @@
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="logo" class="java.io.InputStream">
-		<parameterDescription><![CDATA[$P{REPORT_CLASS_LOADER}.getResourceAsStream("logosekolah.jpeg")]]></parameterDescription>
+		<parameterDescription><![CDATA[]]></parameterDescription>
+		<defaultValueExpression><![CDATA[$P{REPORT_CLASS_LOADER}.getResourceAsStream("logosekolah.jpeg")]]></defaultValueExpression>
 	</parameter>
 	<queryString>
 		<![CDATA[SELECT
@@ -53,7 +54,7 @@ FROM
 			</staticText>
 			<image>
 				<reportElement x="11" y="22" width="155" height="96" uuid="382b2bb3-100c-4031-b5bc-e19e8ec173a3"/>
-				<imageExpression><![CDATA["$P{logo}"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<line>
 				<reportElement x="10" y="131" width="555" height="3" uuid="adc17d98-72ba-4b20-9fa6-9fde8ac68043"/>

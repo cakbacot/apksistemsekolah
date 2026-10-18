@@ -36,7 +36,7 @@ FROM
 			</line>
 			<image>
 				<reportElement x="12" y="0" width="155" height="96" uuid="51283452-3e6f-44c2-abdd-be77c462acb9"/>
-				<imageExpression><![CDATA["$P{logo}"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<staticText>
 				<reportElement x="179" y="0" width="376" height="31" uuid="cf4a77bf-0bec-4ef9-a326-b0a091c76f6a"/>

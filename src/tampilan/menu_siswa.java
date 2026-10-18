@@ -121,7 +121,7 @@ if (cbkls.getItemCount() > 0) {
     
     public void cetak() {
     try {
-        String path = "./src/report/reportKelas.jasper"; 
+        String path = "./src/report/siswaReport.jasper"; 
 
         HashMap<String, Object> parameter = new HashMap<>();
         parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
