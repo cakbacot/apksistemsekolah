@@ -5,7 +5,7 @@
  */
 package tampilan;
 
-
+import tampilan.frm_ScannerBarcode;
 import java.awt.event.KeyEvent;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
@@ -157,10 +157,11 @@ ResultSet rs;
         tblpelanggaran = new javax.swing.JTable();
         bbatal = new javax.swing.JButton();
         bsimpan = new javax.swing.JButton();
+        btnScanNISN = new javax.swing.JButton();
 
         setMaximumSize(new java.awt.Dimension(214647, 2147483647));
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Panel Input", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 11), new java.awt.Color(2, 2, 2))); // NOI18N
+        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Panel Input", javax.swing.border.TitledBorder.LEFT, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Tahoma", 0, 16), new java.awt.Color(2, 2, 2))); // NOI18N
         jPanel1.setForeground(new java.awt.Color(1, 1, 1));
 
         jLabel9.setFont(new java.awt.Font("Segoe UI", 1, 24)); // NOI18N
@@ -375,7 +376,7 @@ ResultSet rs;
                     .addComponent(txtcarisiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(18, 18, 18)
                 .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 321, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(29, Short.MAX_VALUE))
+                .addContainerGap(33, Short.MAX_VALUE))
         );
 
         bbatal.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
@@ -391,6 +392,13 @@ ResultSet rs;
         bsimpan.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bsimpanActionPerformed(evt);
+            }
+        });
+
+        btnScanNISN.setText("SCAN");
+        btnScanNISN.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnScanNISNActionPerformed(evt);
             }
         });
 
@@ -411,9 +419,15 @@ ResultSet rs;
                                 .addGap(18, 18, 18)
                                 .addComponent(bbatal, javax.swing.GroupLayout.DEFAULT_SIZE, 289, Short.MAX_VALUE))
                             .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(28, 28, 28)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addContainerGap())))
+                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(28, 28, 28)
+                                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                                .addContainerGap())
+                            .addGroup(layout.createSequentialGroup()
+                                .addGap(69, 69, 69)
+                                .addComponent(btnScanNISN, javax.swing.GroupLayout.PREFERRED_SIZE, 292, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -430,7 +444,8 @@ ResultSet rs;
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                             .addComponent(bsimpan)
-                            .addComponent(bbatal))
+                            .addComponent(bbatal)
+                            .addComponent(btnScanNISN))
                         .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
         );
 
@@ -442,72 +457,7 @@ ResultSet rs;
     }//GEN-LAST:event_txtcarisiswaActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-  // Validasi input
-    String nisn = txtnisn.getText().trim();
-    String nama = txtnama.getText().trim();
-    String kategori = cbkategori.getSelectedItem().toString();
-    String keterangan = txtketerangan.getText().trim();
-    
-    if (nisn.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Masukkan NIS terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-    
-    if (nama.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Data siswa belum ditemukan. Klik tombol CARI.", "Peringatan", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-    
-    if (tglIinput.getDate() == null) {
-        JOptionPane.showMessageDialog(this, "Pilih tanggal pelanggaran terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-    
-    if (cbkategori.getSelectedIndex() == 0 || kategori.equals("-- Pilih Kategori --")) {
-        JOptionPane.showMessageDialog(this, "Pilih kategori pelanggaran!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-    
-    if (keterangan.isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Keterangan pelanggaran harus diisi!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-        return;
-    }
-    
-    java.sql.Date sqlDate = new java.sql.Date(tglIinput.getDate().getTime());
-    
-    int konfirmasi = JOptionPane.showConfirmDialog(this, 
-            "Apakah Anda yakin data pelanggaran sudah benar dan ingin disimpan?", 
-            "Konfirmasi Simpan", 
-            JOptionPane.YES_NO_OPTION, 
-            JOptionPane.QUESTION_MESSAGE);
-            
-    if (konfirmasi != JOptionPane.YES_OPTION) {
-        return; 
-    }
-
-    try {
-        // SQL Baru: Insert langsung teks kategori tanpa mencari id_kategori
-        String sql = "INSERT INTO tbl_pelanggaran "
-                   + "(nisn, tgl_pelanggaran, kategori_pelanggaran, keterangan) "
-                   + "VALUES (?, ?, ?, ?)";
-        
-        PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, nisn);
-        pst.setDate(2, sqlDate);
-        pst.setString(3, kategori); // Menyimpan teks "Terlambat", "Bolos", dll secara langsung
-        pst.setString(4, keterangan);
-        
-        pst.executeUpdate();
-        
-        JOptionPane.showMessageDialog(this, "Data pelanggaran berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
-        
-        kosong();     
-        datatable();  
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Gagal menyimpan data pelanggaran:\n" + e.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
-    }
-// TODO add your handling code here:
+simpanPelanggaran();
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
@@ -577,10 +527,26 @@ ResultSet rs;
         // TODO add your handling code here:
     }//GEN-LAST:event_cbkategoriActionPerformed
 
+    private void btnScanNISNActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnScanNISNActionPerformed
+frm_ScannerBarcode scanner = new frm_ScannerBarcode(null, true);
+    scanner.mulaiScan();
+    scanner.setVisible(true);
+
+    // 2. Ambil hasil scan setelah dialog ditutup
+    String hasilScan = scanner.getHasilScan();
+
+    // 3. Jika berhasil membaca barcode
+    if (hasilScan != null && !hasilScan.trim().isEmpty()) {
+        txtnisn.setText(hasilScan.trim());
+        ambilDataSiswa(hasilScan.trim());
+    }        // TODO add your handling code here:
+    }//GEN-LAST:event_btnScanNISNActionPerformed
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
     private javax.swing.JButton bcarisiswa;
     private javax.swing.JButton bsimpan;
+    private javax.swing.JButton btnScanNISN;
     private javax.swing.ButtonGroup buttonGroup1;
     private javax.swing.JComboBox<String> cbkategori;
     private javax.swing.JLabel jLabel1;
@@ -603,4 +569,113 @@ ResultSet rs;
     private javax.swing.JTextField txtnama;
     private javax.swing.JTextField txtnisn;
     // End of variables declaration//GEN-END:variables
+
+    // ==========================================================
+    // AREA AMAN: METHOD CUSTOM DITAMBAHKAN DI SINI
+    // ==========================================================
+
+    private void ambilDataSiswa(String nisn) {
+        try {
+            // SESUAIKAN baris ini dengan class koneksi di project Anda
+            java.sql.Connection conn = koneksi.getConnection();
+
+            String sql = "SELECT s.nama, k.kelas AS nama_kelas "
+                       + "FROM tbl_siswa s "
+                       + "JOIN tbl_kelas k ON s.kelas = k.id_kelas "
+                       + "WHERE s.nisn = ?";
+
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, nisn);
+            java.sql.ResultSet rs = pst.executeQuery();
+
+            if (rs.next()) {
+                txtnama.setText(rs.getString("nama"));
+                txtkelas.setText(rs.getString("nama_kelas"));
+                txtkelas.setEditable(false);
+                txtketerangan.requestFocus();
+            } else {
+                javax.swing.JOptionPane.showMessageDialog(this,
+                        "NISN: " + nisn + " tidak terdaftar!",
+                        "Peringatan", javax.swing.JOptionPane.WARNING_MESSAGE);
+                txtnisn.setText("");
+                txtnama.setText("");
+                txtkelas.setText("");
+            }
+
+            rs.close();
+            pst.close();
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
+        }
+    }
+
+    private void simpanPelanggaran() {
+        // 1. Validasi siswa hasil scan
+        String nisn = txtnisn.getText().trim();
+        if (nisn.isEmpty() || txtnama.getText().trim().isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Silakan Scan kartu siswa terlebih dahulu!");
+            return;
+        }
+
+        // 2. Ambil kategori dari ComboBox
+        if (cbkategori.getSelectedItem() == null) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Pilih kategori pelanggaran!");
+            return;
+        }
+        String kategori = cbkategori.getSelectedItem().toString().trim();
+
+        // 3. Ambil keterangan
+        String keterangan = txtketerangan.getText().trim();
+
+        // 4. Validasi input
+        if (kategori.isEmpty() || keterangan.isEmpty()) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Kategori dan Keterangan tidak boleh kosong!");
+            return;
+        }
+
+        try {
+            java.sql.Connection conn = koneksi.getConnection();
+
+            // Tanggal hari ini otomatis
+            java.sql.Date tgl = java.sql.Date.valueOf(java.time.LocalDate.now());
+
+            String sql = "INSERT INTO tbl_pelanggaran "
+                       + "(nisn, tgl_pelanggaran, kategori_pelanggaran, keterangan) "
+                       + "VALUES (?, ?, ?, ?)";
+
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, nisn);
+            pst.setDate(2, tgl);
+            pst.setString(3, kategori);
+            pst.setString(4, keterangan);
+
+            int rows = pst.executeUpdate();
+
+            if (rows > 0) {
+                javax.swing.JOptionPane.showMessageDialog(this, "Pelanggaran berhasil dicatat!");
+                kosongkanFormScan();
+                // datatable(); // Uncomment baris ini jika Anda punya method untuk refresh tabel
+            }
+
+            pst.close();
+        } catch (java.sql.SQLIntegrityConstraintViolationException e) {
+            javax.swing.JOptionPane.showMessageDialog(this,
+                    "NISN tidak valid / tidak ada di tbl_siswa!",
+                    "Error", javax.swing.JOptionPane.ERROR_MESSAGE);
+        } catch (Exception e) {
+            javax.swing.JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage());
+        }
+        datatable();
+    }
+
+    private void kosongkanFormScan() {
+        txtnisn.setText("");
+        txtnama.setText("");
+        txtkelas.setText("");
+        txtketerangan.setText("");
+        if (cbkategori.getItemCount() > 0) {
+            cbkategori.setSelectedIndex(0);
+        }
+        txtnisn.requestFocus();
+    }
 }
