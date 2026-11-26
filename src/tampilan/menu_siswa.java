@@ -23,6 +23,7 @@ import net.sf.jasperreports.view.JasperViewer;
 public class menu_siswa extends javax.swing.JInternalFrame {
 private Connection con = koneksi.getConnection();
 private DefaultTableModel tabmode;
+String nisTerpilih = "";
     /**
    
      */
@@ -99,6 +100,7 @@ bcari.setIcon(new ImageIcon(
     kosong();
     aktif();
     datatable();
+    bkartu.setVisible(false);
 }
     protected void aktif(){
         txtnisn.requestFocus();
@@ -123,6 +125,29 @@ if (cbkls.getItemCount() > 0) {
     cbkls.setSelectedIndex(0);
 }
     }
+    
+    public void cetakReportByNis() {
+    try {
+        // Sesuaikan lokasi file .jasper Anda
+        String reportPath = "./src/report/kartunama.jasper";
+        
+        // Kirim nilai NIS ke parameter $P{p_nis} di report
+        HashMap<String, Object> parameter = new HashMap<>();
+        parameter.put("nisn", txtnisn);
+        
+        // Sesuaikan Koneksi.getKoneksi() dengan class koneksi database Anda
+        Connection con = koneksi.getConnection();
+        
+        // Isi dan tampilkan report
+        JasperPrint jp = JasperFillManager.fillReport(reportPath, parameter, con);
+        JasperViewer.viewReport(jp, false);
+        
+    } catch (Exception e) {
+        JOptionPane.showMessageDialog(this, "Gagal mencetak report: " + e.getMessage());
+        e.printStackTrace();
+    }
+}
+
     
     public void cetak() {
     try {
@@ -261,6 +286,7 @@ while (rs.next()) {
         bhapus = new javax.swing.JButton();
         bbatal = new javax.swing.JButton();
         bcetak = new javax.swing.JButton();
+        bkartu = new javax.swing.JButton();
         jPanel2 = new javax.swing.JPanel();
         txtcari = new javax.swing.JTextField();
         bcari = new javax.swing.JButton();
@@ -386,6 +412,14 @@ while (rs.next()) {
             }
         });
 
+        bkartu.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
+        bkartu.setText("KARTU NAMA");
+        bkartu.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bkartuActionPerformed(evt);
+            }
+        });
+
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
         jPanel1Layout.setHorizontalGroup(
@@ -443,9 +477,12 @@ while (rs.next()) {
                                 .addComponent(bhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
                                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(bcetak, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
+                            .addComponent(bkartu, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                            .addGroup(jPanel1Layout.createSequentialGroup()
+                                .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 264, javax.swing.GroupLayout.PREFERRED_SIZE)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(bcetak, javax.swing.GroupLayout.PREFERRED_SIZE, 127, javax.swing.GroupLayout.PREFERRED_SIZE)))
                         .addGap(0, 0, Short.MAX_VALUE))))
         );
         jPanel1Layout.setVerticalGroup(
@@ -504,7 +541,9 @@ while (rs.next()) {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(bcetak, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(3, 3, 3))
+                .addGap(3, 3, 3)
+                .addComponent(bkartu, javax.swing.GroupLayout.PREFERRED_SIZE, 30, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap())
         );
 
         jPanel2.setBackground(java.awt.Color.white);
@@ -586,7 +625,7 @@ while (rs.next()) {
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap(67, Short.MAX_VALUE))
+                .addContainerGap(21, Short.MAX_VALUE))
         );
 
         pack();
@@ -752,8 +791,12 @@ while (rs.next()) {
 
     private void tbldatasiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbldatasiswaMouseClicked
    int bar = tbldatasiswa.getSelectedRow();
+   if (bar != -1) {
+        // Angka 0 adalah indeks kolom pertama (NIS). Ubah jika posisi kolom NIS berbeda.
+        nisTerpilih = tbldatasiswa.getValueAt(bar, 0).toString();
+    }
    if (bar == -1) return;
-
+  
     String a = tabmode.getValueAt(bar, 0).toString();
     String b = tabmode.getValueAt(bar, 1).toString();
     Object c = tabmode.getValueAt(bar, 2);
@@ -785,6 +828,7 @@ while (rs.next()) {
    } catch (Exception ex) {
      dctgl.setDate(null);
 }
+    bkartu.setVisible(true);
     }//GEN-LAST:event_tbldatasiswaMouseClicked
 
     private void cbjurusanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbjurusanActionPerformed
@@ -804,12 +848,18 @@ while (rs.next()) {
         cetak();
     }//GEN-LAST:event_bcetakActionPerformed
 
+    private void bkartuActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bkartuActionPerformed
+       cetakReportByNis();
+       bkartu.setVisible(false);
+    }//GEN-LAST:event_bkartuActionPerformed
+
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton bbatal;
     private javax.swing.JButton bcari;
     private javax.swing.JButton bcetak;
     private javax.swing.JButton bhapus;
+    private javax.swing.JButton bkartu;
     private javax.swing.JButton bsimpan;
     private javax.swing.JButton bubah;
     private javax.swing.JComboBox<String> cbjk;
