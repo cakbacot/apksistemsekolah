@@ -4,8 +4,27 @@
  * and open the template in the editor.
  */
 package tampilan;
+import com.google.zxing.BarcodeFormat;
+import com.google.zxing.client.j2se.MatrixToImageWriter;
+import com.google.zxing.common.BitMatrix;
+import com.google.zxing.oned.Code128Writer;
+import java.awt.Color;
+import java.awt.Desktop;
+import java.awt.Graphics2D;
 import java.awt.Image;
+import java.awt.RenderingHints;
+import java.awt.image.BufferedImage;
+import java.io.ByteArrayOutputStream;
+import java.io.File;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.nio.charset.StandardCharsets;
+import java.util.Locale;
+import java.util.zip.Deflater;
+import java.util.zip.DeflaterOutputStream;
 import javax.swing.ImageIcon;
+import javax.swing.JFileChooser;
+import javax.swing.filechooser.FileNameExtensionFilter;
 import java.sql.*;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
@@ -15,6 +34,10 @@ import java.util.HashMap;
 import koneksi.koneksi;
 import net.sf.jasperreports.engine.JasperFillManager;
 import net.sf.jasperreports.engine.JasperPrint;
+import net.sf.jasperreports.engine.export.JRGraphics2DExporter;
+import net.sf.jasperreports.export.SimpleExporterInput;
+import net.sf.jasperreports.export.SimpleGraphics2DExporterOutput;
+import net.sf.jasperreports.export.SimpleGraphics2DReportConfiguration;
 import net.sf.jasperreports.view.JasperViewer;
 /**
  *
@@ -124,29 +147,172 @@ bcari.setIcon(new ImageIcon(
 if (cbkls.getItemCount() > 0) {
     cbkls.setSelectedIndex(0);
 }
+        if (bkartu != null) {
+            bkartu.setVisible(false);
+        }
     }
     
     public void cetakReportByNis() {
-    try {
-        // Sesuaikan lokasi file .jasper Anda
-        String reportPath = "./src/report/kartunama.jasper";
-        
-        // Kirim nilai NIS ke parameter $P{p_nis} di report
-        HashMap<String, Object> parameter = new HashMap<>();
-        parameter.put("nisn", txtnisn);
-        
-        // Sesuaikan Koneksi.getKoneksi() dengan class koneksi database Anda
-        Connection con = koneksi.getConnection();
-        
-        // Isi dan tampilkan report
-        JasperPrint jp = JasperFillManager.fillReport(reportPath, parameter, con);
-        JasperViewer.viewReport(jp, false);
-        
-    } catch (Exception e) {
-        JOptionPane.showMessageDialog(this, "Gagal mencetak report: " + e.getMessage());
-        e.printStackTrace();
+        try {
+            String nis = txtnisn.getText().trim();
+            if (nis.isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Silakan klik data siswa pada tabel terlebih dahulu!");
+                return;
+            }
+
+            // Buat gambar barcode Code128 resolusi tinggi menggunakan ZXing
+            BitMatrix bitMatrix = new Code128Writer().encode(nis, BarcodeFormat.CODE_128, 600, 105);
+            BufferedImage barcodeImg = MatrixToImageWriter.toBufferedImage(bitMatrix);
+
+            InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg");
+
+            HashMap<String, Object> parameter = new HashMap<>();
+            parameter.put("nisn", nis);
+            parameter.put("barcode", barcodeImg);
+            parameter.put("logo", logoStream);
+
+            Connection conn = koneksi.getConnection();
+            InputStream reportStream = getClass().getResourceAsStream("/report/kartunama.jasper");
+            JasperPrint jp;
+            if (reportStream != null) {
+                jp = JasperFillManager.fillReport(reportStream, parameter, conn);
+            } else {
+                jp = JasperFillManager.fillReport("./src/report/kartunama.jasper", parameter, conn);
+            }
+
+            if (jp.getPages().isEmpty()) {
+                JOptionPane.showMessageDialog(this, "Data siswa dengan NISN " + nis + " tidak ditemukan!");
+                return;
+            }
+
+            // Dialog simpan langsung sebagai PDF ukuran standar ID Card (8,6 cm x 5,4 cm)
+            String namaBersih = txtnm.getText().trim().replaceAll("[^a-zA-Z0-9_\\- ]", "").replaceAll("\\s+", "_");
+            String namaFileDefault = "Kartu_Pelajar_" + nis + (namaBersih.isEmpty() ? "" : "_" + namaBersih) + ".pdf";
+
+            JFileChooser chooser = new JFileChooser();
+            chooser.setDialogTitle("Simpan Kartu Pelajar (Ukuran ID Card 8,6 x 5,4 cm)");
+            chooser.setSelectedFile(new File(chooser.getCurrentDirectory(), namaFileDefault));
+            chooser.setFileFilter(new FileNameExtensionFilter("PDF Document (*.pdf)", "pdf"));
+
+            int pilihan = chooser.showSaveDialog(this);
+            if (pilihan != JFileChooser.APPROVE_OPTION) {
+                return;
+            }
+
+            File fileTujuan = chooser.getSelectedFile();
+            if (!fileTujuan.getName().toLowerCase(Locale.ROOT).endsWith(".pdf")) {
+                fileTujuan = new File(fileTujuan.getParentFile(), fileTujuan.getName() + ".pdf");
+            }
+
+            simpanJasperKePdfUkuranKartu(jp, fileTujuan);
+
+            JOptionPane.showMessageDialog(this, "Kartu pelajar berhasil disimpan:\n" + fileTujuan.getAbsolutePath());
+            if (Desktop.isDesktopSupported()) {
+                try {
+                    Desktop.getDesktop().open(fileTujuan);
+                } catch (Exception ignore) {
+                }
+            }
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Gagal mencetak kartu pelajar: " + e.getMessage());
+            e.printStackTrace();
+        }
     }
-}
+
+    public static void simpanJasperKePdfUkuranKartu(JasperPrint jp, File outputPdf) throws Exception {
+        // Render halaman kartu pada resolusi cetak tinggi (360 DPI -> zoom 5x dari 72 DPI)
+        float zoom = 5.0f;
+        int imgW = Math.round(jp.getPageWidth() * zoom);
+        int imgH = Math.round(jp.getPageHeight() * zoom);
+
+        BufferedImage cardImage = new BufferedImage(imgW, imgH, BufferedImage.TYPE_INT_RGB);
+        Graphics2D g2d = cardImage.createGraphics();
+        g2d.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_ON);
+        g2d.setRenderingHint(RenderingHints.KEY_RENDERING, RenderingHints.VALUE_RENDER_QUALITY);
+        g2d.setRenderingHint(RenderingHints.KEY_INTERPOLATION, RenderingHints.VALUE_INTERPOLATION_BICUBIC);
+        g2d.setColor(Color.WHITE);
+        g2d.fillRect(0, 0, imgW, imgH);
+
+        JRGraphics2DExporter exporter = new JRGraphics2DExporter();
+        exporter.setExporterInput(new SimpleExporterInput(jp));
+        SimpleGraphics2DExporterOutput expOut = new SimpleGraphics2DExporterOutput();
+        expOut.setGraphics2D(g2d);
+        exporter.setExporterOutput(expOut);
+
+        SimpleGraphics2DReportConfiguration cfg = new SimpleGraphics2DReportConfiguration();
+        cfg.setPageIndex(0);
+        cfg.setZoomRatio(zoom);
+        exporter.setConfiguration(cfg);
+        exporter.exportReport();
+        g2d.dispose();
+
+        // Konversi piksel RGB & kompresi lossless FlateDecode
+        byte[] rawRgb = new byte[imgW * imgH * 3];
+        int[] pixels = cardImage.getRGB(0, 0, imgW, imgH, null, 0, imgW);
+        int idx = 0;
+        for (int argb : pixels) {
+            rawRgb[idx++] = (byte) ((argb >> 16) & 0xFF);
+            rawRgb[idx++] = (byte) ((argb >> 8) & 0xFF);
+            rawRgb[idx++] = (byte) (argb & 0xFF);
+        }
+
+        ByteArrayOutputStream compressedBuf = new ByteArrayOutputStream();
+        Deflater deflater = new Deflater(Deflater.BEST_COMPRESSION);
+        try (DeflaterOutputStream dos = new DeflaterOutputStream(compressedBuf, deflater)) {
+            dos.write(rawRgb);
+        }
+        deflater.end();
+        byte[] compressedImg = compressedBuf.toByteArray();
+
+        // Ukuran fisik standar ID Card CR80 / KTP: 85.6 mm x 54.0 mm = 242.65 pt x 153.07 pt
+        String pageW = "242.65";
+        String pageH = "153.07";
+        byte[] contentBytes = ("q " + pageW + " 0 0 " + pageH + " 0 0 cm /Im0 Do Q\n").getBytes(StandardCharsets.US_ASCII);
+
+        ByteArrayOutputStream pdf = new ByteArrayOutputStream();
+        pdf.write("%PDF-1.4\n".getBytes(StandardCharsets.US_ASCII));
+        pdf.write(new byte[]{'%', (byte) 0xE2, (byte) 0xE3, (byte) 0xCF, (byte) 0xD3, '\n'});
+
+        int[] offsets = new int[6];
+
+        offsets[1] = pdf.size();
+        writeAscii(pdf, "1 0 obj\n<< /Type /Catalog /Pages 2 0 R >>\nendobj\n");
+
+        offsets[2] = pdf.size();
+        writeAscii(pdf, "2 0 obj\n<< /Type /Pages /Kids [3 0 R] /Count 1 >>\nendobj\n");
+
+        offsets[3] = pdf.size();
+        writeAscii(pdf, "3 0 obj\n<< /Type /Page /Parent 2 0 R /MediaBox [0 0 " + pageW + " " + pageH + "] "
+                + "/Resources << /XObject << /Im0 4 0 R >> >> /Contents 5 0 R >>\nendobj\n");
+
+        offsets[4] = pdf.size();
+        writeAscii(pdf, "4 0 obj\n<< /Type /XObject /Subtype /Image /Width " + imgW + " /Height " + imgH
+                + " /ColorSpace /DeviceRGB /BitsPerComponent 8 /Filter /FlateDecode /Length " + compressedImg.length + " >>\nstream\n");
+        pdf.write(compressedImg);
+        writeAscii(pdf, "\nendstream\nendobj\n");
+
+        offsets[5] = pdf.size();
+        writeAscii(pdf, "5 0 obj\n<< /Length " + contentBytes.length + " >>\nstream\n");
+        pdf.write(contentBytes);
+        writeAscii(pdf, "endstream\nendobj\n");
+
+        int xrefOffset = pdf.size();
+        writeAscii(pdf, "xref\n0 6\n0000000000 65535 f \r\n");
+        for (int i = 1; i <= 5; i++) {
+            writeAscii(pdf, String.format(Locale.US, "%010d 00000 n \r\n", offsets[i]));
+        }
+        writeAscii(pdf, "trailer\n<< /Size 6 /Root 1 0 R >>\nstartxref\n" + xrefOffset + "\n%%EOF\n");
+
+        try (FileOutputStream fos = new FileOutputStream(outputPdf)) {
+            pdf.writeTo(fos);
+        }
+    }
+
+    private static void writeAscii(ByteArrayOutputStream out, String text) throws IOException {
+        out.write(text.getBytes(StandardCharsets.US_ASCII));
+    }
 
     
     public void cetak() {

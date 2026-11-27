@@ -35,7 +35,7 @@ FROM
 				</textElement>
 				<text><![CDATA[Jakarta, Jl. Laksamana VIII No.4, RT.15/RW.4, Bambu Apus, Kec. Cipayung, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13890]]></text>
 			</staticText>
-			<image>
+			<image isUsingCache="true">
 				<reportElement x="11" y="10" width="155" height="96" uuid="8a97eae3-9144-4248-aba5-f01c1d106366"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>

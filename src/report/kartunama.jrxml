@@ -1,53 +1,157 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="242" pageHeight="153" orientation="Landscape" columnWidth="202" leftMargin="20" rightMargin="20" topMargin="0" bottomMargin="0" uuid="ec0e3e99-645b-4ea4-b2dc-ac46618a61b8">
-	<property name="ireport.zoom" value="4.0"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="kartunama" language="groovy" pageWidth="243" pageHeight="153" orientation="Landscape" columnWidth="231" leftMargin="6" rightMargin="6" topMargin="6" bottomMargin="6" uuid="ec0e3e99-645b-4ea4-b2dc-ac46618a61b8">
+	<property name="ireport.zoom" value="3.0"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
 	<parameter name="nisn" class="java.lang.String" isForPrompting="false">
-		<defaultValueExpression><![CDATA[]]></defaultValueExpression>
+		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="barcode" class="java.awt.Image" isForPrompting="false"/>
+	<parameter name="logo" class="java.io.InputStream" isForPrompting="false"/>
 	<queryString>
 		<![CDATA[SELECT 
     s.nisn, 
     s.nama, 
-    s.jurusan, 
-    k.kelas AS nama_kelas
+    COALESCE(s.jurusan, '-') AS jurusan, 
+    COALESCE(k.kelas, s.kelas, '-') AS nama_kelas
 FROM tbl_siswa s
-JOIN tbl_kelas k ON s.kelas = k.id_kelas
-WHERE s.nisn = $P{nisn}
-]]>
+LEFT JOIN tbl_kelas k ON s.kelas = k.id_kelas
+WHERE s.nisn = $P{nisn}]]>
 	</queryString>
-	<field name="nisn" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="jurusan" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="nisn" class="java.lang.String"/>
+	<field name="nama" class="java.lang.String"/>
+	<field name="jurusan" class="java.lang.String"/>
 	<field name="nama_kelas" class="java.lang.String"/>
 	<background>
 		<band splitType="Stretch"/>
 	</background>
 	<detail>
-		<band height="120" splitType="Stretch">
+		<band height="141" splitType="Stretch">
+			<rectangle radius="6">
+				<reportElement x="0" y="0" width="231" height="141" forecolor="#94A3B8" backcolor="#FFFFFF" uuid="c1d52970-6a98-4019-9439-01a2887d1a01"/>
+				<graphicElement>
+					<pen lineWidth="0.75"/>
+				</graphicElement>
+			</rectangle>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" isUsingCache="true" onErrorType="Blank">
+				<reportElement x="8" y="4" width="23" height="23" uuid="41f6982b-8222-485c-96f3-001053bd1902"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 			<staticText>
-				<reportElement uuid="d62b7ecc-a535-4e97-ab58-d2431b9e383e" x="0" y="0" width="100" height="20"/>
-				<textElement/>
-				<text><![CDATA[nama = ]]></text>
+				<reportElement x="35" y="4" width="188" height="12" forecolor="#0F172A" uuid="53a142d4-370f-4f9e-8b5a-992102bc1903"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="9" isBold="true"/>
+				</textElement>
+				<text><![CDATA[KARTU PELAJAR]]></text>
 			</staticText>
-			<textField>
-				<reportElement uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33ec" x="102" y="0" width="100" height="20"/>
-				<textElement/>
+			<staticText>
+				<reportElement x="35" y="16" width="188" height="11" forecolor="#1E3A8A" uuid="e83902fb-1792-406d-8d8f-291032bc1904"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SMPN 259 JAKARTA]]></text>
+			</staticText>
+			<line>
+				<reportElement x="6" y="30" width="219" height="1" forecolor="#CBD5E1" uuid="928b51ec-1b21-4d4a-9456-771234bc1905"/>
+				<graphicElement>
+					<pen lineWidth="0.75"/>
+				</graphicElement>
+			</line>
+			<staticText>
+				<reportElement x="10" y="34" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e383e"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[NISN]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="34" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3831"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="58" y="34" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e1"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="47" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3832"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Nama]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="47" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3833"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="58" y="47" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33ec"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
 				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
 			</textField>
-			<componentElement>
-				<reportElement uuid="a480f0b0-4731-45b0-9a3f-7a3a8df9c419" x="11" y="64" width="180" height="45"/>
-				<jr:Code128 xmlns:jr="http://jasperreports.sourceforge.net/jasperreports/components" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports/components http://jasperreports.sourceforge.net/xsd/components.xsd" textPosition="bottom">
-					<jr:codeExpression><![CDATA[$F{nisn}]]></jr:codeExpression>
-				</jr:Code128>
-			</componentElement>
+			<staticText>
+				<reportElement x="10" y="60" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3834"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Kelas]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="60" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3835"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="58" y="60" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e2"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nama_kelas}]]></textFieldExpression>
+			</textField>
+			<staticText>
+				<reportElement x="10" y="73" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3836"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[Jurusan]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="51" y="73" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3837"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="true"/>
+				</textElement>
+				<text><![CDATA[:]]></text>
+			</staticText>
+			<textField isBlankWhenNull="true">
+				<reportElement x="58" y="73" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e3"/>
+				<textElement verticalAlignment="Middle">
+					<font fontName="SansSerif" size="8" isBold="false"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{jurusan}]]></textFieldExpression>
+			</textField>
+			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" isUsingCache="true" onErrorType="Blank">
+				<reportElement x="18" y="89" width="195" height="33" uuid="a480f0b0-4731-45b0-9a3f-7a3a8df9c419"/>
+				<imageExpression><![CDATA[$P{barcode}]]></imageExpression>
+			</image>
+			<textField isBlankWhenNull="true">
+				<reportElement x="18" y="123" width="195" height="11" forecolor="#334155" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
+					<font fontName="SansSerif" size="7" isBold="true"/>
+				</textElement>
+				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
+			</textField>
 		</band>
 	</detail>
 </jasperReport>

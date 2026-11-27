@@ -32,7 +32,7 @@ FROM
 			<line>
 				<reportElement x="0" y="119" width="555" height="3" uuid="d7f93243-1f78-4aef-9737-ddf9dc837ba4"/>
 			</line>
-			<image>
+			<image isUsingCache="true">
 				<reportElement x="6" y="10" width="155" height="96" uuid="03e9eca9-fb86-4050-a60c-18ac861ee581"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>

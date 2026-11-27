@@ -30,9 +30,9 @@ FROM
 	</title>
 	<pageHeader>
 		<band height="178" splitType="Stretch">
-			<image>
+			<image isUsingCache="true">
 				<reportElement x="1" y="12" width="155" height="96" uuid="bffb0ce7-149d-4070-b741-677f0c41b75c"/>
-				<imageExpression><![CDATA["$P{logo}"]]></imageExpression>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
 			<line>
 				<reportElement x="0" y="121" width="555" height="3" uuid="f59044a6-8508-4b83-b4b8-3d779be00e56"/>

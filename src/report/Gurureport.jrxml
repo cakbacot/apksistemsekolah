@@ -52,7 +52,7 @@ FROM
 				</textElement>
 				<text><![CDATA[DATA TENAGA PENDIDIK SMPN 259 JAKARTA]]></text>
 			</staticText>
-			<image>
+			<image isUsingCache="true">
 				<reportElement x="11" y="22" width="155" height="96" uuid="382b2bb3-100c-4031-b5bc-e19e8ec173a3"/>
 				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
 			</image>
