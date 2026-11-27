@@ -242,7 +242,7 @@ CREATE TABLE `tbl_absen_user` (
 
 CREATE TABLE `tbl_jadwal` (
   `id_mapel` varchar(10) NOT NULL,
-  `nama_mapel` varchar(15) NOT NULL,
+  `nama_mapel` varchar(25) NOT NULL,
   `kd_guru` varchar(10) NOT NULL,
   `jam` time DEFAULT NULL,
   `kelas` varchar(20) NOT NULL
