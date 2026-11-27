@@ -113,10 +113,12 @@ public class panel_absen extends javax.swing.JInternalFrame {
     }
    
     private void aktifkanHoverWarnaPanel() {
-        java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);     
-        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); 
+        final java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);     
+        final java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); 
+        jpanel1.setBackground(warnaAsliSiswa);
+        absensiswa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        jpanel1.addMouseListener(new java.awt.event.MouseAdapter() {
+        java.awt.event.MouseAdapter hoverSiswa = new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jpanel1.setBackground(warnaHoverSiswa);
@@ -127,13 +129,16 @@ public class panel_absen extends javax.swing.JInternalFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jpanel1.setBackground(warnaAsliSiswa);
             }
+        };
+        jpanel1.addMouseListener(hoverSiswa);
+        absensiswa.addMouseListener(hoverSiswa);
 
-        });
+        final java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     
+        final java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  
+        jPanel2.setBackground(warnaAsliGuru);
+        absenguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     
-        java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  
-
-        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
+        java.awt.event.MouseAdapter hoverGuru = new java.awt.event.MouseAdapter() {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 jPanel2.setBackground(warnaHoverGuru);
@@ -144,7 +149,9 @@ public class panel_absen extends javax.swing.JInternalFrame {
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 jPanel2.setBackground(warnaAsliGuru);
             }
-        });
+        };
+        jPanel2.addMouseListener(hoverGuru);
+        absenguru.addMouseListener(hoverGuru);
     }
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {

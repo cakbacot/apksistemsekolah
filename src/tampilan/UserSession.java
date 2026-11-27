@@ -38,4 +38,11 @@ public class UserSession {
     public static String getStatus() {
         return status;
     }
+
+    public static void clear() {
+        nip = null;
+        level = null;
+        nama = null;
+        status = null;
+    }
 }

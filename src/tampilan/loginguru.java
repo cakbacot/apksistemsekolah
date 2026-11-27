@@ -264,28 +264,22 @@ String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
 
     java.sql.ResultSet rs = pst.executeQuery();
    if (rs.next()) {
+            UserSession.clear();
             GuruSession.setKdGuru(rs.getString("kd_guru"));
             GuruSession.setNip(rs.getString("nip_g"));
             GuruSession.setNama(rs.getString("nama"));
             GuruSession.setJkel(rs.getString("jkel")); 
             GuruSession.setKelas(rs.getString("kelas"));
-            System.out.println(rs.getString("kd_guru"));
-            System.out.println(rs.getString("nip_g"));
-            System.out.println(rs.getString("nama"));
-            System.out.println(rs.getString("jkel"));
-            System.out.println(rs.getString("kelas"));
-            
             
             JOptionPane.showMessageDialog(null, "Login Berhasil!\nSelamat Datang, "
-                    + GuruSession.getSapaan() + (", ") + GuruSession.getNama());
+                    + GuruSession.getSapaan() + GuruSession.getNama());
             
             dashboardguru menu = new dashboardguru(); 
             menu.setVisible(true);
             
-            
             this.dispose(); 
         } else {
-            JOptionPane.showMessageDialog(null, "Kode Guru atau Password salah!", "Gagal Login", JOptionPane.ERROR_MESSAGE);
+            JOptionPane.showMessageDialog(null, "NIP atau Password salah!", "Gagal Login", JOptionPane.ERROR_MESSAGE);
         }
 } catch (Exception e) {
     JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());

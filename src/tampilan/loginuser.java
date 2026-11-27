@@ -264,6 +264,7 @@ public class loginuser extends javax.swing.JFrame {
                     nip.setText("");
                     pass.setText("");
                 } else {
+                    GuruSession.clear();
                     UserSession.setNip(rs.getString("nip")); 
                     
                     UserSession.setLevel(rs.getString("lvl"));

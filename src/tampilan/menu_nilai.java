@@ -26,16 +26,43 @@ ResultSet rs;
     /**
      * Creates new form menu_nilai
      */
+    private boolean sedangMemuatCombo = false;
+
     public menu_nilai() {
         initComponents();
         javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
-    ui.setNorthPane(null);
+        ui.setNorthPane(null);
+        txnilai.setText("");
+        txcari.setText("");
+        loadjenisnilai();
         loadcombo();
         loadcomboMapel();
-        loadjenisnilai();
+        datatable();
     }
+
+    private void resetFormInput() {
+        lblnisn.setText("silahkan pilih siswa pada tabel");
+        lblnama.setText("silahkan pilih siswa pada tabel");
+        if (cbmapel.getSelectedIndex() > 0 && cbmapel.getSelectedItem() != null) {
+            lblmapel.setText(cbmapel.getSelectedItem().toString());
+        } else {
+            lblmapel.setText("silahkan pilih pada tabel");
+        }
+        String namaGuru = GuruSession.getNama();
+        lblguru.setText((namaGuru != null && !namaGuru.isEmpty()) ? namaGuru : "silahkan pilih pada tabel");
+        if (cbjnsnilai.getItemCount() > 0) {
+            cbjnsnilai.setSelectedIndex(0);
+        }
+        txnilai.setText("");
+    }
+
 public void datatable() {
-    DefaultTableModel tabmode = new DefaultTableModel();
+    DefaultTableModel tabmode = new DefaultTableModel() {
+        @Override
+        public boolean isCellEditable(int row, int column) {
+            return false;
+        }
+    };
     tabmode.addColumn("NISN");
     tabmode.addColumn("Nama Siswa");
     tabmode.addColumn("Tugas");
@@ -43,16 +70,16 @@ public void datatable() {
     tabmode.addColumn("UAS");
     tblsiswa.setModel(tabmode);
     
-    if (cbkelas.getSelectedIndex() <= 0) {
+    if (cbkelas.getSelectedIndex() <= 0 || cbkelas.getSelectedItem() == null) {
         return;
     }
 
     String kelasDipilih = cbkelas.getSelectedItem().toString();
-    String idGuru = GuruSession.getKdGuru();
     String idMapel = "";
-    if (cbmapel.getSelectedIndex() > 0) {
-        idMapel = cariIdMapel(cbmapel.getSelectedItem().toString());
+    if (cbmapel.getSelectedIndex() > 0 && cbmapel.getSelectedItem() != null) {
+        idMapel = cariIdMapel(cbmapel.getSelectedItem().toString(), kelasDipilih);
     }
+    String keyword = "%" + txcari.getText().trim() + "%";
 
     try {
         String sql = "SELECT s.nisn, s.nama, " +
@@ -62,28 +89,28 @@ public void datatable() {
                      "FROM tbl_siswa s " +
                      "JOIN tbl_kelas k ON s.kelas = k.id_kelas " +
                      "LEFT JOIN tbl_nilai n ON s.nisn = n.nisn AND n.id_mapel = ? " +
-                     "WHERE k.kelas = ? " +
+                     "WHERE k.kelas = ? AND (s.nisn LIKE ? OR s.nama LIKE ?) " +
                      "GROUP BY s.nisn, s.nama " +
                      "ORDER BY s.nama ASC";
 
-        PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, idMapel); 
-        pst.setString(2, kelasDipilih);
-        
-        ResultSet rs = pst.executeQuery();
-
-        int count = 0;
-        while (rs.next()) {
-            tabmode.addRow(new Object[]{
-                rs.getString("nisn"),
-                rs.getString("nama"),
-                rs.getInt("Tugas"),
-                rs.getInt("UTS"),
-                rs.getInt("UAS")
-            });
-            count++;
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, idMapel); 
+            pst.setString(2, kelasDipilih);
+            pst.setString(3, keyword);
+            pst.setString(4, keyword);
+            
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    tabmode.addRow(new Object[]{
+                        rs.getString("nisn"),
+                        rs.getString("nama"),
+                        rs.getInt("Tugas"),
+                        rs.getInt("UTS"),
+                        rs.getInt("UAS")
+                    });
+                }
+            }
         }
-        System.out.println("DEBUG: Ditemukan " + count + " data.");
 
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal memuat tabel: " + e.getMessage());
@@ -97,17 +124,21 @@ private void loadjenisnilai() {
     cbjnsnilai.addItem("UTS");
     cbjnsnilai.addItem("UAS");
 }
-private String cariIdMapel(String namaMapel) {
+private String cariIdMapel(String namaMapel, String namaKelas) {
     String id = "";
     try {
-        String sql = "SELECT id_mapel FROM tbl_jadwal WHERE nama_mapel = ? AND kd_guru = ?";
-        PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, namaMapel);
-        pst.setString(2, GuruSession.getKdGuru()); 
-        ResultSet rs = pst.executeQuery();
-        
-        if (rs.next()) {
-            id = rs.getString("id_mapel"); 
+        String sql = "SELECT j.id_mapel FROM tbl_jadwal j " +
+                     "JOIN tbl_kelas k ON j.kelas = k.id_kelas " +
+                     "WHERE j.nama_mapel = ? AND j.kd_guru = ? AND k.kelas = ?";
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, namaMapel);
+            pst.setString(2, GuruSession.getKdGuru());
+            pst.setString(3, namaKelas);
+            try (ResultSet rs = pst.executeQuery()) {
+                if (rs.next()) {
+                    id = rs.getString("id_mapel");
+                }
+            }
         }
     } catch (Exception e) {
         System.out.println("Error cari ID Mapel: " + e.getMessage());
@@ -117,51 +148,75 @@ private String cariIdMapel(String namaMapel) {
 
     
     private void loadcombo() {
+        sedangMemuatCombo = true;
         try {
-            String idGuruLogin = GuruSession.getKdGuru();
-            String sql = "SELECT kelas FROM tbl_kelas WHERE kd_guru = '" + idGuruLogin + "' ORDER BY kelas ASC"; 
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-
             cbkelas.removeAllItems(); 
             cbkelas.addItem("-- Pilih Kelas --"); 
 
+            String idGuruLogin = GuruSession.getKdGuru();
+            if (idGuruLogin == null || idGuruLogin.trim().isEmpty()) {
+                return;
+            }
+
+            String sql = "SELECT DISTINCT k.kelas FROM tbl_jadwal j " +
+                         "JOIN tbl_kelas k ON j.kelas = k.id_kelas " +
+                         "WHERE j.kd_guru = ? ORDER BY k.kelas ASC"; 
             boolean punyaKelas = false; 
-            while(rs.next()) {
-                cbkelas.addItem(rs.getString("kelas")); 
-                punyaKelas = true;
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
+                pst.setString(1, idGuruLogin);
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        cbkelas.addItem(rs.getString("kelas")); 
+                        punyaKelas = true;
+                    }
+                }
             }
             
-            if (!punyaKelas && idGuruLogin != null) {
-                JOptionPane.showMessageDialog(this, "Anda belum ditugaskan untuk mengajar/wali di kelas manapun.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
+            if (!punyaKelas) {
+                JOptionPane.showMessageDialog(this, "Anda belum memiliki jadwal mengajar di kelas manapun.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Gagal Load Kelas: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal Load Kelas: " + e.getMessage());
+        } finally {
+            sedangMemuatCombo = false;
         }
     }
     
     private void loadcomboMapel() {
+    sedangMemuatCombo = true;
     try {
-        String idGuru = GuruSession.getKdGuru();
-        String kelasDipilih = cbkelas.getSelectedItem().toString();
-        String sql = "SELECT j.nama_mapel FROM tbl_jadwal j " +
-                     "JOIN tbl_kelas k ON j.kelas = k.id_kelas " +
-                     "WHERE j.kd_guru = ? AND k.kelas = ?";
-                     
-        PreparedStatement pst = con.prepareStatement(sql);
-        pst.setString(1, idGuru);
-        pst.setString(2, kelasDipilih);
-        ResultSet rs = pst.executeQuery();
-
         cbmapel.removeAllItems(); 
         cbmapel.addItem("-- Pilih Mapel --");
 
-        while(rs.next()) {
-            cbmapel.addItem(rs.getString("nama_mapel")); 
+        String idGuru = GuruSession.getKdGuru();
+        if (idGuru == null || idGuru.trim().isEmpty() || cbkelas.getSelectedIndex() <= 0 || cbkelas.getSelectedItem() == null) {
+            return;
+        }
+
+        String kelasDipilih = cbkelas.getSelectedItem().toString();
+        String sql = "SELECT j.nama_mapel FROM tbl_jadwal j " +
+                     "JOIN tbl_kelas k ON j.kelas = k.id_kelas " +
+                     "WHERE j.kd_guru = ? AND k.kelas = ? " +
+                     "ORDER BY j.nama_mapel ASC";
+                     
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setString(1, idGuru);
+            pst.setString(2, kelasDipilih);
+            try (ResultSet rs = pst.executeQuery()) {
+                while (rs.next()) {
+                    cbmapel.addItem(rs.getString("nama_mapel")); 
+                }
+            }
+        }
+
+        if (cbmapel.getItemCount() == 2) {
+            cbmapel.setSelectedIndex(1);
         }
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal memuat mapel: " + e.getMessage());
+    } finally {
+        sedangMemuatCombo = false;
     }
 }
     @SuppressWarnings("unchecked")
@@ -252,8 +307,6 @@ private String cariIdMapel(String namaMapel) {
 
         cbjnsnilai.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
 
-        txnilai.setText("nilai");
-
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
         jPanel2.setLayout(jPanel2Layout);
         jPanel2Layout.setHorizontalGroup(
@@ -335,7 +388,11 @@ private String cariIdMapel(String namaMapel) {
         jLabel8.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
         jLabel8.setText("Cari Siswa = ");
 
-        txcari.setText("nilai");
+        txcari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txcariKeyReleased(evt);
+            }
+        });
 
         cbmapel.setModel(new javax.swing.DefaultComboBoxModel<>(new String[] { "Item 1", "Item 2", "Item 3", "Item 4" }));
         cbmapel.addActionListener(new java.awt.event.ActionListener() {
@@ -450,6 +507,11 @@ private String cariIdMapel(String namaMapel) {
     }// </editor-fold>//GEN-END:initComponents
 
     private void tblsiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblsiswaMouseClicked
+    if (cbmapel.getSelectedIndex() <= 0 || cbmapel.getSelectedItem() == null) {
+        JOptionPane.showMessageDialog(this, "Silakan pilih Mata Pelajaran terlebih dahulu!");
+        return;
+    }
+
     int baris = tblsiswa.getSelectedRow();
     
     if (baris != -1) {
@@ -467,52 +529,84 @@ private String cariIdMapel(String namaMapel) {
     }//GEN-LAST:event_tblsiswaMouseClicked
 
     private void cbkelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbkelasActionPerformed
-    if (cbkelas.getSelectedIndex() > 0) {
-        loadcomboMapel();
-        datatable();
+    if (sedangMemuatCombo) {
+        return;
     }
+    loadcomboMapel();
+    resetFormInput();
+    datatable();
     }//GEN-LAST:event_cbkelasActionPerformed
 
     private void saveActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_saveActionPerformed
-if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") || 
-        cbjnsnilai.getSelectedIndex() == 0 || 
-        txnilai.getText().isEmpty()) {
-        JOptionPane.showMessageDialog(this, "Harap pilih siswa, jenis nilai, dan isi skor!");
+    if (cbkelas.getSelectedIndex() <= 0 || cbmapel.getSelectedIndex() <= 0) {
+        JOptionPane.showMessageDialog(this, "Harap pilih Kelas dan Mata Pelajaran terlebih dahulu!");
+        return;
+    }
+
+    if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") || 
+        cbjnsnilai.getSelectedIndex() <= 0 || 
+        txnilai.getText().trim().isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Harap pilih siswa pada tabel, jenis nilai, dan isi skor!");
+        return;
+    }
+
+    int skor;
+    try {
+        skor = Integer.parseInt(txnilai.getText().trim());
+    } catch (NumberFormatException e) {
+        JOptionPane.showMessageDialog(this, "Nilai harus berupa angka bulat!");
+        return;
+    }
+
+    if (skor < 0 || skor > 100) {
+        JOptionPane.showMessageDialog(this, "Nilai harus berada pada rentang 0 sampai 100!");
         return;
     }
 
     String nisn = lblnisn.getText();
     String jenisNilai = cbjnsnilai.getSelectedItem().toString();
-    int skor = Integer.parseInt(txnilai.getText());
-    String idMapel = cariIdMapel(lblmapel.getText()); 
+    String kelasDipilih = cbkelas.getSelectedItem().toString();
+    String idMapel = cariIdMapel(cbmapel.getSelectedItem().toString(), kelasDipilih); 
     String idGuru = GuruSession.getKdGuru(); 
 
-    try {
-        String cekSql = "SELECT * FROM tbl_nilai WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
-        PreparedStatement psCek = con.prepareStatement(cekSql);
-        psCek.setString(1, nisn);
-        psCek.setString(2, idMapel);
-        psCek.setString(3, jenisNilai);
-        ResultSet rs = psCek.executeQuery();
+    if (idMapel.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Mata pelajaran tidak ditemukan pada jadwal kelas ini!");
+        return;
+    }
 
-        if (rs.next()) {
-            String updateSql = "UPDATE tbl_nilai SET skor = ? WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
-            PreparedStatement psUpdate = con.prepareStatement(updateSql);
-            psUpdate.setInt(1, skor);
-            psUpdate.setString(2, nisn);
-            psUpdate.setString(3, idMapel);
-            psUpdate.setString(4, jenisNilai);
-            psUpdate.executeUpdate();
+    try {
+        String cekSql = "SELECT id_nilai FROM tbl_nilai WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
+        boolean sudahAda;
+        try (PreparedStatement psCek = con.prepareStatement(cekSql)) {
+            psCek.setString(1, nisn);
+            psCek.setString(2, idMapel);
+            psCek.setString(3, jenisNilai);
+            try (ResultSet rs = psCek.executeQuery()) {
+                sudahAda = rs.next();
+            }
+        }
+
+        if (sudahAda) {
+            String updateSql = "UPDATE tbl_nilai SET skor = ?, kd_guru = ? WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
+            try (PreparedStatement psUpdate = con.prepareStatement(updateSql)) {
+                psUpdate.setInt(1, skor);
+                psUpdate.setString(2, idGuru);
+                psUpdate.setString(3, nisn);
+                psUpdate.setString(4, idMapel);
+                psUpdate.setString(5, jenisNilai);
+                psUpdate.executeUpdate();
+            }
             JOptionPane.showMessageDialog(this, "Data berhasil diupdate!");
         } else {
             String insertSql = "INSERT INTO tbl_nilai (nisn, id_mapel, jenis_nilai, skor, kd_guru) VALUES (?, ?, ?, ?, ?)";
-            PreparedStatement psInsert = con.prepareStatement(insertSql);
-            psInsert.setString(1, nisn);
-            psInsert.setString(2, idMapel);
-            psInsert.setString(3, jenisNilai);
-            psInsert.setInt(4, skor);
-            psInsert.setString(5, idGuru);
-            psInsert.executeUpdate();
+            try (PreparedStatement psInsert = con.prepareStatement(insertSql)) {
+                psInsert.setString(1, nisn);
+                psInsert.setString(2, idMapel);
+                psInsert.setString(3, jenisNilai);
+                psInsert.setInt(4, skor);
+                psInsert.setString(5, idGuru);
+                psInsert.executeUpdate();
+            }
             JOptionPane.showMessageDialog(this, "Data berhasil disimpan!");
         }
 
@@ -524,31 +618,48 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
         JOptionPane.showMessageDialog(this, "Gagal menyimpan: " + e.getMessage());
         e.printStackTrace();
     }
-        }//GEN-LAST:event_saveActionPerformed
+    }//GEN-LAST:event_saveActionPerformed
 
     private void changeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_changeActionPerformed
+    if (cbkelas.getSelectedIndex() <= 0 || cbmapel.getSelectedIndex() <= 0) {
+        JOptionPane.showMessageDialog(this, "Harap pilih Kelas dan Mata Pelajaran terlebih dahulu!");
+        return;
+    }
+
     if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") || 
-        cbjnsnilai.getSelectedIndex() == 0 || 
-        txnilai.getText().isEmpty()) {
+        cbjnsnilai.getSelectedIndex() <= 0 || 
+        txnilai.getText().trim().isEmpty()) {
         JOptionPane.showMessageDialog(this, "Harap pilih siswa dan isi nilai yang ingin diubah!");
         return;
     }
 
     String nisn = lblnisn.getText();
     String jenisNilai = cbjnsnilai.getSelectedItem().toString();
-    String idMapel = cariIdMapel(lblmapel.getText()); 
+    String kelasDipilih = cbkelas.getSelectedItem().toString();
+    String idMapel = cariIdMapel(cbmapel.getSelectedItem().toString(), kelasDipilih); 
+
+    if (idMapel.isEmpty()) {
+        JOptionPane.showMessageDialog(this, "Mata pelajaran tidak ditemukan pada jadwal kelas ini!");
+        return;
+    }
     
     try {
-        int skor = Integer.parseInt(txnilai.getText());
-        String sql = "UPDATE tbl_nilai SET skor = ? WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
-        PreparedStatement ps = con.prepareStatement(sql);
-        
-        ps.setInt(1, skor);
-        ps.setString(2, nisn);
-        ps.setString(3, idMapel);
-        ps.setString(4, jenisNilai);
-        
-        int rowsAffected = ps.executeUpdate();
+        int skor = Integer.parseInt(txnilai.getText().trim());
+        if (skor < 0 || skor > 100) {
+            JOptionPane.showMessageDialog(this, "Nilai harus berada pada rentang 0 sampai 100!");
+            return;
+        }
+
+        String sql = "UPDATE tbl_nilai SET skor = ?, kd_guru = ? WHERE nisn = ? AND id_mapel = ? AND jenis_nilai = ?";
+        int rowsAffected;
+        try (PreparedStatement ps = con.prepareStatement(sql)) {
+            ps.setInt(1, skor);
+            ps.setString(2, GuruSession.getKdGuru());
+            ps.setString(3, nisn);
+            ps.setString(4, idMapel);
+            ps.setString(5, jenisNilai);
+            rowsAffected = ps.executeUpdate();
+        }
 
         if (rowsAffected > 0) {
             JOptionPane.showMessageDialog(this, "Data berhasil diubah!");
@@ -560,7 +671,7 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
         }
 
     } catch (NumberFormatException e) {
-        JOptionPane.showMessageDialog(this, "Nilai harus berupa angka!");
+        JOptionPane.showMessageDialog(this, "Nilai harus berupa angka bulat!");
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
         e.printStackTrace();
@@ -568,10 +679,16 @@ if (lblnisn.getText().equals("silahkan pilih siswa pada tabel") ||
     }//GEN-LAST:event_changeActionPerformed
 
     private void cbmapelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbmapelActionPerformed
-    if (cbmapel.getSelectedIndex() > 0) {
-        datatable(); 
+    if (sedangMemuatCombo) {
+        return;
     }
+    resetFormInput();
+    datatable(); 
     }//GEN-LAST:event_cbmapelActionPerformed
+
+    private void txcariKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txcariKeyReleased
+        datatable();
+    }//GEN-LAST:event_txcariKeyReleased
 
 
     // Variables declaration - do not modify//GEN-BEGIN:variables

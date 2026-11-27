@@ -29,35 +29,51 @@ private Connection con = new koneksi().getConnection();
 private DefaultTableModel tabmode;
 PreparedStatement ps;
 ResultSet rs;
+    private boolean sedangMemuat = false;
+
     /**
      * Creates new form menu_jadwal
      */
     public menu_absenSiswa() {
         initComponents();
         javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
-    ui.setNorthPane(null);
+        ui.setNorthPane(null);
         loadcombo();
         kosong();
         aktif();
         datatable();
-        
+
+        tglTemu.addPropertyChangeListener("date", evt -> {
+            if (!sedangMemuat) {
+                datatable();
+            }
+        });
+        jTemu.addChangeListener(evt -> {
+            if (!sedangMemuat) {
+                datatable();
+            }
+        });
     }
     
     public void cetak() {
     try {
+        if (cbkelas.getSelectedIndex() <= 0 || cbkelas.getSelectedItem() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih kelas terlebih dahulu!");
+            return;
+        }
+
         String kelasYangDipilih = cbkelas.getSelectedItem().toString(); 
         String idGuruLogin = GuruSession.getNip(); 
-        
-        if (kelasYangDipilih.equals("Item 1") || kelasYangDipilih.isEmpty()) {
-            JOptionPane.showMessageDialog(this, "Pilih kelas terlebih dahulu!");
+        if (idGuruLogin == null || idGuruLogin.trim().isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Sesi guru tidak ditemukan. Silakan login kembali!");
             return;
         }
 
         String path = "./src/report/reportSiswa.jasper"; 
         HashMap<String, Object> parameter = new HashMap<>();
-        System.out.println("NIP Guru yang dikirim: '" + idGuruLogin + "'");
-        System.out.println("Kelas yang dikirim: '" + kelasYangDipilih + "'");
-        
+        parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
+        java.io.InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg");
+        parameter.put("logo", logoStream);
         parameter.put("paramKelas", kelasYangDipilih); 
         parameter.put("paramIdGuru", idGuruLogin);     
 
@@ -75,12 +91,17 @@ ResultSet rs;
     }
     
     protected void kosong(){
-        jTemu.setValue(1);
-        txtcarisiswa.setText("");
-        tglTemu.setDate(new Date());
-        
-        if (cbkelas.getItemCount() > 0) {
-            cbkelas.setSelectedIndex(0);
+        sedangMemuat = true;
+        try {
+            jTemu.setValue(1);
+            txtcarisiswa.setText("");
+            tglTemu.setDate(new Date());
+            
+            if (cbkelas.getItemCount() > 0) {
+                cbkelas.setSelectedIndex(0);
+            }
+        } finally {
+            sedangMemuat = false;
         }
     }
     
@@ -103,69 +124,84 @@ ResultSet rs;
 
     tblsiswa.setModel(tabmode);
 
-    String cariitem = txtcarisiswa.getText();
-    String kelasTerpilih = "";
-    
-    if (cbkelas.getSelectedItem() != null) {
-            kelasTerpilih = cbkelas.getSelectedItem().toString();
-        }
+    if (cbkelas.getSelectedIndex() <= 0 || cbkelas.getSelectedItem() == null) {
+        return;
+    }
+
+    String cariitem = "%" + txtcarisiswa.getText().trim() + "%";
+    String kelasTerpilih = cbkelas.getSelectedItem().toString();
+    java.sql.Date sqlDate = (tglTemu.getDate() != null)
+            ? new java.sql.Date(tglTemu.getDate().getTime())
+            : new java.sql.Date(new Date().getTime());
+    int pertemuanKe = (Integer) jTemu.getValue();
     
     try {
-        String sql = "SELECT nisn, nama, jkel FROM tbl_siswa " +
-                     "WHERE nisn LIKE '%" + cariitem + "%' OR nama LIKE '%" + cariitem + "%' " +
-                     "ORDER BY nisn ASC";
-        
-        if (kelasTerpilih.equals("-- Pilih Kelas --") || kelasTerpilih.isEmpty()) {
-            sql = "SELECT nisn, nama, jkel FROM tbl_siswa " +
-                  "WHERE (nisn LIKE '%" + cariitem + "%' OR nama LIKE '%" + cariitem + "%') " +
-                  "ORDER BY nisn ASC";
-        } else {
-            sql = "SELECT a.nisn, a.nama, a.jkel FROM tbl_siswa a " +
-                      "JOIN tbl_kelas b ON a.kelas = b.id_kelas " +
-                      "WHERE b.kelas = '" + kelasTerpilih + "' " +
-                      "AND (a.nisn LIKE '%" + cariitem + "%' OR a.nama LIKE '%" + cariitem + "%') " +
-                      "ORDER BY a.nisn ASC";
-        }
+        String sql = "SELECT a.nisn, a.nama, a.jkel, COALESCE(ab.status_hadir, 0) AS status_hadir " +
+                     "FROM tbl_siswa a " +
+                     "JOIN tbl_kelas b ON a.kelas = b.id_kelas " +
+                     "LEFT JOIN tbl_absen ab ON a.nisn = ab.nisn AND ab.tanggal = ? AND ab.pertemuan_ke = ? " +
+                     "WHERE b.kelas = ? AND (a.nisn LIKE ? OR a.nama LIKE ?) " +
+                     "ORDER BY a.nisn ASC";
 
-        Statement stat = con.createStatement();
-        ResultSet hasil = stat.executeQuery(sql);
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            pst.setDate(1, sqlDate);
+            pst.setInt(2, pertemuanKe);
+            pst.setString(3, kelasTerpilih);
+            pst.setString(4, cariitem);
+            pst.setString(5, cariitem);
 
-        while (hasil.next()) {
-            tabmode.addRow(new Object[]{
-                hasil.getString("nisn"), 
-                hasil.getString("nama"), 
-                hasil.getString("jkel"), 
-                false                    
-            });
+            try (ResultSet hasil = pst.executeQuery()) {
+                while (hasil.next()) {
+                    tabmode.addRow(new Object[]{
+                        hasil.getString("nisn"), 
+                        hasil.getString("nama"), 
+                        hasil.getString("jkel"), 
+                        hasil.getInt("status_hadir") == 1
+                    });
+                }
+            }
         }
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Data siswa gagal dipanggil: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Data siswa gagal dipanggil: " + e.getMessage());
         }
     }
     
     private void loadcombo() {
+        sedangMemuat = true;
         try {
-            String idGuruLogin = GuruSession.getKdGuru();
-
-            String sql = "SELECT kelas FROM tbl_kelas WHERE kd_guru = '" + idGuruLogin + "' ORDER BY kelas ASC"; 
-            PreparedStatement pst = con.prepareStatement(sql);
-            ResultSet rs = pst.executeQuery();
-
             cbkelas.removeAllItems(); 
             cbkelas.addItem("-- Pilih Kelas --"); 
 
+            String idGuruLogin = GuruSession.getKdGuru();
+            if (idGuruLogin == null || idGuruLogin.trim().isEmpty()) {
+                return;
+            }
+
+            String sql = "SELECT DISTINCT k.kelas " +
+                         "FROM tbl_kelas k " +
+                         "LEFT JOIN tbl_jadwal j ON k.id_kelas = j.kelas " +
+                         "WHERE k.kd_guru = ? OR j.kd_guru = ? " +
+                         "ORDER BY k.kelas ASC"; 
             boolean punyaKelas = false; 
-            while(rs.next()) {
-                cbkelas.addItem(rs.getString("kelas")); 
-                punyaKelas = true;
+            try (PreparedStatement pst = con.prepareStatement(sql)) {
+                pst.setString(1, idGuruLogin);
+                pst.setString(2, idGuruLogin);
+                try (ResultSet rs = pst.executeQuery()) {
+                    while (rs.next()) {
+                        cbkelas.addItem(rs.getString("kelas")); 
+                        punyaKelas = true;
+                    }
+                }
             }
             
-            if (!punyaKelas && idGuruLogin != null) {
+            if (!punyaKelas) {
                 JOptionPane.showMessageDialog(this, "Anda belum ditugaskan untuk mengajar/wali di kelas manapun.", "Informasi", JOptionPane.INFORMATION_MESSAGE);
             }
 
         } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Gagal Load Kelas: " + e.getMessage());
+            JOptionPane.showMessageDialog(this, "Gagal Load Kelas: " + e.getMessage());
+        } finally {
+            sedangMemuat = false;
         }
     }
     /**
@@ -299,8 +335,8 @@ ResultSet rs;
             }
         });
         txtcarisiswa.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txtcarisiswaKeyPressed(evt);
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtcarisiswaKeyReleased(evt);
             }
         });
 
@@ -405,14 +441,24 @@ ResultSet rs;
     }// </editor-fold>//GEN-END:initComponents
 
     private void cbkelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_cbkelasActionPerformed
-        datatable();        // TODO add your handling code here:
+        if (!sedangMemuat) {
+            datatable();
+        }
     }//GEN-LAST:event_cbkelasActionPerformed
 
     private void txtcarisiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txtcarisiswaActionPerformed
-        // TODO add your handling code here:
+        datatable();
     }//GEN-LAST:event_txtcarisiswaActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
+    if (tblsiswa.isEditing()) {
+        tblsiswa.getCellEditor().stopCellEditing();
+    }
+
+    if (cbkelas.getSelectedIndex() <= 0 || cbkelas.getSelectedItem() == null) {
+        JOptionPane.showMessageDialog(this, "Silakan pilih kelas terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        return;
+    }
 
     if (tglTemu.getDate() == null) {
         JOptionPane.showMessageDialog(this, "Pilih tanggal pertemuan terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
@@ -421,18 +467,18 @@ ResultSet rs;
     int pertemuan_ke = (Integer) jTemu.getValue();
     if (pertemuan_ke <= 0) {
         JOptionPane.showMessageDialog(this, "Pertemuan tidak boleh 0!", "Peringatan", JOptionPane.WARNING_MESSAGE);
-    return;
+        return;
     }
     
     DefaultTableModel model = (DefaultTableModel) tblsiswa.getModel();
     int jumlahBaris = model.getRowCount();
     if (jumlahBaris == 0) {
-        JOptionPane.showMessageDialog(this, "Tabel data siswa masih kosong. Silakan pilih kelas terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+        JOptionPane.showMessageDialog(this, "Tabel data siswa masih kosong!", "Peringatan", JOptionPane.WARNING_MESSAGE);
         return;
     }
 
     int konfirmasi = JOptionPane.showConfirmDialog(this, 
-            "Apakah Anda yakin data kehadiran sudah benar dan ingin disimpan?", 
+            "Apakah Anda yakin data kehadiran kelas " + cbkelas.getSelectedItem() + " sudah benar dan ingin disimpan?", 
             "Konfirmasi Simpan", 
             JOptionPane.YES_NO_OPTION, 
             JOptionPane.QUESTION_MESSAGE);
@@ -444,39 +490,39 @@ ResultSet rs;
     java.sql.Date sqlDate = new java.sql.Date(tglTemu.getDate().getTime());
 
     try {
-        String sql = "INSERT INTO tbl_absen (nisn, tanggal, pertemuan_ke, status_hadir)" + "VALUES (?, ?, ?, ?)" + "ON DUPLICATE KEY UPDATE status_hadir = VALUES(status_hadir)";
-        PreparedStatement pst = con.prepareStatement(sql);
-        for (int i = 0; i < jumlahBaris; i++) {
-            String nisn = model.getValueAt(i, 0).toString();
-            
-            Object objKehadiran = model.getValueAt(i, 3);
-            boolean isChecked = (objKehadiran != null && (Boolean) objKehadiran);
-            
-            int status_hadir = isChecked ? 1 : 0;
+        String sql = "INSERT INTO tbl_absen (nisn, tanggal, pertemuan_ke, status_hadir) " +
+                     "VALUES (?, ?, ?, ?) " +
+                     "ON DUPLICATE KEY UPDATE status_hadir = VALUES(status_hadir)";
+        try (PreparedStatement pst = con.prepareStatement(sql)) {
+            for (int i = 0; i < jumlahBaris; i++) {
+                String nisn = model.getValueAt(i, 0).toString();
+                
+                Object objKehadiran = model.getValueAt(i, 3);
+                boolean isChecked = (objKehadiran instanceof Boolean) && (Boolean) objKehadiran;
+                
+                int status_hadir = isChecked ? 1 : 0;
 
-            pst.setString(1, nisn);
-            pst.setDate(2, sqlDate);
-            pst.setInt(3, pertemuan_ke);
-            pst.setInt(4, status_hadir);
-            
-            pst.addBatch();
+                pst.setString(1, nisn);
+                pst.setDate(2, sqlDate);
+                pst.setInt(3, pertemuan_ke);
+                pst.setInt(4, status_hadir);
+                
+                pst.addBatch();
+            }
+
+            pst.executeBatch();
         }
-
-        pst.executeBatch();
         
         JOptionPane.showMessageDialog(this, "Data absensi kelas berhasil disimpan!", "Sukses", JOptionPane.INFORMATION_MESSAGE);
-        
-        kosong();     
         datatable();  
         
     } catch (Exception e) {
         JOptionPane.showMessageDialog(this, "Gagal menyimpan data absensi:\n" + e.getMessage(), "Error Database", JOptionPane.ERROR_MESSAGE);
     }
-// TODO add your handling code here:
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void tblsiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tblsiswaMouseClicked
-     // TODO add your handling code here:
+      // TODO add your handling code here:
     }//GEN-LAST:event_tblsiswaMouseClicked
 
     private void bbatalActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bbatalActionPerformed
@@ -492,12 +538,12 @@ ResultSet rs;
         datatable();  
         
         JOptionPane.showMessageDialog(this, "Form berhasil dibersihkan.", "Batal", JOptionPane.INFORMATION_MESSAGE);
-    }        // TODO add your handling code here:
+    }
     }//GEN-LAST:event_bbatalActionPerformed
 
-    private void txtcarisiswaKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcarisiswaKeyPressed
-        datatable();        // TODO add your handling code here:
-    }//GEN-LAST:event_txtcarisiswaKeyPressed
+    private void txtcarisiswaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcarisiswaKeyReleased
+        datatable();
+    }//GEN-LAST:event_txtcarisiswaKeyReleased
 
     private void printActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_printActionPerformed
         cetak();

@@ -627,8 +627,8 @@ private void setadmin(javax.swing.JButton btn, String path) {
     int pilih = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
     
     if (pilih == JOptionPane.YES_OPTION) {
-        UserSession.setLevel(null);
-        UserSession.setNama(null);
+        UserSession.clear();
+        GuruSession.clear();
         
         this.dispose(); 
         new loginuser().setVisible(true);

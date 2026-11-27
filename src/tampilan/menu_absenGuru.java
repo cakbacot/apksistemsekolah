@@ -42,13 +42,13 @@ ResultSet rs;
     public menu_absenGuru() {
         initComponents();
         javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
-    ui.setNorthPane(null);
-        String KD = GuruSession.getKdGuru();
-        System.out.println(KD);
+        ui.setNorthPane(null);
+        kosong();
         datatable();
         aktif();
-        kosong();
         aturHakAkses();
+
+        tglTemu.addPropertyChangeListener("date", evt -> datatable());
     }
     
     private void aturHakAkses() {
@@ -56,11 +56,10 @@ ResultSet rs;
     bprint1.setVisible(false); 
     String levelAdmin = UserSession.getLevel(); 
     String sessionGuru = GuruSession.getNip(); 
-        if (levelAdmin != null && levelAdmin.equals("1")) {
-            bprint1.setVisible(true); 
-
-        } else if (sessionGuru != null && !sessionGuru.isEmpty()) {
+        if (sessionGuru != null && !sessionGuru.isEmpty()) {
             bprint.setVisible(true); 
+        } else if (levelAdmin != null && levelAdmin.equals("1")) {
+            bprint1.setVisible(true); 
         }
     }
      protected void datatable(){
@@ -84,33 +83,51 @@ ResultSet rs;
 
         try {
             String guruLogin = GuruSession.getKdGuru();
-            String sql = "SELECT u.kd_guru, u.nama, " +
-             "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
-             "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir " +
-             "FROM guru u " +
-             "LEFT JOIN tbl_absen_guru a ON u.kd_guru = a.kd_guru " +
-             "WHERE u.kd_guru = ? " +  
-             "GROUP BY u.kd_guru, u.nama"; 
-            PreparedStatement stat = con.prepareStatement(sql);
-            stat.setString(1, guruLogin);
-            ResultSet hasil = stat.executeQuery();
+            boolean filterGuru = (guruLogin != null && !guruLogin.trim().isEmpty());
+            if (!filterGuru && UserSession.getLevel() == null) {
+                return;
+            }
 
-            while (hasil.next()) {
-                Object[] data = {
-                    hasil.getString("kd_guru"),
-                    hasil.getString("nama"),
-                    false, 
-                    hasil.getInt("total_hadir"),
-                    hasil.getInt("total_tidak_hadir"),
-                    ""
-                };
-                tabmode.addRow(data);
+            java.sql.Date tglDipilih = (tglTemu.getDate() != null)
+                    ? new java.sql.Date(tglTemu.getDate().getTime())
+                    : new java.sql.Date(new Date().getTime());
+
+            String sql = "SELECT u.kd_guru, u.nama, " +
+                         "COALESCE(SUM(CASE WHEN a.kehadiran = 1 THEN 1 ELSE 0 END), 0) AS total_hadir, " +
+                         "COALESCE(SUM(CASE WHEN a.kehadiran = 0 THEN 1 ELSE 0 END), 0) AS total_tidak_hadir, " +
+                         "MAX(CASE WHEN a.tgl = ? THEN a.kehadiran ELSE 0 END) AS hadir_tgl_ini, " +
+                         "COALESCE(MAX(CASE WHEN a.tgl = ? THEN a.keterangan ELSE NULL END), '') AS ket_tgl_ini " +
+                         "FROM guru u " +
+                         "LEFT JOIN tbl_absen_guru a ON u.kd_guru = a.kd_guru " +
+                         (filterGuru ? "WHERE u.kd_guru = ? " : "") +
+                         "GROUP BY u.kd_guru, u.nama " +
+                         "ORDER BY u.kd_guru ASC"; 
+            try (PreparedStatement stat = con.prepareStatement(sql)) {
+                stat.setDate(1, tglDipilih);
+                stat.setDate(2, tglDipilih);
+                if (filterGuru) {
+                    stat.setString(3, guruLogin);
+                }
+                try (ResultSet hasil = stat.executeQuery()) {
+                    while (hasil.next()) {
+                        Object[] data = {
+                            hasil.getString("kd_guru"),
+                            hasil.getString("nama"),
+                            hasil.getInt("hadir_tgl_ini") == 1,
+                            hasil.getInt("total_hadir"),
+                            hasil.getInt("total_tidak_hadir"),
+                            hasil.getString("ket_tgl_ini")
+                        };
+                        tabmode.addRow(data);
+                    }
+                }
             }
 
         } catch (Exception e) {
             e.printStackTrace(); 
             JOptionPane.showMessageDialog(this, "Gagal memuat data: " + e.getMessage());
-        }    }
+        }
+    }
 
        
         
@@ -127,15 +144,17 @@ ResultSet rs;
     public void cetak() {
         try{
             String path="./src/report/reportGuruprib.jasper";
-            HashMap parameter = new HashMap();
+            HashMap<String, Object> parameter = new HashMap<>();
+            parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
+            java.io.InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg");
+            parameter.put("logo", logoStream);
             String guruLogin = GuruSession.getNip();
-            System.out.println("=== DEBUG LOG === Kode Guru dari Session: " + guruLogin); 
             parameter.put("paramKdGuru", guruLogin); 
-            JasperPrint print = JasperFillManager.fillReport(path, parameter,con);
+            JasperPrint print = JasperFillManager.fillReport(path, parameter, con);
             JasperViewer.viewReport(print, false);
         }catch (Exception ex){
             ex.printStackTrace();
-            JOptionPane.showMessageDialog(rootPane,"Dokumen tidak ada" +ex);
+            JOptionPane.showMessageDialog(rootPane, "Dokumen gagal dicetak: " + ex.getMessage());
         }
     }
     
@@ -144,6 +163,9 @@ ResultSet rs;
         String path = "./src/report/reportGuru.jasper"; 
 
         HashMap<String, Object> parameter = new HashMap<>();
+        parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
+        java.io.InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg");
+        parameter.put("logo", logoStream);
         JasperPrint print = JasperFillManager.fillReport(path, parameter, con);
         JasperViewer.viewReport(print, false);
         
@@ -332,74 +354,83 @@ ResultSet rs;
     }//GEN-LAST:event_bbatalActionPerformed
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
-        DefaultTableModel model =
-            (DefaultTableModel) tblguru.getModel();
-
-    int jumlahBaris = model.getRowCount();
-
-    if (jumlahBaris == 0) {
-        JOptionPane.showMessageDialog(this,
-                "Data masih kosong!");
-        return;
-    }
-
-    int konfirmasi = JOptionPane.showConfirmDialog(
-            this,
-            "Yakin ingin menyimpan data absensi?",
-            "Konfirmasi",
-            JOptionPane.YES_NO_OPTION);
-
-    if (konfirmasi != JOptionPane.YES_OPTION) {
-        return;
-    }
-
-    try {
-
-        String sql =
-                "INSERT INTO tbl_absen_guru " +
-                "(kd_guru,tgl,kehadiran,keterangan) " +
-                "VALUES (?,?,?,?)";
-
-        PreparedStatement pst =
-                con.prepareStatement(sql);
-
-       java.sql.Date tgl =
-            new java.sql.Date(tglTemu.getDate().getTime());
-
-        for (int i = 0; i < jumlahBaris; i++) {
-
-            String nip =
-                    model.getValueAt(i, 0).toString();
-
-            boolean hadir =
-                    (Boolean) model.getValueAt(i, 2);
-
-            String keterangan =
-                    model.getValueAt(i, 5).toString();
-
-            pst.setString(1, nip);
-            pst.setDate(2, tgl);
-            pst.setInt(3, hadir ? 1 : 0);
-            pst.setString(4, keterangan);
-
-            pst.addBatch();
+        if (tblguru.isEditing()) {
+            tblguru.getCellEditor().stopCellEditing();
         }
 
-        pst.executeBatch();
+        if (tglTemu.getDate() == null) {
+            JOptionPane.showMessageDialog(this, "Pilih tanggal terlebih dahulu!", "Peringatan", JOptionPane.WARNING_MESSAGE);
+            return;
+        }
 
-        JOptionPane.showMessageDialog(
+        DefaultTableModel model = (DefaultTableModel) tblguru.getModel();
+        int jumlahBaris = model.getRowCount();
+
+        if (jumlahBaris == 0) {
+            JOptionPane.showMessageDialog(this, "Data masih kosong!");
+            return;
+        }
+
+        int konfirmasi = JOptionPane.showConfirmDialog(
                 this,
-                "Data absensi berhasil disimpan");
+                "Yakin ingin menyimpan data absensi?",
+                "Konfirmasi",
+                JOptionPane.YES_NO_OPTION);
 
-        datatable();
+        if (konfirmasi != JOptionPane.YES_OPTION) {
+            return;
+        }
 
-    } catch (Exception e) {
+        try {
+            java.sql.Date tgl = new java.sql.Date(tglTemu.getDate().getTime());
 
-        JOptionPane.showMessageDialog(
-                this,
-                "Error : " + e.getMessage());
-    }
+            String cekSql = "SELECT id_absen FROM tbl_absen_guru WHERE kd_guru = ? AND tgl = ?";
+            String updateSql = "UPDATE tbl_absen_guru SET kehadiran = ?, keterangan = ? WHERE kd_guru = ? AND tgl = ?";
+            String insertSql = "INSERT INTO tbl_absen_guru (kd_guru, tgl, kehadiran, keterangan) VALUES (?, ?, ?, ?)";
 
+            try (PreparedStatement psCek = con.prepareStatement(cekSql);
+                 PreparedStatement psUpdate = con.prepareStatement(updateSql);
+                 PreparedStatement psInsert = con.prepareStatement(insertSql)) {
+
+                for (int i = 0; i < jumlahBaris; i++) {
+                    String kdGuru = model.getValueAt(i, 0).toString();
+                    Object objHadir = model.getValueAt(i, 2);
+                    boolean hadir = (objHadir instanceof Boolean) && (Boolean) objHadir;
+                    Object objKet = model.getValueAt(i, 5);
+                    String keterangan = (objKet != null) ? objKet.toString().trim() : "";
+                    if (keterangan.length() > 50) {
+                        keterangan = keterangan.substring(0, 50);
+                    }
+
+                    psCek.setString(1, kdGuru);
+                    psCek.setDate(2, tgl);
+                    boolean sudahAda;
+                    try (ResultSet rsCek = psCek.executeQuery()) {
+                        sudahAda = rsCek.next();
+                    }
+
+                    if (sudahAda) {
+                        psUpdate.setInt(1, hadir ? 1 : 0);
+                        psUpdate.setString(2, keterangan);
+                        psUpdate.setString(3, kdGuru);
+                        psUpdate.setDate(4, tgl);
+                        psUpdate.executeUpdate();
+                    } else {
+                        psInsert.setString(1, kdGuru);
+                        psInsert.setDate(2, tgl);
+                        psInsert.setInt(3, hadir ? 1 : 0);
+                        psInsert.setString(4, keterangan);
+                        psInsert.executeUpdate();
+                    }
+                }
+            }
+
+            JOptionPane.showMessageDialog(this, "Data absensi berhasil disimpan");
+            datatable();
+
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error : " + e.getMessage());
+        }
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void bprintActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bprintActionPerformed

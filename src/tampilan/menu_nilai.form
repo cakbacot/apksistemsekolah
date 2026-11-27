@@ -266,9 +266,6 @@
           </AuxValues>
         </Component>
         <Component class="javax.swing.JTextField" name="txnilai">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="nilai"/>
-          </Properties>
         </Component>
       </SubComponents>
     </Container>
@@ -418,9 +415,9 @@
           </Properties>
         </Component>
         <Component class="javax.swing.JTextField" name="txcari">
-          <Properties>
-            <Property name="text" type="java.lang.String" value="nilai"/>
-          </Properties>
+          <Events>
+            <EventHandler event="keyReleased" listener="java.awt.event.KeyListener" parameters="java.awt.event.KeyEvent" handler="txcariKeyReleased"/>
+          </Events>
         </Component>
         <Component class="javax.swing.JComboBox" name="cbmapel">
           <Properties>

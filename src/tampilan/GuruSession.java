@@ -56,13 +56,21 @@ public class GuruSession {
         String panggilan = "";
         
         if (jkel != null) {
-            if (jkel.equals("Laki - laki")) {
+            if (jkel.equalsIgnoreCase("Laki - laki") || jkel.equalsIgnoreCase("L")) {
                 panggilan = "Bapak ";
-            } else if (jkel.equals("Perempuan")) {
+            } else if (jkel.equalsIgnoreCase("Perempuan") || jkel.equalsIgnoreCase("P")) {
                 panggilan = "Ibu ";
             }
         }
         
         return panggilan;
+    }
+
+    public static void clear() {
+        kd_guru = null;
+        nama = null;
+        jkel = null;
+        Nip = null;
+        kelas = null;
     }
 }

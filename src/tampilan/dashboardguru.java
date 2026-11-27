@@ -21,15 +21,18 @@ public class dashboardguru extends javax.swing.JFrame {
      */
     public dashboardguru() {
         initComponents();
-        String kelas = GuruSession.getKelas();
-        System.out.println(kelas);
-        tampilkanHomeAwal();
         this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        lab_login.setText(("SELAMAT DATANG ")+GuruSession.getSapaan()+ (", ") + GuruSession.getNama());
+        String namaGuru = GuruSession.getNama();
+        if (namaGuru != null && !namaGuru.trim().isEmpty()) {
+            lab_login.setText("SELAMAT DATANG, " + GuruSession.getSapaan() + namaGuru);
+        } else {
+            lab_login.setText("SELAMAT DATANG DI DASHBOARD GURU");
+        }
         setFixedIcon(babsen,"/resource/absen.png");
         sethome(home,"/resource/home.png");
         setFixedIcon(bnilai,"/resource/nilai.png");
         setleave(logout,"/resource/keluar.png");
+        tampilkanHomeAwal();
     }
     
     public void tampilkanHomeAwal() {
@@ -42,12 +45,12 @@ public class dashboardguru extends javax.swing.JFrame {
         ((javax.swing.plaf.basic.BasicInternalFrameUI)h.getUI()).setNorthPane(null);
         
         desktop.add(h);
-        
-        h.setSize(desktop.getWidth(), desktop.getHeight());
         h.setVisible(true);
-        
-        h.tampilkanDiagramSiswa();
-        h.tampilkanDiagramAbsensi();
+        try {
+            h.setMaximum(true);
+        } catch (PropertyVetoException ex) {
+            h.setSize(desktop.getWidth(), desktop.getHeight());
+        }
         
         desktop.repaint();
         desktop.revalidate();
@@ -79,6 +82,7 @@ public class dashboardguru extends javax.swing.JFrame {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn.setContentAreaFilled(true);
+                btn.setOpaque(true);
                 btn.setBackground(new java.awt.Color(255, 255, 0)); 
                 btn.setForeground(java.awt.Color.BLACK); 
             }
@@ -86,6 +90,7 @@ public class dashboardguru extends javax.swing.JFrame {
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn.setContentAreaFilled(false);
+                btn.setOpaque(false);
                 btn.setForeground(java.awt.Color.WHITE);
             }
         });
@@ -116,6 +121,7 @@ public class dashboardguru extends javax.swing.JFrame {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn.setContentAreaFilled(true);
+                btn.setOpaque(true);
                 btn.setBackground(new java.awt.Color(255, 255, 255));
                 btn.setForeground(java.awt.Color.BLACK); 
             }
@@ -123,6 +129,7 @@ public class dashboardguru extends javax.swing.JFrame {
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn.setContentAreaFilled(false);
+                btn.setOpaque(false);
                 btn.setForeground(java.awt.Color.WHITE);
             }
         });
@@ -154,6 +161,7 @@ public class dashboardguru extends javax.swing.JFrame {
             @Override
             public void mouseEntered(java.awt.event.MouseEvent evt) {
                 btn.setContentAreaFilled(true);
+                btn.setOpaque(true);
                 btn.setBackground(new java.awt.Color(255, 0, 0)); 
                 btn.setForeground(java.awt.Color.WHITE); 
             }
@@ -161,6 +169,7 @@ public class dashboardguru extends javax.swing.JFrame {
             @Override
             public void mouseExited(java.awt.event.MouseEvent evt) {
                 btn.setContentAreaFilled(false);
+                btn.setOpaque(false);
                 btn.setForeground(java.awt.Color.WHITE);
             }
         });
@@ -382,10 +391,11 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
 
-    int pilih = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
+    int pilih = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
     
     if (pilih == JOptionPane.YES_OPTION) {
-        UserSession.setNama(null);
+        GuruSession.clear();
+        UserSession.clear();
         
         this.dispose(); 
         
