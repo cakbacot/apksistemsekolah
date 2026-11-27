@@ -1,45 +1,20 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="report name" pageWidth="595" pageHeight="842" columnWidth="535" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="38e1a44c-8e18-47ce-a162-3fb8a86adddf">
-	<property name="ireport.zoom" value="1.6105100000000014"/>
+<jasperReport xmlns="http://jasperreports.sourceforge.net/jasperreports" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://jasperreports.sourceforge.net/jasperreports http://jasperreports.sourceforge.net/xsd/jasperreport.xsd" name="reportUser" language="groovy" pageWidth="595" pageHeight="842" columnWidth="555" leftMargin="20" rightMargin="20" topMargin="20" bottomMargin="20" uuid="38e1a44c-8e18-47ce-a162-3fb8a86adddf">
+	<property name="ireport.zoom" value="1.3310000000000004"/>
 	<property name="ireport.x" value="0"/>
 	<property name="ireport.y" value="0"/>
-	<style name="Crosstab Data Text" hAlign="Center"/>
-	<subDataset name="New Dataset 1" uuid="16a91dfd-33c1-4f2d-a224-f719c9617ff2">
-		<queryString language="SQL">
-			<![CDATA[SELECT 
-    u.nip, 
-    u.nama,
-    -- 1. Mengubah angka lvl menjadi nama jabatan
-    CASE 
-        WHEN u.lvl = '1' THEN 'TU'
-        WHEN u.lvl = '2' THEN 'Administrasi'
-        ELSE '-'
-    END AS jabatan,
-    -- 2. Mengubah status Y/T menjadi Aktif/Tidak Aktif
-    CASE 
-        WHEN u.status = 'Y' THEN 'Aktif'
-        ELSE 'Tidak Aktif'
-    END AS status_teks,
-    -- 3. Menghitung persentase kehadiran berdasarkan angka 1 di kolom kehadiran
-    ROUND(
-        COALESCE(
-            (COUNT(CASE WHEN a.kehadiran = 1 THEN 1 END) * 100) / NULLIF(COUNT(a.id_absen), 0), 
-            0
-        ), 1
-    ) AS persentase_kehadiran
-FROM users u
-LEFT JOIN tbl_absen_user a ON u.nip = a.nip
-GROUP BY u.nip, u.nama, u.lvl, u.status;]]>
-		</queryString>
-	</subDataset>
+	<parameter name="logo" class="java.io.InputStream">
+		<defaultValueExpression><![CDATA[$P{REPORT_CLASS_LOADER}.getResourceAsStream("resource/logosekolah.jpeg")]]></defaultValueExpression>
+	</parameter>
 	<queryString>
 		<![CDATA[SELECT 
     u.nip, 
     u.nama,
     CASE 
-        WHEN u.lvl = '1' THEN 'TU'
-        WHEN u.lvl = '2' THEN 'Administrasi'
-        ELSE '-'
+        WHEN u.lvl = '1' THEN 'Kepala Administrasi'
+        WHEN u.lvl = '2' THEN 'Admin'
+        WHEN u.lvl = '3' THEN 'Staff Keuangan'
+        ELSE 'Lainnya'
     END AS jabatan,
     CASE 
         WHEN u.status = 'Y' THEN 'Aktif'
@@ -47,20 +22,16 @@ GROUP BY u.nip, u.nama, u.lvl, u.status;]]>
     END AS status_teks,
     ROUND(
         COALESCE(
-            (COUNT(CASE WHEN a.kehadiran = 1 THEN 1 END) * 100) / NULLIF(COUNT(a.id_absen), 0), 
+            (COUNT(CASE WHEN a.kehadiran = 1 THEN 1 END) * 100.0) / NULLIF(COUNT(a.id_absen), 0), 
             0
         ), 1
     ) AS persentase_kehadiran
 FROM users u
 LEFT JOIN tbl_absen_user a ON u.nip = a.nip
-GROUP BY u.nip, u.nama, u.lvl, u.status;]]>
+GROUP BY u.nip, u.nama, u.lvl, u.status]]>
 	</queryString>
-	<field name="nip" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
-	<field name="nama" class="java.lang.String">
-		<fieldDescription><![CDATA[]]></fieldDescription>
-	</field>
+	<field name="nip" class="java.lang.String"/>
+	<field name="nama" class="java.lang.String"/>
 	<field name="jabatan" class="java.lang.String"/>
 	<field name="status_teks" class="java.lang.String"/>
 	<field name="persentase_kehadiran" class="java.math.BigDecimal"/>
@@ -68,112 +39,206 @@ GROUP BY u.nip, u.nama, u.lvl, u.status;]]>
 		<band splitType="Stretch"/>
 	</background>
 	<title>
-		<band height="38" splitType="Stretch">
+		<band splitType="Stretch"/>
+	</title>
+	<pageHeader>
+		<band height="175" splitType="Stretch">
+			<image isUsingCache="true">
+				<reportElement x="6" y="10" width="155" height="96" uuid="bffb0ce7-149d-4070-b741-677f0c41b75c"/>
+				<imageExpression><![CDATA[$P{logo}]]></imageExpression>
+			</image>
 			<staticText>
-				<reportElement x="212" y="0" width="136" height="25" uuid="8a05d217-b8f1-4800-9c6a-2c022aecdc45"/>
+				<reportElement x="173" y="10" width="376" height="31" uuid="ba5a0002-0417-4f47-bb8e-3eb229b4b9d9"/>
+				<textElement textAlignment="Center">
+					<font size="24" isBold="true"/>
+				</textElement>
+				<text><![CDATA[SMPN 259 JAKARTA ]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="173" y="58" width="376" height="31" uuid="a149ac3d-8d91-40d1-ae2b-a593452df468"/>
+				<textElement textAlignment="Center">
+					<font size="12" isBold="false"/>
+				</textElement>
+				<text><![CDATA[Jakarta, Jl. Laksamana VIII No.4, RT.15/RW.4, Bambu Apus, Kec. Cipayung, Kota Jakarta Timur, Daerah Khusus Ibukota Jakarta 13890]]></text>
+			</staticText>
+			<line>
+				<reportElement x="0" y="119" width="555" height="3" uuid="f59044a6-8508-4b83-b4b8-3d779be00e56"/>
+			</line>
+			<staticText>
+				<reportElement x="0" y="132" width="555" height="31" uuid="42699ef6-66e0-4f03-92fe-62533fe8de32"/>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="14" isBold="true"/>
 				</textElement>
-				<text><![CDATA[REKAP ABSEN TU]]></text>
+				<text><![CDATA[LAPORAN REKAP ABSENSI STAFF SMPN 259 JAKARTA]]></text>
 			</staticText>
 		</band>
-	</title>
-	<pageHeader>
-		<band height="35" splitType="Stretch"/>
 	</pageHeader>
 	<columnHeader>
-		<band height="35" splitType="Stretch">
+		<band height="20" splitType="Stretch">
 			<staticText>
-				<reportElement x="0" y="0" width="100" height="20" uuid="52c4de54-6e15-4dad-b84c-be9aa29ab0f8"/>
+				<reportElement x="15" y="0" width="95" height="20" uuid="52c4de54-6e15-4dad-b84c-be9aa29ab0f8"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NIP]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="100" y="0" width="112" height="20" uuid="b8063d43-e4ab-43e2-8a44-6f1c8242eaa4"/>
+				<reportElement x="110" y="0" width="140" height="20" uuid="b8063d43-e4ab-43e2-8a44-6f1c8242eaa4"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama Pegawai]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="212" y="0" width="115" height="20" uuid="c5de22ca-de5f-4251-8bd1-a2329ce9c9dc"/>
+				<reportElement x="250" y="0" width="115" height="20" uuid="c5de22ca-de5f-4251-8bd1-a2329ce9c9dc"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Jabatan]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="327" y="0" width="128" height="20" uuid="7f1a3116-c996-4d7b-9a3e-53179b737f6f"/>
+				<reportElement x="365" y="0" width="90" height="20" uuid="7f1a3116-c996-4d7b-9a3e-53179b737f6f"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Status]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="455" y="0" width="100" height="20" uuid="2428d098-e18f-41ab-9fd3-e98b34942109"/>
+				<reportElement x="455" y="0" width="85" height="20" uuid="2428d098-e18f-41ab-9fd3-e98b34942109"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
 				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font size="12" isBold="true"/>
 				</textElement>
-				<text><![CDATA[Presentas]]></text>
+				<text><![CDATA[Persentase]]></text>
 			</staticText>
-			<line>
-				<reportElement x="0" y="0" width="555" height="1" uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6"/>
-			</line>
-			<line>
-				<reportElement x="0" y="34" width="555" height="1" uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6"/>
-			</line>
 		</band>
 	</columnHeader>
 	<detail>
-		<band height="44" splitType="Stretch">
-			<textField>
-				<reportElement x="0" y="0" width="100" height="20" uuid="93d97c0f-9f7d-434d-881b-c8461be6ac29"/>
-				<textElement verticalAlignment="Middle"/>
+		<band height="20" splitType="Stretch">
+			<textField isBlankWhenNull="true">
+				<reportElement x="15" y="0" width="95" height="20" uuid="93d97c0f-9f7d-434d-881b-c8461be6ac29"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nip}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="100" y="0" width="112" height="20" uuid="e82c0d1b-5dea-4e5f-b9a5-a216a353e0e8"/>
-				<textElement verticalAlignment="Middle"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="110" y="0" width="140" height="20" uuid="e82c0d1b-5dea-4e5f-b9a5-a216a353e0e8"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="212" y="0" width="115" height="20" uuid="fc6b79e2-6d81-46a2-b54f-03babb79fb71"/>
-				<textElement verticalAlignment="Middle"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="250" y="0" width="115" height="20" uuid="fc6b79e2-6d81-46a2-b54f-03babb79fb71"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{jabatan}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="327" y="0" width="128" height="20" uuid="d6223d7e-f58b-4339-be85-c17769933070"/>
-				<textElement verticalAlignment="Middle"/>
+			<textField isBlankWhenNull="true">
+				<reportElement x="365" y="0" width="90" height="20" uuid="d6223d7e-f58b-4339-be85-c17769933070"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
 				<textFieldExpression><![CDATA[$F{status_teks}]]></textFieldExpression>
 			</textField>
-			<textField>
-				<reportElement x="455" y="0" width="100" height="20" uuid="43e49bf0-367b-4b19-a28d-ac9f316d741c"/>
-				<textElement verticalAlignment="Middle"/>
-				<textFieldExpression><![CDATA[$F{persentase_kehadiran}]]></textFieldExpression>
+			<textField isBlankWhenNull="true">
+				<reportElement x="455" y="0" width="85" height="20" uuid="43e49bf0-367b-4b19-a28d-ac9f316d741c"/>
+				<box>
+					<pen lineWidth="1.0"/>
+					<topPen lineWidth="1.0"/>
+					<leftPen lineWidth="1.0"/>
+					<bottomPen lineWidth="1.0"/>
+					<rightPen lineWidth="1.0"/>
+				</box>
+				<textElement textAlignment="Center" verticalAlignment="Middle"/>
+				<textFieldExpression><![CDATA[$F{persentase_kehadiran} + "%"]]></textFieldExpression>
 			</textField>
-			<line>
-				<reportElement x="0" y="30" width="555" height="1" uuid="a0011fe1-c46f-4ab2-957e-3bf4d32360c6"/>
-			</line>
 		</band>
 	</detail>
 	<columnFooter>
-		<band height="25" splitType="Stretch"/>
-	</columnFooter>
-	<pageFooter>
-		<band height="73" splitType="Stretch">
+		<band height="135" splitType="Stretch">
+			<textField pattern="EEEEE dd MMMMM yyyy">
+				<reportElement x="380" y="11" width="150" height="19" uuid="6cb51f27-8a69-4869-a01a-425904d1d1f8"/>
+				<textElement textAlignment="Center"/>
+				<textFieldExpression><![CDATA[new java.util.Date()]]></textFieldExpression>
+			</textField>
 			<staticText>
-				<reportElement x="419" y="0" width="100" height="20" uuid="924f031f-4020-4643-a448-2352371e88b0"/>
-				<text><![CDATA[Mengetahui :]]></text>
+				<reportElement x="405" y="30" width="100" height="20" uuid="d899db9c-b3c6-48dc-ade8-03b44f57c0ed"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Mengetahui]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="419" y="42" width="111" height="20" uuid="8af305d6-3d9e-45f9-b2d4-248fa6c64d68"/>
-				<text><![CDATA[(.....................................)]]></text>
+				<reportElement x="366" y="50" width="177" height="20" uuid="a111504b-d4d4-48f2-a700-3b0cdfed66f1"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Kepala Sekolah SMPN 259 Jakarta]]></text>
+			</staticText>
+			<staticText>
+				<reportElement x="366" y="107" width="177" height="20" uuid="708e3016-e3a0-4399-9ffd-d2dabdf07274"/>
+				<textElement textAlignment="Center"/>
+				<text><![CDATA[Hesti wahyuni, S.Pd.]]></text>
 			</staticText>
 		</band>
+	</columnFooter>
+	<pageFooter>
+		<band height="2" splitType="Stretch"/>
 	</pageFooter>
 	<summary>
-		<band height="42" splitType="Stretch"/>
+		<band height="1" splitType="Stretch"/>
 	</summary>
 </jasperReport>

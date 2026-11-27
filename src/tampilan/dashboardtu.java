@@ -1,488 +1,319 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Dashboard Administrasi - Sistem Manajemen Administrasi SMP 259 Jakarta
  */
 package tampilan;
 
-import java.awt.Image;
 import java.beans.PropertyVetoException;
 import java.sql.Connection;
-import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import org.jfree.chart.ChartFactory;
-import org.jfree.chart.ChartPanel;
-import org.jfree.chart.JFreeChart;
-import org.jfree.chart.plot.PiePlot;
-import org.jfree.data.general.DefaultPieDataset;
+import javax.swing.JOptionPane;
 import koneksi.koneksi;
 
 /**
- *
- * @author faisa
+ * Shell utama Dashboard Staf / Tata Usaha / Administrasi SMP 259 Jakarta.
  */
 public class dashboardtu extends javax.swing.JFrame {
-private Connection conn = new koneksi().getConnection();
+
+    private Connection conn = new koneksi().getConnection();
+    private JButton[] navButtons;
+
     /**
      * Creates new form dashboardtu
      */
-     
-     
     public dashboardtu() {
-        com.formdev.flatlaf.FlatLightLaf.setup();
+        UITheme.setup();
         initComponents();
-        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        scaleImage(); 
-       
-       com.formdev.flatlaf.FlatLightLaf.setup();
-    homedashboardtu h = new homedashboardtu();
-    desktop.add(h); 
-    
-    h.setBorder(null); 
-    ((javax.swing.plaf.basic.BasicInternalFrameUI)h.getUI()).setNorthPane(null); 
-    
-    try {
-        h.setMaximum(true); 
-    } catch (java.beans.PropertyVetoException e) {}
-    
-    h.setVisible(true);
-    h.tampilkanDiagramSiswa();
-    h.tampilkanDiagramGuru();
-    
-    setFixedIcon(menukelas, "/resource/class.png");
-    setFixedIcon(menuguru, "/resource/guru.png");
-    setFixedIcon(menusiswa, "/resource/murid.png");
-    setFixedIcon(tranksaksi, "/resource/tranksaksi.png");
-    setFixedIcon(jdwl,"/resource/jadwal.png");
-    setFixedIcon(absenuser,"/resource/user.png");
-    setFixedIcon(absenguru,"/resource/logoguru.png");
-    setFixedIcon(bpel,"/resource/kesiswaan.png");
-    sethome(home,"/resource/home.png");
-    setleave(keluar,"/resource/keluar.png");
-    setadmin(admin,"/resource/admin.png");
-    lblWelcome.setText("Selamat Datang, " + UserSession.getNama());
-    validasiMenu();
-    tampilkanHomeAwal();
-    }
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        UITheme.applyWindowIcon(this);
 
-    
-    public void validasiMenu() {
-    String role = UserSession.getLevel(); 
-    
-    if (role.equals("2")) { 
-        menukelas.setEnabled(false);
-        menusiswa.setEnabled(false);
-        menuguru.setEnabled(false);
-        jdwl.setEnabled(false);
-        admin.setEnabled(false);
-        absenuser.setEnabled(false);
-        absenguru.setEnabled(false);
-    } else if (role.equals("3")) {
-        tranksaksi.setEnabled(false);
-        admin.setEnabled(false); 
-        absenuser.setEnabled(false);
-        absenguru.setEnabled(false);
-    }
-}
-    
-private void scaleImage() {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/logo.png"));
-        Image imgLama = iconAwal.getImage();
-        
-        int width = lbl_logo.getWidth();
-        int height = lbl_logo.getHeight();
-        
-        if (width > 0 && height > 0) {
-            Image imgBaru = imgLama.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            lbl_logo.setIcon(new ImageIcon(imgBaru));
+        ImageIcon logoIcon = UITheme.getScaledIcon("/resource/logosekolah.png", 42, 48);
+        if (logoIcon != null) {
+            lbl_logo.setIcon(logoIcon);
         }
-    } catch (Exception e) {
-        System.err.println("Error logo: " + e.getMessage());
-    }
-}
 
-public void tampilkanHomeAwal() {
-    try {
-        desktop.removeAll();
-        
+        jPanel2.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UITheme.BORDER_SOFT));
+        UITheme.styleUserProfileBadge(pnlUserBadge);
+
+        validasiMenu();
+        initSidebarStyling();
+        aturSapaanPengguna();
+        tampilkanHomeAwal();
+    }
+
+    private void initSidebarStyling() {
+        navButtons = new JButton[]{
+            home, menukelas, menusiswa, menuguru, jdwl,
+            tranksaksi, absenuser, absenguru, bpel
+        };
+        UITheme.styleSidebarItem(home, "/resource/home.png", true);
+        UITheme.styleSidebarItem(menukelas, "/resource/class.png", false);
+        UITheme.styleSidebarItem(menusiswa, "/resource/murid.png", false);
+        UITheme.styleSidebarItem(menuguru, "/resource/guru.png", false);
+        UITheme.styleSidebarItem(jdwl, "/resource/jadwal.png", false);
+        UITheme.styleSidebarItem(tranksaksi, "/resource/tranksaksi.png", false);
+        UITheme.styleSidebarItem(absenuser, "/resource/user.png", false);
+        UITheme.styleSidebarItem(absenguru, "/resource/logoguru.png", false);
+        UITheme.styleSidebarItem(bpel, "/resource/kesiswaan.png", false);
+        UITheme.styleSidebarItem(admin, "/resource/admin.png", false);
+        UITheme.styleSidebarLogout(keluar, "/resource/keluar.png");
+    }
+
+    private void aturSapaanPengguna() {
+        String nama = UserSession.getNama();
+        String role = UserSession.getLevel();
+        if (nama != null && !nama.trim().isEmpty()) {
+            lblWelcome.setText("Selamat Datang, " + nama);
+        } else {
+            lblWelcome.setText("Selamat Datang, Staf TU");
+        }
+
+        if ("2".equals(role)) {
+            lblRoleBadge.setText("STAF KEUANGAN");
+        } else if ("3".equals(role)) {
+            lblRoleBadge.setText("STAF KESISWAAN");
+        } else {
+            lblRoleBadge.setText("ADMINISTRATOR / TATA USAHA");
+        }
+    }
+
+    public void validasiMenu() {
+        String role = UserSession.getLevel();
+        if ("2".equals(role)) {
+            menukelas.setEnabled(false);
+            menusiswa.setEnabled(false);
+            menuguru.setEnabled(false);
+            jdwl.setEnabled(false);
+            admin.setEnabled(false);
+            absenuser.setEnabled(false);
+            absenguru.setEnabled(false);
+        } else if ("3".equals(role)) {
+            tranksaksi.setEnabled(false);
+            admin.setEnabled(false);
+            absenuser.setEnabled(false);
+            absenguru.setEnabled(false);
+        }
+    }
+
+    private void bukaHalamanInternal(JInternalFrame frame, JButton tombolAktif, String judulHalaman) {
+        try {
+            jLabel1.setText(judulHalaman);
+            UITheme.setActiveSidebar(tombolAktif, navButtons);
+            desktop.removeAll();
+            frame.setBorder(null);
+            if (frame.getUI() instanceof javax.swing.plaf.basic.BasicInternalFrameUI) {
+                ((javax.swing.plaf.basic.BasicInternalFrameUI) frame.getUI()).setNorthPane(null);
+            }
+            desktop.add(frame);
+            frame.setVisible(true);
+            try {
+                frame.setMaximum(true);
+            } catch (PropertyVetoException ex) {
+                frame.setSize(desktop.getWidth(), desktop.getHeight());
+            }
+            desktop.revalidate();
+            desktop.repaint();
+        } catch (Exception e) {
+            System.err.println("Gagal membuka halaman internal: " + e.getMessage());
+        }
+    }
+
+    public void tampilkanHomeAwal() {
         homedashboardtu h = new homedashboardtu();
-        h.setBorder(null);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI)h.getUI()).setNorthPane(null);
-        
-        desktop.add(h);
-        
-        h.setSize(desktop.getWidth(), desktop.getHeight());
-        h.setVisible(true);
-        
-        h.tampilkanDiagramSiswa();
-        h.tampilkanDiagramGuru();
-        
-        desktop.repaint();
-        desktop.revalidate();
-    } catch (Exception e) {
-        System.err.println("Gagal memuat home awal: " + e.getMessage());
+        bukaHalamanInternal(h, home, "Beranda Administrasi");
     }
-}
 
-private void setFixedIcon(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
-
-        btn.setForeground(java.awt.Color.WHITE);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
-        btn.setIconTextGap(20);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setBackground(new java.awt.Color(255, 255, 0)); 
-                btn.setForeground(java.awt.Color.BLACK); 
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(false);
-                btn.setForeground(java.awt.Color.WHITE);
-            }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
-    }
-}
-
-private void setleave(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
-
-        btn.setForeground(java.awt.Color.WHITE);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
-        btn.setIconTextGap(20);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setBackground(new java.awt.Color(255, 0, 0)); 
-                btn.setForeground(java.awt.Color.WHITE); 
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(false);
-                btn.setForeground(java.awt.Color.WHITE);
-            }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
-    }
-}
-
-private void sethome(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
-
-        btn.setForeground(java.awt.Color.WHITE);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        btn.setIconTextGap(20);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setBackground(new java.awt.Color(255, 255, 255)); 
-                btn.setForeground(java.awt.Color.BLACK); 
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(false);
-                btn.setForeground(java.awt.Color.WHITE);
-            }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
-    }
-}
-
-
-private void setadmin(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
-
-        btn.setForeground(java.awt.Color.WHITE);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        btn.setIconTextGap(20);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setBackground(new java.awt.Color(0, 255, 98)); 
-                btn.setForeground(java.awt.Color.WHITE); 
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(false);
-                btn.setForeground(java.awt.Color.WHITE);
-            }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
-    }
-}
-// * This method is called from within the constructor to initialize the form.
-    // * WARNING: Do NOT modify this code. The content of this method is always
-    // * regenerated by the Form Editor.
+    /**
+     * This method is called from within the constructor to initialize the form.
+     * WARNING: Do NOT modify this code. The content of this method is always
+     * regenerated by the Form Editor.
+     */
     @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
+        jPanel1 = new javax.swing.JPanel();
         lbl_logo = new javax.swing.JLabel();
-        jLabel1 = new javax.swing.JLabel();
+        lblBrandTitle = new javax.swing.JLabel();
+        lblBrandSub = new javax.swing.JLabel();
+        pnlSideDivider = new javax.swing.JPanel();
+        lblSecUtama = new javax.swing.JLabel();
         home = new javax.swing.JButton();
+        menukelas = new javax.swing.JButton();
+        menusiswa = new javax.swing.JButton();
+        menuguru = new javax.swing.JButton();
+        jdwl = new javax.swing.JButton();
+        tranksaksi = new javax.swing.JButton();
+        lblSecOperasional = new javax.swing.JLabel();
+        absenuser = new javax.swing.JButton();
+        absenguru = new javax.swing.JButton();
+        bpel = new javax.swing.JButton();
         admin = new javax.swing.JButton();
+        keluar = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblHeaderSub = new javax.swing.JLabel();
+        pnlUserBadge = new javax.swing.JPanel();
+        lblRoleBadge = new javax.swing.JLabel();
         lblWelcome = new javax.swing.JLabel();
         desktop = new javax.swing.JDesktopPane();
-        jPanel1 = new javax.swing.JPanel();
-        menusiswa = new javax.swing.JButton();
-        menukelas = new javax.swing.JButton();
-        menuguru = new javax.swing.JButton();
-        tranksaksi = new javax.swing.JButton();
-        keluar = new javax.swing.JButton();
-        jdwl = new javax.swing.JButton();
-        absenguru = new javax.swing.JButton();
-        absenuser = new javax.swing.JButton();
-        bpel = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Dashboard Administrasi - Sistem Manajemen Administrasi SMP 259 Jakarta");
         addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 formComponentResized(evt);
             }
         });
 
-        jPanel2.setBackground(new java.awt.Color(0, 8, 97));
+        jPanel1.setBackground(new java.awt.Color(15, 23, 42));
 
-        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/logo.png"))); // NOI18N
+        lbl_logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_logo_46.png"))); // NOI18N
         lbl_logo.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 lbl_logoComponentResized(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Rockwell Extra Bold", 3, 22)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setText("SELAMAT DATANG DI DASHBOARD TATA USAHA");
+        lblBrandTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblBrandTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblBrandTitle.setText("SMP 259 JAKARTA");
 
-        home.setFont(new java.awt.Font("Segoe UI Emoji", 1, 12)); // NOI18N
+        lblBrandSub.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        lblBrandSub.setForeground(new java.awt.Color(56, 189, 248));
+        lblBrandSub.setText("Sistem Administrasi");
+
+        pnlSideDivider.setBackground(new java.awt.Color(30, 41, 59));
+        pnlSideDivider.setPreferredSize(new java.awt.Dimension(216, 1));
+
+        javax.swing.GroupLayout pnlSideDividerLayout = new javax.swing.GroupLayout(pnlSideDivider);
+        pnlSideDivider.setLayout(pnlSideDividerLayout);
+        pnlSideDividerLayout.setHorizontalGroup(
+            pnlSideDividerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlSideDividerLayout.setVerticalGroup(
+            pnlSideDividerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1, Short.MAX_VALUE)
+        );
+
+        lblSecUtama.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        lblSecUtama.setForeground(new java.awt.Color(100, 116, 139));
+        lblSecUtama.setText("MENU UTAMA");
+
+        home.setBackground(new java.awt.Color(37, 99, 235));
+        home.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        home.setForeground(new java.awt.Color(255, 255, 255));
+        home.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_home.png"))); // NOI18N
+        home.setText("Beranda Utama");
+        home.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        home.setFocusPainted(false);
+        home.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        home.setIconTextGap(12);
         home.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 homeActionPerformed(evt);
             }
         });
 
-        admin.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                adminActionPerformed(evt);
-            }
-        });
-
-        lblWelcome.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        lblWelcome.setForeground(new java.awt.Color(255, 255, 255));
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 81, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(77, 77, 77)
-                .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 683, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(18, 18, Short.MAX_VALUE)
-                .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 256, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(admin, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(23, 23, 23)
-                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 50, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(admin, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(lblWelcome, javax.swing.GroupLayout.PREFERRED_SIZE, 25, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addContainerGap())
-        );
-
-        desktop.setBackground(new java.awt.Color(255, 255, 255));
-        desktop.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                desktopComponentResized(evt);
-            }
-        });
-
-        javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
-        desktop.setLayout(desktopLayout);
-        desktopLayout.setHorizontalGroup(
-            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 1120, Short.MAX_VALUE)
-        );
-        desktopLayout.setVerticalGroup(
-            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
-        );
-
-        jPanel1.setBackground(new java.awt.Color(0, 8, 97));
-        jPanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-
-        menusiswa.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
-        menusiswa.setForeground(new java.awt.Color(255, 255, 255));
-        menusiswa.setText("Siswa");
-        menusiswa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        menusiswa.setFocusPainted(false);
-        menusiswa.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                menusiswaActionPerformed(evt);
-            }
-        });
-
-        menukelas.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
-        menukelas.setForeground(new java.awt.Color(255, 255, 255));
-        menukelas.setText("Kelas");
+        menukelas.setBackground(new java.awt.Color(15, 23, 42));
+        menukelas.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        menukelas.setForeground(new java.awt.Color(203, 213, 225));
+        menukelas.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_kelas.png"))); // NOI18N
+        menukelas.setText("Data Kelas");
         menukelas.setBorderPainted(false);
         menukelas.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menukelas.setFocusPainted(false);
+        menukelas.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        menukelas.setIconTextGap(12);
         menukelas.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menukelasActionPerformed(evt);
             }
         });
 
-        menuguru.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
-        menuguru.setForeground(new java.awt.Color(255, 255, 255));
-        menuguru.setText("Guru");
+        menusiswa.setBackground(new java.awt.Color(15, 23, 42));
+        menusiswa.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        menusiswa.setForeground(new java.awt.Color(203, 213, 225));
+        menusiswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_siswa.png"))); // NOI18N
+        menusiswa.setText("Data Siswa");
+        menusiswa.setBorderPainted(false);
+        menusiswa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        menusiswa.setFocusPainted(false);
+        menusiswa.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        menusiswa.setIconTextGap(12);
+        menusiswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                menusiswaActionPerformed(evt);
+            }
+        });
+
+        menuguru.setBackground(new java.awt.Color(15, 23, 42));
+        menuguru.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        menuguru.setForeground(new java.awt.Color(203, 213, 225));
+        menuguru.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_guru.png"))); // NOI18N
+        menuguru.setText("Data Guru");
+        menuguru.setBorderPainted(false);
         menuguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         menuguru.setFocusPainted(false);
+        menuguru.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        menuguru.setIconTextGap(12);
         menuguru.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 menuguruActionPerformed(evt);
             }
         });
 
-        tranksaksi.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
-        tranksaksi.setForeground(new java.awt.Color(255, 255, 255));
-        tranksaksi.setText("Transaksi");
-        tranksaksi.setToolTipText("");
-        tranksaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        tranksaksi.setFocusPainted(false);
-        tranksaksi.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                tranksaksiActionPerformed(evt);
-            }
-        });
-
-        keluar.setBackground(new java.awt.Color(255, 0, 0));
-        keluar.setText("Logout");
-        keluar.setToolTipText("");
-        keluar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        keluar.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                keluarActionPerformed(evt);
-            }
-        });
-
-        jdwl.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
-        jdwl.setForeground(new java.awt.Color(255, 255, 255));
-        jdwl.setText("jadwal");
-        jdwl.setToolTipText("");
+        jdwl.setBackground(new java.awt.Color(15, 23, 42));
+        jdwl.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        jdwl.setForeground(new java.awt.Color(203, 213, 225));
+        jdwl.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_jadwal.png"))); // NOI18N
+        jdwl.setText("Jadwal Pelajaran");
+        jdwl.setBorderPainted(false);
         jdwl.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         jdwl.setFocusPainted(false);
+        jdwl.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        jdwl.setIconTextGap(12);
         jdwl.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 jdwlActionPerformed(evt);
             }
         });
 
-        absenguru.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
-        absenguru.setForeground(new java.awt.Color(255, 255, 255));
-        absenguru.setText("Absen Guru");
-        absenguru.setToolTipText("");
-        absenguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        absenguru.setFocusPainted(false);
-        absenguru.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                absenguruMouseClicked(evt);
-            }
-        });
-        absenguru.addActionListener(new java.awt.event.ActionListener() {
+        tranksaksi.setBackground(new java.awt.Color(15, 23, 42));
+        tranksaksi.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        tranksaksi.setForeground(new java.awt.Color(203, 213, 225));
+        tranksaksi.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_transaksi.png"))); // NOI18N
+        tranksaksi.setText("Transaksi Keuangan");
+        tranksaksi.setBorderPainted(false);
+        tranksaksi.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        tranksaksi.setFocusPainted(false);
+        tranksaksi.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        tranksaksi.setIconTextGap(12);
+        tranksaksi.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                absenguruActionPerformed(evt);
+                tranksaksiActionPerformed(evt);
             }
         });
 
-        absenuser.setFont(new java.awt.Font("Segoe UI Symbol", 1, 14)); // NOI18N
-        absenuser.setForeground(new java.awt.Color(255, 255, 255));
-        absenuser.setText("Absen User");
-        absenuser.setToolTipText("");
+        lblSecOperasional.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        lblSecOperasional.setForeground(new java.awt.Color(100, 116, 139));
+        lblSecOperasional.setText("KEHADIRAN & SISTEM");
+
+        absenuser.setBackground(new java.awt.Color(15, 23, 42));
+        absenuser.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        absenuser.setForeground(new java.awt.Color(203, 213, 225));
+        absenuser.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_absenuser.png"))); // NOI18N
+        absenuser.setText("Presensi Staf");
+        absenuser.setBorderPainted(false);
         absenuser.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         absenuser.setFocusPainted(false);
+        absenuser.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        absenuser.setIconTextGap(12);
         absenuser.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
                 absenuserMouseClicked(evt);
@@ -494,12 +325,72 @@ private void setadmin(javax.swing.JButton btn, String path) {
             }
         });
 
-        bpel.setFont(new java.awt.Font("Segoe UI", 1, 18)); // NOI18N
-        bpel.setText("Kesiswaan");
-        bpel.setHorizontalTextPosition(javax.swing.SwingConstants.LEFT);
+        absenguru.setBackground(new java.awt.Color(15, 23, 42));
+        absenguru.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        absenguru.setForeground(new java.awt.Color(203, 213, 225));
+        absenguru.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_absenguru.png"))); // NOI18N
+        absenguru.setText("Presensi Guru");
+        absenguru.setBorderPainted(false);
+        absenguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        absenguru.setFocusPainted(false);
+        absenguru.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        absenguru.setIconTextGap(12);
+        absenguru.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseClicked(java.awt.event.MouseEvent evt) {
+                absenguruMouseClicked(evt);
+            }
+        });
+        absenguru.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                absenguruActionPerformed(evt);
+            }
+        });
+
+        bpel.setBackground(new java.awt.Color(15, 23, 42));
+        bpel.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        bpel.setForeground(new java.awt.Color(203, 213, 225));
+        bpel.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_kesiswaan.png"))); // NOI18N
+        bpel.setText("Pelanggaran Siswa");
+        bpel.setBorderPainted(false);
+        bpel.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bpel.setFocusPainted(false);
+        bpel.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        bpel.setIconTextGap(12);
         bpel.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bpelActionPerformed(evt);
+            }
+        });
+
+        admin.setBackground(new java.awt.Color(15, 23, 42));
+        admin.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        admin.setForeground(new java.awt.Color(203, 213, 225));
+        admin.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_admin.png"))); // NOI18N
+        admin.setText("Kelola Pengguna");
+        admin.setBorderPainted(false);
+        admin.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        admin.setFocusPainted(false);
+        admin.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        admin.setIconTextGap(12);
+        admin.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                adminActionPerformed(evt);
+            }
+        });
+
+        keluar.setBackground(new java.awt.Color(30, 41, 59));
+        keluar.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        keluar.setForeground(new java.awt.Color(252, 165, 165));
+        keluar.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_logout.png"))); // NOI18N
+        keluar.setText("Keluar Akun");
+        keluar.setBorderPainted(false);
+        keluar.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        keluar.setFocusPainted(false);
+        keluar.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        keluar.setIconTextGap(12);
+        keluar.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                keluarActionPerformed(evt);
             }
         });
 
@@ -508,258 +399,263 @@ private void setadmin(javax.swing.JButton btn, String path) {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblBrandTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                            .addComponent(lblBrandSub, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)))
+                    .addComponent(pnlSideDivider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSecUtama, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(menukelas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(menusiswa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(menuguru, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(tranksaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jdwl, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(absenguru, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(absenuser, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(bpel, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 142, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addContainerGap())
+                    .addComponent(tranksaksi, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSecOperasional, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(absenuser, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(absenguru, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(bpel, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(admin, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(keluar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
-
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.HORIZONTAL, new java.awt.Component[] {absenguru, bpel});
-
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(34, 34, 34)
-                .addComponent(menukelas, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGap(18, 18, 18)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblBrandTitle)
+                        .addGap(2, 2, 2)
+                        .addComponent(lblBrandSub)))
+                .addGap(16, 16, 16)
+                .addComponent(pnlSideDivider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(lblSecUtama)
+                .addGap(6, 6, 6)
+                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(menukelas, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
                 .addComponent(menusiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(menuguru, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jdwl, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(tranksaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(absenuser, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(absenguru, javax.swing.GroupLayout.PREFERRED_SIZE, 39, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(bpel)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 49, Short.MAX_VALUE)
-                .addComponent(keluar))
+                .addGap(4, 4, 4)
+                .addComponent(menuguru, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(jdwl, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(tranksaksi, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(lblSecOperasional)
+                .addGap(6, 6, 6)
+                .addComponent(absenuser, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(absenguru, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(bpel, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(4, 4, 4)
+                .addComponent(admin, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 42, Short.MAX_VALUE)
+                .addComponent(keluar, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
-        jPanel1Layout.linkSize(javax.swing.SwingConstants.VERTICAL, new java.awt.Component[] {absenguru, bpel});
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(226, 232, 240)));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 19)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(15, 23, 42));
+        jLabel1.setText("Beranda Administrasi");
+
+        lblHeaderSub.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        lblHeaderSub.setForeground(new java.awt.Color(100, 116, 139));
+        lblHeaderSub.setText("Sistem Manajemen Administrasi SMP 259 Jakarta");
+
+        pnlUserBadge.setBackground(new java.awt.Color(248, 250, 252));
+        pnlUserBadge.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 232, 240), 1, true));
+
+        lblRoleBadge.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        lblRoleBadge.setForeground(new java.awt.Color(37, 99, 235));
+        lblRoleBadge.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblRoleBadge.setText("ADMINISTRATOR");
+
+        lblWelcome.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        lblWelcome.setForeground(new java.awt.Color(15, 23, 42));
+        lblWelcome.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblWelcome.setText("Selamat Datang, Pengguna");
+
+        javax.swing.GroupLayout pnlUserBadgeLayout = new javax.swing.GroupLayout(pnlUserBadge);
+        pnlUserBadge.setLayout(pnlUserBadgeLayout);
+        pnlUserBadgeLayout.setHorizontalGroup(
+            pnlUserBadgeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlUserBadgeLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(pnlUserBadgeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblRoleBadge, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                    .addComponent(lblWelcome, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
+        );
+        pnlUserBadgeLayout.setVerticalGroup(
+            pnlUserBadgeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlUserBadgeLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(lblRoleBadge)
+                .addGap(1, 1, 1)
+                .addComponent(lblWelcome)
+                .addContainerGap(6, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+                    .addComponent(lblHeaderSub, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(pnlUserBadge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(jLabel1)
+                        .addGap(2, 2, 2)
+                        .addComponent(lblHeaderSub))
+                    .addComponent(pnlUserBadge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        desktop.setBackground(new java.awt.Color(241, 245, 249));
+        desktop.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                desktopComponentResized(evt);
+            }
+        });
+
+        javax.swing.GroupLayout desktopLayout = new javax.swing.GroupLayout(desktop);
+        desktop.setLayout(desktopLayout);
+        desktopLayout.setHorizontalGroup(
+            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1032, Short.MAX_VALUE)
+        );
+        desktopLayout.setVerticalGroup(
+            desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(desktop))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(desktop)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(desktop)))
+                .addComponent(desktop))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void menukelasActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menukelasActionPerformed
-    desktop.removeAll();
-    desktop.repaint();
-
-    menu_kelas mk = new menu_kelas();
-
-    desktop.add(mk);
-
-    mk.setVisible(true);
-    
-    try {
-        mk.setMaximum(true);
-    } catch (java.beans.PropertyVetoException e) {
-        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-    }      
+        bukaHalamanInternal(new menu_kelas(), menukelas, "Manajemen Data Kelas");
     }//GEN-LAST:event_menukelasActionPerformed
 
     private void menuguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menuguruActionPerformed
-    desktop.removeAll();
-    desktop.repaint();
-    menu_guru mg = new menu_guru();
-
-    desktop.add(mg);
-
-    mg.setVisible(true);
-    
-    try {
-        mg.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-
-            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-        }
+        bukaHalamanInternal(new menu_guru(), menuguru, "Manajemen Data Guru");
     }//GEN-LAST:event_menuguruActionPerformed
 
     private void tranksaksiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_tranksaksiActionPerformed
-   desktop.removeAll();
-    desktop.repaint();
-
-    menu_tranksaksi mt = new menu_tranksaksi();
-
-    desktop.add(mt);
-
-    mt.setVisible(true);
-    
-    try {
-        mt.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-        }
+        bukaHalamanInternal(new menu_tranksaksi(), tranksaksi, "Transaksi & Keuangan Sekolah");
     }//GEN-LAST:event_tranksaksiActionPerformed
 
     private void keluarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_keluarActionPerformed
-    int pilih = JOptionPane.showConfirmDialog(null, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-    
-    if (pilih == JOptionPane.YES_OPTION) {
-        UserSession.clear();
-        GuruSession.clear();
-        
-        this.dispose(); 
-        new loginuser().setVisible(true);
-    }
+        int pilih = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin keluar dari sesi saat ini?", "Konfirmasi Keluar", JOptionPane.YES_NO_OPTION);
+        if (pilih == JOptionPane.YES_OPTION) {
+            UserSession.clear();
+            GuruSession.clear();
+            this.dispose();
+            new loginuser().setVisible(true);
+        }
     }//GEN-LAST:event_keluarActionPerformed
 
     private void menusiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_menusiswaActionPerformed
-    desktop.removeAll();
-    desktop.repaint();
-
-    menu_siswa ms = new menu_siswa();
-
-    desktop.add(ms);
-
-    ms.setVisible(true);
-    
-    try {
-        ms.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-        }
+        bukaHalamanInternal(new menu_siswa(), menusiswa, "Manajemen Data Peserta Didik");
     }//GEN-LAST:event_menusiswaActionPerformed
 
     private void lbl_logoComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_lbl_logoComponentResized
- scaleImage();
     }//GEN-LAST:event_lbl_logoComponentResized
 
     private void formComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_formComponentResized
-   
     }//GEN-LAST:event_formComponentResized
 
     private void desktopComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_desktopComponentResized
-    for (JInternalFrame frame : desktop.getAllFrames()) {
-        try {
-            frame.setMaximum(true);
-        } catch (PropertyVetoException e) {
-            System.err.println("Gagal resize internal frame: " + e.getMessage());
+        for (JInternalFrame frame : desktop.getAllFrames()) {
+            try {
+                frame.setMaximum(true);
+            } catch (PropertyVetoException e) {
+            }
+            frame.setBounds(0, 0, desktop.getWidth(), desktop.getHeight());
+            frame.revalidate();
         }
-    }
     }//GEN-LAST:event_desktopComponentResized
 
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
-    tampilkanHomeAwal();
+        tampilkanHomeAwal();
     }//GEN-LAST:event_homeActionPerformed
 
     private void adminActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_adminActionPerformed
-    frm_user user = new frm_user();
-    user.setVisible(true);
+        frm_user user = new frm_user();
+        user.setVisible(true);
     }//GEN-LAST:event_adminActionPerformed
 
     private void jdwlActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jdwlActionPerformed
-    desktop.removeAll();
-    desktop.repaint();
-    menu_jadwal mj = new menu_jadwal();
-
-    desktop.add(mj);
-
-    mj.setVisible(true);
-    
-    try {
-        mj.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-        }
+        bukaHalamanInternal(new menu_jadwal(), jdwl, "Manajemen Jadwal Pelajaran");
     }//GEN-LAST:event_jdwlActionPerformed
 
     private void absenguruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_absenguruActionPerformed
-    desktop.removeAll();
-    desktop.repaint();
-
-    menu_absenGuru mu = new menu_absenGuru();
-
-    desktop.add(mu);
-
-    mu.setVisible(true);
-    
-    try {
-        mu.setMaximum(true);
-    } catch (java.beans.PropertyVetoException e) {
-        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-    }
+        bukaHalamanInternal(new menu_absenGuru(), absenguru, "Rekapitulasi Presensi Guru");
     }//GEN-LAST:event_absenguruActionPerformed
 
     private void absenguruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenguruMouseClicked
-        // TODO add your handling code here:
     }//GEN-LAST:event_absenguruMouseClicked
 
     private void absenuserMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenuserMouseClicked
-        // TODO add your handling code here:
     }//GEN-LAST:event_absenuserMouseClicked
 
     private void absenuserActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_absenuserActionPerformed
-     desktop.removeAll();
-    desktop.repaint();
-    
-    menu_absenUser mu = new menu_absenUser();
-    
-    desktop.add(mu);
-    
-    mu.setVisible(true);
-    
-    try {
-        mu.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-        }
+        bukaHalamanInternal(new menu_absenUser(), absenuser, "Rekapitulasi Presensi Staf");
     }//GEN-LAST:event_absenuserActionPerformed
 
     private void bpelActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bpelActionPerformed
-        desktop.removeAll();
-        menu_PelanggaranSiswa as = new menu_PelanggaranSiswa();
-
-        desktop.add(as);
-        as.setVisible(true);
-        try {
-            as.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-        }
+        bukaHalamanInternal(new menu_PelanggaranSiswa(), bpel, "Catatan Kesiswaan & Pelanggaran");
     }//GEN-LAST:event_bpelActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        try {
-        com.formdev.flatlaf.FlatLightLaf.setup();
-    } catch (Exception ex) {
-        System.err.println("Gagal memuat tema FlatLaf");
-    }
-        
+        UITheme.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new dashboardtu().setVisible(true);
@@ -779,11 +675,19 @@ private void setadmin(javax.swing.JButton btn, String path) {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton jdwl;
     private javax.swing.JButton keluar;
+    private javax.swing.JLabel lblBrandSub;
+    private javax.swing.JLabel lblBrandTitle;
+    private javax.swing.JLabel lblHeaderSub;
+    private javax.swing.JLabel lblRoleBadge;
+    private javax.swing.JLabel lblSecOperasional;
+    private javax.swing.JLabel lblSecUtama;
     private javax.swing.JLabel lblWelcome;
     private javax.swing.JLabel lbl_logo;
     private javax.swing.JButton menuguru;
     private javax.swing.JButton menukelas;
     private javax.swing.JButton menusiswa;
+    private javax.swing.JPanel pnlSideDivider;
+    private javax.swing.JPanel pnlUserBadge;
     private javax.swing.JButton tranksaksi;
     // End of variables declaration//GEN-END:variables
 }

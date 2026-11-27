@@ -4,6 +4,7 @@
  * and open the template in the editor.
  */
 package tampilan;
+
 import java.awt.event.KeyEvent;
 import java.io.InputStream;
 import java.sql.Connection;
@@ -25,64 +26,86 @@ import static tampilan.frm_jadwal.txkg;
  * @author User
  */
 public class menu_kelas extends javax.swing.JInternalFrame {
-     private Connection conn = new koneksi().getConnection();
+
+    private Connection conn = new koneksi().getConnection();
     private DefaultTableModel tabmode;
     PreparedStatement ps;
     ResultSet rs;
+
     /**
-     * Creates new form 
+     * Creates new form menu_kelas
      */
     public menu_kelas() {
+        UITheme.setup();
         initComponents();
-        javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
-    ui.setNorthPane(null);
+        UITheme.prepareInternalFrame(this);
+
+        UITheme.styleCard(jPanel1);
+        UITheme.styleCard(jPanel2);
+
+        UITheme.styleTextField(txidk, "Masukkan ID kelas (cth: KLS01)...");
+        UITheme.styleTextField(txkelas, "Masukkan nama kelas (cth: VII-A)...");
+        UITheme.styleTextField(txkg, "Pilih kode guru wali kelas...");
+        UITheme.styleTextField(txcari, "Cari ID atau nama kelas...");
+
+        UITheme.styleActionButton(btn_cguru, "SOFT", "/resource/ui_act_search.png");
+        UITheme.styleActionButton(bsimpan, "SAVE", "/resource/ui_act_save.png");
+        UITheme.styleActionButton(bubah, "EDIT", "/resource/ui_act_edit.png");
+        UITheme.styleActionButton(bhapus, "DELETE", "/resource/ui_act_delete.png");
+        UITheme.styleActionButton(bbatal, "RESET", "/resource/ui_act_reset.png");
+        UITheme.styleActionButton(bcari, "PRIMARY", "/resource/ui_act_search.png");
+        UITheme.styleActionButton(bcetak, "PRINT", null);
+
+        UITheme.styleTable(tbl_kelas, jScrollPane1);
+
         kosong();
         aktif();
         datatable();
     }
-    protected void aktif(){
-       txidk.requestFocus();
+
+    protected void aktif() {
+        txidk.requestFocus();
     }
-    
-     protected void kosong(){
+
+    protected void kosong() {
         txidk.setText("");
         txkelas.setText("");
         txkg.setText("");
     }
-     
-    public void cetak() {
-    try {
-        String path = "./src/report/reportKelas.jasper"; 
 
-        HashMap<String, Object> parameter = new HashMap<>();
-        parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
-        InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg"); 
-        if (logoStream == null) {
-            System.out.println("GAGAL: File gambar tidak ditemukan di resources!");
-        }
-        parameter.put("logo", logoStream);
-        JasperPrint print = JasperFillManager.fillReport(path, parameter, conn);
-        JasperViewer.viewReport(print, false);
-        
+    public void cetak() {
+        try {
+            String path = "./src/report/reportKelas.jasper";
+
+            HashMap<String, Object> parameter = new HashMap<String, Object>();
+            parameter.put(net.sf.jasperreports.engine.JRParameter.REPORT_LOCALE, new java.util.Locale("id", "ID"));
+            InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg");
+            if (logoStream == null) {
+                System.out.println("GAGAL: File gambar tidak ditemukan di resources!");
+            }
+            parameter.put("logo", logoStream);
+            JasperPrint print = JasperFillManager.fillReport(path, parameter, conn);
+            JasperViewer.viewReport(print, false);
+
         } catch (Exception ex) {
             javax.swing.JOptionPane.showMessageDialog(rootPane, "Dokumen gagal dicetak: " + ex.getMessage());
-            ex.printStackTrace(); 
+            ex.printStackTrace();
         }
-    } 
-     
-    protected void datatable(){
-        Object[] Baris = {"ID Kelas","Kelas","Kode Guru","Nama Guru"};
-        tabmode = new DefaultTableModel(null,Baris);
+    }
+
+    protected void datatable() {
+        Object[] Baris = {"ID Kelas", "Kelas", "Kode Guru", "Nama Guru"};
+        tabmode = new DefaultTableModel(null, Baris);
         String cariitem = txcari.getText();
-        try{
-            String sql = "SELECT tbl_kelas.id_kelas, tbl_kelas.kelas, tbl_kelas.kd_guru, guru.nama " +
-                          "FROM tbl_kelas " +
-                          "JOIN guru ON tbl_kelas.kd_guru = guru.kd_guru " +
-                          "WHERE tbl_kelas.id_kelas LIKE '%"+cariitem+"%' OR tbl_kelas.kelas LIKE '%"+cariitem+"%' " +
-                          "ORDER BY tbl_kelas.id_kelas ASC";;
+        try {
+            String sql = "SELECT tbl_kelas.id_kelas, tbl_kelas.kelas, tbl_kelas.kd_guru, guru.nama "
+                    + "FROM tbl_kelas "
+                    + "JOIN guru ON tbl_kelas.kd_guru = guru.kd_guru "
+                    + "WHERE tbl_kelas.id_kelas LIKE '%" + cariitem + "%' OR tbl_kelas.kelas LIKE '%" + cariitem + "%' "
+                    + "ORDER BY tbl_kelas.id_kelas ASC";
             Statement stat = conn.createStatement();
             ResultSet hasil = stat.executeQuery(sql);
-            while (hasil.next()){
+            while (hasil.next()) {
                 tabmode.addRow(new Object[]{
                     hasil.getString(1),
                     hasil.getString(2),
@@ -91,11 +114,10 @@ public class menu_kelas extends javax.swing.JInternalFrame {
                 });
             }
             tbl_kelas.setModel(tabmode);
-        }catch (Exception e){
-            JOptionPane.showMessageDialog(null, "data gagal dipanggil"+e);
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "data gagal dipanggil" + e);
         }
     }
-
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -106,106 +128,128 @@ public class menu_kelas extends javax.swing.JInternalFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        lblSubtitleKelas = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
+        txidk = new javax.swing.JTextField();
         jLabel3 = new javax.swing.JLabel();
-        bsimpan = new javax.swing.JButton();
+        txkelas = new javax.swing.JTextField();
         jLabel4 = new javax.swing.JLabel();
         txkg = new javax.swing.JTextField();
-        bubah = new javax.swing.JButton();
-        txidk = new javax.swing.JTextField();
-        bhapus = new javax.swing.JButton();
-        txkelas = new javax.swing.JTextField();
-        bbatal = new javax.swing.JButton();
         btn_cguru = new javax.swing.JButton();
-        jPanel1 = new javax.swing.JPanel();
+        lblInfoWali = new javax.swing.JLabel();
+        bsimpan = new javax.swing.JButton();
+        bubah = new javax.swing.JButton();
+        bhapus = new javax.swing.JButton();
+        bbatal = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        lblDaftarKelas = new javax.swing.JLabel();
         txcari = new javax.swing.JTextField();
         bcari = new javax.swing.JButton();
+        bcetak = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_kelas = new javax.swing.JTable();
-        bcetak = new javax.swing.JButton();
 
+        setBackground(new java.awt.Color(241, 245, 249));
         setBorder(null);
+        setDefaultCloseOperation(javax.swing.WindowConstants.HIDE_ON_CLOSE);
 
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 36)); // NOI18N
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("FORM KELAS");
+        jPanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 232, 240), 1, true));
 
-        jLabel2.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(15, 23, 42));
+        jLabel1.setText("Form Data Kelas");
+
+        lblSubtitleKelas.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        lblSubtitleKelas.setForeground(new java.awt.Color(100, 116, 139));
+        lblSubtitleKelas.setText("Kelola data kelas dan wali kelas pengampu");
+
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 65, 85));
         jLabel2.setText("ID Kelas");
 
-        jLabel3.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel3.setText("Kelas");
+        txidk.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
-        bsimpan.setBackground(new java.awt.Color(0, 255, 0));
-        bsimpan.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bsimpan.setText("Simpan");
-        bsimpan.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bsimpanActionPerformed(evt);
-            }
-        });
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(51, 65, 85));
+        jLabel3.setText("Nama Kelas / Rombel");
 
-        jLabel4.setFont(new java.awt.Font("Times New Roman", 1, 24)); // NOI18N
-        jLabel4.setText("Kode Guru");
+        txkelas.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
 
+        jLabel4.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        jLabel4.setForeground(new java.awt.Color(51, 65, 85));
+        jLabel4.setText("Kode Wali Kelas (Guru)");
+
+        txkg.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         txkg.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 txkgActionPerformed(evt);
             }
         });
 
-        bubah.setBackground(new java.awt.Color(0, 0, 255));
-        bubah.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bubah.setText("Ubah");
-        bubah.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bubahActionPerformed(evt);
-            }
-        });
-
-        bhapus.setBackground(new java.awt.Color(255, 0, 0));
-        bhapus.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bhapus.setText("Hapus");
-        bhapus.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bhapusActionPerformed(evt);
-            }
-        });
-
-        bbatal.setBackground(new java.awt.Color(102, 102, 102));
-        bbatal.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bbatal.setText("Batal");
-        bbatal.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bbatalActionPerformed(evt);
-            }
-        });
-
-        btn_cguru.setBackground(new java.awt.Color(255, 255, 255));
-        btn_cguru.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        btn_cguru.setForeground(new java.awt.Color(0, 102, 204));
-        btn_cguru.setText("Cari");
+        btn_cguru.setBackground(new java.awt.Color(239, 246, 255));
+        btn_cguru.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        btn_cguru.setForeground(new java.awt.Color(37, 99, 235));
+        btn_cguru.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_act_search.png"))); // NOI18N
+        btn_cguru.setText("Pilih Guru");
+        btn_cguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
         btn_cguru.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 btn_cguruActionPerformed(evt);
             }
         });
 
-        jPanel1.setBorder(javax.swing.BorderFactory.createTitledBorder("Tabel Kelas"));
+        lblInfoWali.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        lblInfoWali.setForeground(new java.awt.Color(100, 116, 139));
+        lblInfoWali.setText("Klik Pilih Guru untuk mencari kode guru wali kelas.");
 
-        txcari.addKeyListener(new java.awt.event.KeyAdapter() {
-            public void keyPressed(java.awt.event.KeyEvent evt) {
-                txcariKeyPressed(evt);
+        bsimpan.setBackground(new java.awt.Color(22, 163, 74));
+        bsimpan.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bsimpan.setForeground(new java.awt.Color(255, 255, 255));
+        bsimpan.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_act_save.png"))); // NOI18N
+        bsimpan.setText("Simpan");
+        bsimpan.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bsimpan.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bsimpanActionPerformed(evt);
             }
         });
 
-        bcari.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bcari.setForeground(new java.awt.Color(0, 102, 204));
-        bcari.setText("Cari");
-        bcari.addActionListener(new java.awt.event.ActionListener() {
+        bubah.setBackground(new java.awt.Color(37, 99, 235));
+        bubah.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bubah.setForeground(new java.awt.Color(255, 255, 255));
+        bubah.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_act_edit.png"))); // NOI18N
+        bubah.setText("Ubah");
+        bubah.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bubah.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bcariActionPerformed(evt);
+                bubahActionPerformed(evt);
+            }
+        });
+
+        bhapus.setBackground(new java.awt.Color(220, 38, 38));
+        bhapus.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bhapus.setForeground(new java.awt.Color(255, 255, 255));
+        bhapus.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_act_delete.png"))); // NOI18N
+        bhapus.setText("Hapus");
+        bhapus.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bhapus.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bhapusActionPerformed(evt);
+            }
+        });
+
+        bbatal.setBackground(new java.awt.Color(255, 255, 255));
+        bbatal.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bbatal.setForeground(new java.awt.Color(51, 65, 85));
+        bbatal.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_act_reset.png"))); // NOI18N
+        bbatal.setText("Reset");
+        bbatal.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bbatal.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bbatalActionPerformed(evt);
             }
         });
 
@@ -214,20 +258,100 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 181, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 72, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(0, 0, Short.MAX_VALUE))
+                .addGap(22, 22, 22)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSubtitleKelas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jLabel2)
+                    .addComponent(txidk)
+                    .addComponent(jLabel3)
+                    .addComponent(txkelas)
+                    .addComponent(jLabel4)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(txkg, javax.swing.GroupLayout.DEFAULT_SIZE, 240, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
+                        .addComponent(btn_cguru))
+                    .addComponent(lblInfoWali, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(bsimpan, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
+                        .addComponent(bubah, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE))
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(bhapus, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)
+                        .addGap(10, 10, 10)
+                        .addComponent(bbatal, javax.swing.GroupLayout.DEFAULT_SIZE, 178, Short.MAX_VALUE)))
+                .addGap(22, 22, 22))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(1, 1, 1)
+                .addGap(22, 22, 22)
+                .addComponent(jLabel1)
+                .addGap(2, 2, 2)
+                .addComponent(lblSubtitleKelas)
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2)
+                .addGap(6, 6, 6)
+                .addComponent(txidk, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel3)
+                .addGap(6, 6, 6)
+                .addComponent(txkelas, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(14, 14, 14)
+                .addComponent(jLabel4)
+                .addGap(6, 6, 6)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                .addGap(0, 8, Short.MAX_VALUE))
+                    .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(btn_cguru, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(6, 6, 6)
+                .addComponent(lblInfoWali)
+                .addGap(24, 24, 24)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bubah, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(10, 10, 10)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(bhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(180, Short.MAX_VALUE))
         );
+
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 232, 240), 1, true));
+
+        lblDaftarKelas.setFont(new java.awt.Font("Segoe UI", 1, 16)); // NOI18N
+        lblDaftarKelas.setForeground(new java.awt.Color(15, 23, 42));
+        lblDaftarKelas.setText("Daftar Rombongan Belajar");
+
+        txcari.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        txcari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txcariKeyPressed(evt);
+            }
+        });
+
+        bcari.setBackground(new java.awt.Color(37, 99, 235));
+        bcari.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bcari.setForeground(new java.awt.Color(255, 255, 255));
+        bcari.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_act_search.png"))); // NOI18N
+        bcari.setText("Cari");
+        bcari.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bcari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcariActionPerformed(evt);
+            }
+        });
+
+        bcetak.setBackground(new java.awt.Color(15, 23, 42));
+        bcetak.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        bcetak.setForeground(new java.awt.Color(255, 255, 255));
+        bcetak.setText("Cetak Laporan");
+        bcetak.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bcetak.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcetakActionPerformed(evt);
+            }
+        });
 
         tbl_kelas.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
@@ -247,87 +371,57 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         });
         jScrollPane1.setViewportView(tbl_kelas);
 
-        bcetak.setFont(new java.awt.Font("Times New Roman", 1, 18)); // NOI18N
-        bcetak.setText("CETAK");
-        bcetak.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                bcetakActionPerformed(evt);
-            }
-        });
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(22, 22, 22)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblDaftarKelas)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 32, Short.MAX_VALUE)
+                        .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 200, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(8, 8, 8)
+                        .addComponent(bcari)
+                        .addGap(8, 8, 8)
+                        .addComponent(bcetak)))
+                .addGap(22, 22, 22))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(lblDaftarKelas)
+                    .addComponent(txcari, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bcetak, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(16, 16, 16)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 510, Short.MAX_VALUE)
+                .addGap(22, 22, 22))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addComponent(jLabel3)
-                                    .addComponent(jLabel2)
-                                    .addComponent(jLabel4))
-                                .addGap(18, 18, 18)
-                                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                    .addGroup(layout.createSequentialGroup()
-                                        .addComponent(txkg)
-                                        .addGap(12, 12, 12)
-                                        .addComponent(btn_cguru))
-                                    .addComponent(txkelas)
-                                    .addComponent(txidk)))
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bsimpan, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                                .addComponent(bubah, javax.swing.GroupLayout.PREFERRED_SIZE, 117, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                .addComponent(bhapus, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                            .addComponent(bbatal, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                        .addGap(64, 64, 64)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                            .addGroup(layout.createSequentialGroup()
-                                .addComponent(bcetak)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                            .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 626, Short.MAX_VALUE))))
-                .addContainerGap())
+                .addGap(24, 24, 24)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 410, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(24, 24, 24))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(layout.createSequentialGroup()
-                .addGap(55, 55, 55)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(layout.createSequentialGroup()
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(txidk, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(jLabel2))
-                        .addGap(9, 9, 9)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel3)
-                            .addComponent(txkelas, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(16, 16, 16)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel4)
-                            .addComponent(txkg, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(btn_cguru, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addGap(104, 104, 104)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(bsimpan, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bubah, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(bhapus, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(bbatal, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 255, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(bcetak)
-                .addContainerGap(40, Short.MAX_VALUE))
+                .addGap(24, 24, 24)
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(24, 24, 24))
         );
 
         pack();
@@ -335,7 +429,7 @@ public class menu_kelas extends javax.swing.JInternalFrame {
 
     private void bsimpanActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bsimpanActionPerformed
         String sql = "insert into tbl_kelas values(?,?,?)";
-        try{
+        try {
             PreparedStatement stat = conn.prepareStatement(sql);
             stat.setString(1, txidk.getText());
             stat.setString(2, txkelas.getText());
@@ -345,19 +439,17 @@ public class menu_kelas extends javax.swing.JInternalFrame {
             JOptionPane.showMessageDialog(null, "data berhasil disimpen");
             kosong();
             txidk.requestFocus();
-        }
-        catch (SQLException e){
-            JOptionPane.showMessageDialog(null, "data gagal disimpan"+e);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "data gagal disimpan" + e);
         }
         datatable();
     }//GEN-LAST:event_bsimpanActionPerformed
 
     private void txkgActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_txkgActionPerformed
-
     }//GEN-LAST:event_txkgActionPerformed
 
     private void bubahActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bubahActionPerformed
-        String sql = "update tbl_kelas set kelas=?, kd_guru=? where id_kelas='"+txidk.getText()+"'";
+        String sql = "update tbl_kelas set kelas=?, kd_guru=? where id_kelas='" + txidk.getText() + "'";
         try {
             PreparedStatement stat = conn.prepareStatement(sql);
             stat.setString(1, txkelas.getText());
@@ -376,16 +468,15 @@ public class menu_kelas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_bubahActionPerformed
 
     private void bhapusActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bhapusActionPerformed
-        String sql = "delete from tbl_kelas where id_kelas='"+txidk.getText()+"'";
-        try{
+        String sql = "delete from tbl_kelas where id_kelas='" + txidk.getText() + "'";
+        try {
             PreparedStatement stat = conn.prepareStatement(sql);
             stat.executeUpdate();
             JOptionPane.showMessageDialog(null, "data berhasil dihapus");
             kosong();
             txidk.requestFocus();
-        }
-        catch (SQLException e){
-            JOptionPane.showMessageDialog(null, "data gagal dihapus"+e);
+        } catch (SQLException e) {
+            JOptionPane.showMessageDialog(null, "data gagal dihapus" + e);
         }
         datatable();
     }//GEN-LAST:event_bhapusActionPerformed
@@ -403,7 +494,7 @@ public class menu_kelas extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_btn_cguruActionPerformed
 
     private void txcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txcariKeyPressed
-        if(evt.getKeyCode() == KeyEvent.VK_ENTER){
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
             datatable();
         }
     }//GEN-LAST:event_txcariKeyPressed
@@ -414,6 +505,9 @@ public class menu_kelas extends javax.swing.JInternalFrame {
 
     private void tbl_kelasMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_kelasMouseClicked
         int bar = tbl_kelas.getSelectedRow();
+        if (bar == -1) {
+            return;
+        }
         String a = tabmode.getValueAt(bar, 0).toString();
         String b = tabmode.getValueAt(bar, 1).toString();
         String c = tabmode.getValueAt(bar, 2).toString();
@@ -421,7 +515,6 @@ public class menu_kelas extends javax.swing.JInternalFrame {
         txidk.setText(a);
         txkelas.setText(b);
         txkg.setText(c);
-
     }//GEN-LAST:event_tbl_kelasMouseClicked
 
     private void bcetakActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcetakActionPerformed
@@ -442,7 +535,11 @@ public class menu_kelas extends javax.swing.JInternalFrame {
     private javax.swing.JLabel jLabel3;
     private javax.swing.JLabel jLabel4;
     private javax.swing.JPanel jPanel1;
+    private javax.swing.JPanel jPanel2;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblDaftarKelas;
+    private javax.swing.JLabel lblInfoWali;
+    private javax.swing.JLabel lblSubtitleKelas;
     private javax.swing.JTable tbl_kelas;
     private javax.swing.JTextField txcari;
     private javax.swing.JTextField txidk;

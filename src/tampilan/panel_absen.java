@@ -1,215 +1,193 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package tampilan;
-import java.awt.Image;
+
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import javax.swing.ImageIcon;
-import javax.swing.JInternalFrame;
-import javax.swing.JOptionPane;
+import javax.swing.JDesktopPane;
 import koneksi.koneksi;
 
 /**
- *
- * @author User
+ * Portal pemilihan layanan presensi akademik (Siswa & Guru).
  */
 public class panel_absen extends javax.swing.JInternalFrame {
-    
-    Connection con=koneksi.getConnection();
+
+    Connection con = koneksi.getConnection();
     PreparedStatement pet;
     ResultSet rs;
-    private javax.swing.JDesktopPane desktop;
-    /**
-     * Creates new form dashboardRunning
-     */
-    public panel_absen(javax.swing.JDesktopPane desktopDariDashboard) {
-       
-       this.desktop = desktopDariDashboard;
-        
-        initComponents(); 
-        javax.swing.plaf.basic.BasicInternalFrameUI ui = (javax.swing.plaf.basic.BasicInternalFrameUI) this.getUI();
-    ui.setNorthPane(null);
-        
-        java.awt.EventQueue.invokeLater(new Runnable() {
+    private JDesktopPane desktop;
+
+    public panel_absen() {
+        this(null);
+    }
+
+    public panel_absen(JDesktopPane desktopDariDashboard) {
+        this.desktop = desktopDariDashboard;
+        UITheme.setup();
+        initComponents();
+        applyModernEnhancements();
+    }
+
+    private void applyModernEnhancements() {
+        UITheme.prepareInternalFrame(this);
+
+        ImageIcon icSiswa = UITheme.getScaledIcon("/resource/murid.png", 60, 60);
+        if (icSiswa != null) {
+            absensiswa.setIcon(icSiswa);
+        }
+
+        ImageIcon icGuru = UITheme.getScaledIcon("/resource/logoguru.png", 60, 60);
+        if (icGuru != null) {
+            absenguru.setIcon(icGuru);
+        }
+
+        UITheme.makePortalCardInteractive(jpanel1, pnlBadgeSiswa, btnBukaSiswa, new Runnable() {
             @Override
             public void run() {
-                scaleImage();
-                scaleImage1();
+                bukaFormSiswa();
             }
         });
-        aktifkanHoverWarnaPanel();
+
+        UITheme.makePortalCardInteractive(jPanel2, pnlBadgeGuru, btnBukaGuru, new Runnable() {
+            @Override
+            public void run() {
+                bukaFormGuru();
+            }
+        });
     }
-    
-    private void scaleImage() {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/logoguru.png"));
-        Image imgLama = iconAwal.getImage();
-        
-        int width = absenguru.getWidth();
-        int height = absenguru.getHeight();
-        
-        if (width > 0 && height > 0) {
-            Image imgBaru = imgLama.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            absenguru.setIcon(new ImageIcon(imgBaru));
-        }
-    } catch (Exception e) {
-        System.err.println("Error logo: " + e.getMessage());
-    }
-}
-    
-    private void scaleImage1() {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/murid.png"));
-        Image imgLama = iconAwal.getImage();
-        
-        int width = absensiswa.getWidth();
-        int height = absensiswa.getHeight();
-        
-        if (width > 0 && height > 0) {
-            Image imgBaru = imgLama.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            absensiswa.setIcon(new ImageIcon(imgBaru));
-        }
-    } catch (Exception e) {
-        System.err.println("Error logo: " + e.getMessage());
-    }
-}
+
     private void bukaFormSiswa() {
+        if (desktop == null) {
+            return;
+        }
         desktop.removeAll();
         menu_absenSiswa ma = new menu_absenSiswa();
+        UITheme.prepareInternalFrame(ma);
         desktop.add(ma);
+        ma.setBounds(0, 0, desktop.getWidth(), desktop.getHeight());
         ma.setVisible(true);
         try {
             ma.setMaximum(true);
         } catch (java.beans.PropertyVetoException e) {
             System.err.println("Gagal memaksimalkan: " + e.getMessage());
         }
-        desktop.repaint(); 
+        desktop.revalidate();
+        desktop.repaint();
     }
-    
+
     private void bukaFormGuru() {
+        if (desktop == null) {
+            return;
+        }
         desktop.removeAll();
-        menu_absenGuru mg = new menu_absenGuru(); 
+        menu_absenGuru mg = new menu_absenGuru();
+        UITheme.prepareInternalFrame(mg);
         desktop.add(mg);
+        mg.setBounds(0, 0, desktop.getWidth(), desktop.getHeight());
         mg.setVisible(true);
         try {
             mg.setMaximum(true);
         } catch (java.beans.PropertyVetoException e) {
             System.err.println("Gagal memaksimalkan: " + e.getMessage());
         }
+        desktop.revalidate();
         desktop.repaint();
     }
-    
-    private void tampilkanGambar() {
-        try {
-            absensiswa.setIcon(new ImageIcon(getClass().getResource("/resource/user.png")));
-            absenguru.setIcon(new ImageIcon(getClass().getResource("/resource/logoguru.png")));
-        } catch (Exception e) {
-            System.err.println("Gambar tidak ditemukan! Pastikan folder resource sudah benar.");
-        }
-    }
-   
-    private void aktifkanHoverWarnaPanel() {
-        final java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);     
-        final java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); 
-        jpanel1.setBackground(warnaAsliSiswa);
-        absensiswa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
 
-        java.awt.event.MouseAdapter hoverSiswa = new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jpanel1.setBackground(warnaHoverSiswa);
-                jpanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jpanel1.setBackground(warnaAsliSiswa);
-            }
-        };
-        jpanel1.addMouseListener(hoverSiswa);
-        absensiswa.addMouseListener(hoverSiswa);
-
-        final java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     
-        final java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  
-        jPanel2.setBackground(warnaAsliGuru);
-        absenguru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-
-        java.awt.event.MouseAdapter hoverGuru = new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                jPanel2.setBackground(warnaHoverGuru);
-                jPanel2.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                jPanel2.setBackground(warnaAsliGuru);
-            }
-        };
-        jPanel2.addMouseListener(hoverGuru);
-        absenguru.addMouseListener(hoverGuru);
-    }
+    @SuppressWarnings("unchecked")
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        absenguru = new javax.swing.JLabel();
-        jpanel1 = new javax.swing.JPanel();
-        absensiswa = new javax.swing.JLabel();
+        pnlBackground = new javax.swing.JPanel();
         jPanel3 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
+        lblSubtitle = new javax.swing.JLabel();
+        jpanel1 = new javax.swing.JPanel();
+        pnlBadgeSiswa = new javax.swing.JPanel();
+        absensiswa = new javax.swing.JLabel();
+        lblTitleSiswa = new javax.swing.JLabel();
+        lblDescSiswa = new javax.swing.JLabel();
+        btnBukaSiswa = new javax.swing.JButton();
+        jPanel2 = new javax.swing.JPanel();
+        pnlBadgeGuru = new javax.swing.JPanel();
+        absenguru = new javax.swing.JLabel();
+        lblTitleGuru = new javax.swing.JLabel();
+        lblDescGuru = new javax.swing.JLabel();
+        btnBukaGuru = new javax.swing.JButton();
 
-        jPanel2.setBackground(new java.awt.Color(0, 8, 97));
-        jPanel2.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jPanel2MouseClicked(evt);
-            }
-        });
+        setBorder(null);
 
-        absenguru.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                absenguruMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                absenguruMouseEntered(evt);
-            }
-        });
+        pnlBackground.setBackground(new java.awt.Color(241, 245, 249));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(absenguru, javax.swing.GroupLayout.DEFAULT_SIZE, 386, Short.MAX_VALUE)
-                .addGap(41, 41, 41))
+        jPanel3.setBackground(new java.awt.Color(241, 245, 249));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(15, 23, 42));
+        jLabel1.setText("Pilih Layanan Presensi Akademik");
+
+        lblSubtitle.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblSubtitle.setForeground(new java.awt.Color(100, 116, 139));
+        lblSubtitle.setText("Silakan pilih jenis pencatatan kehadiran yang ingin Anda kelola");
+
+        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
+        jPanel3.setLayout(jPanel3Layout);
+        jPanel3Layout.setHorizontalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSubtitle, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(28, 28, 28))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(absenguru, javax.swing.GroupLayout.DEFAULT_SIZE, 476, Short.MAX_VALUE)
-                .addGap(94, 94, 94))
+        jPanel3Layout.setVerticalGroup(
+            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel3Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jLabel1)
+                .addGap(6, 6, 6)
+                .addComponent(lblSubtitle)
+                .addGap(20, 20, 20))
         );
 
-        jpanel1.setBackground(new java.awt.Color(0, 0, 255));
-        jpanel1.setCursor(new java.awt.Cursor(java.awt.Cursor.DEFAULT_CURSOR));
-        jpanel1.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jpanel1MouseClicked(evt);
-            }
-        });
+        jpanel1.setBackground(new java.awt.Color(255, 255, 255));
+        jpanel1.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 232, 240), 1, true));
 
-        absensiswa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                absensiswaMouseClicked(evt);
-            }
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                absensiswaMouseEntered(evt);
+        pnlBadgeSiswa.setBackground(new java.awt.Color(239, 246, 255));
+
+        absensiswa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        absensiswa.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_siswa.png"))); // NOI18N
+
+        javax.swing.GroupLayout pnlBadgeSiswaLayout = new javax.swing.GroupLayout(pnlBadgeSiswa);
+        pnlBadgeSiswa.setLayout(pnlBadgeSiswaLayout);
+        pnlBadgeSiswaLayout.setHorizontalGroup(
+            pnlBadgeSiswaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(absensiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+        );
+        pnlBadgeSiswaLayout.setVerticalGroup(
+            pnlBadgeSiswaLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(absensiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+        );
+
+        lblTitleSiswa.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblTitleSiswa.setForeground(new java.awt.Color(15, 23, 42));
+        lblTitleSiswa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitleSiswa.setText("Presensi Kehadiran Siswa");
+
+        lblDescSiswa.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblDescSiswa.setForeground(new java.awt.Color(100, 116, 139));
+        lblDescSiswa.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDescSiswa.setText("<html><div style='text-align:center;'>Kelola pencatatan kehadiran siswa per kelas,<br>pertemuan tatap muka, dan cetak rekap presensi kelas.</div></html>");
+
+        btnBukaSiswa.setBackground(new java.awt.Color(37, 99, 235));
+        btnBukaSiswa.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnBukaSiswa.setForeground(new java.awt.Color(255, 255, 255));
+        btnBukaSiswa.setText("Buka Presensi Siswa →");
+        btnBukaSiswa.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBukaSiswa.setFocusPainted(false);
+        btnBukaSiswa.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBukaSiswaActionPerformed(evt);
             }
         });
 
@@ -217,104 +195,158 @@ public class panel_absen extends javax.swing.JInternalFrame {
         jpanel1.setLayout(jpanel1Layout);
         jpanel1Layout.setHorizontalGroup(
             jpanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jpanel1Layout.createSequentialGroup()
-                .addGap(51, 51, 51)
-                .addComponent(absensiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 385, Short.MAX_VALUE)
-                .addGap(41, 41, 41))
+            .addGroup(jpanel1Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jpanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(pnlBadgeSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTitleSiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                    .addComponent(lblDescSiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                    .addComponent(btnBukaSiswa, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
         );
         jpanel1Layout.setVerticalGroup(
             jpanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jpanel1Layout.createSequentialGroup()
-                .addGap(60, 60, 60)
-                .addComponent(absensiswa, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(94, 94, 94))
+                .addGap(36, 36, 36)
+                .addComponent(pnlBadgeSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addComponent(lblTitleSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(lblDescSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(btnBukaSiswa, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
         );
 
-        jPanel3.setBackground(new java.awt.Color(0, 8, 97));
-        jPanel3.setForeground(new java.awt.Color(0, 8, 97));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 232, 240), 1, true));
 
-        jLabel1.setFont(new java.awt.Font("Rockwell Extra Bold", 0, 36)); // NOI18N
-        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
-        jLabel1.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel1.setText("MENU ABSENSI");
+        pnlBadgeGuru.setBackground(new java.awt.Color(239, 246, 255));
 
-        javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
-        jPanel3.setLayout(jPanel3Layout);
-        jPanel3Layout.setHorizontalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addContainerGap())
+        absenguru.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        absenguru.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_guru_56.png"))); // NOI18N
+
+        javax.swing.GroupLayout pnlBadgeGuruLayout = new javax.swing.GroupLayout(pnlBadgeGuru);
+        pnlBadgeGuru.setLayout(pnlBadgeGuruLayout);
+        pnlBadgeGuruLayout.setHorizontalGroup(
+            pnlBadgeGuruLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(absenguru, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
         );
-        jPanel3Layout.setVerticalGroup(
-            jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel3Layout.createSequentialGroup()
-                .addGap(37, 37, 37)
-                .addComponent(jLabel1)
-                .addContainerGap(43, Short.MAX_VALUE))
+        pnlBadgeGuruLayout.setVerticalGroup(
+            pnlBadgeGuruLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(absenguru, javax.swing.GroupLayout.DEFAULT_SIZE, 96, Short.MAX_VALUE)
+        );
+
+        lblTitleGuru.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblTitleGuru.setForeground(new java.awt.Color(15, 23, 42));
+        lblTitleGuru.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblTitleGuru.setText("Presensi Kehadiran Guru");
+
+        lblDescGuru.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblDescGuru.setForeground(new java.awt.Color(100, 116, 139));
+        lblDescGuru.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblDescGuru.setText("<html><div style='text-align:center;'>Catat kehadiran harian guru pengajar, keterangan izin/tugas,<br>dan cetak laporan rekapitulasi kehadiran guru.</div></html>");
+
+        btnBukaGuru.setBackground(new java.awt.Color(37, 99, 235));
+        btnBukaGuru.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        btnBukaGuru.setForeground(new java.awt.Color(255, 255, 255));
+        btnBukaGuru.setText("Buka Presensi Guru →");
+        btnBukaGuru.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        btnBukaGuru.setFocusPainted(false);
+        btnBukaGuru.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                btnBukaGuruActionPerformed(evt);
+            }
+        });
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(32, 32, 32)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(pnlBadgeGuru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblTitleGuru, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                    .addComponent(lblDescGuru, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE)
+                    .addComponent(btnBukaGuru, javax.swing.GroupLayout.DEFAULT_SIZE, 330, Short.MAX_VALUE))
+                .addGap(32, 32, 32))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addComponent(pnlBadgeGuru, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(22, 22, 22)
+                .addComponent(lblTitleGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 28, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(lblDescGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addComponent(btnBukaGuru, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(32, 32, 32))
+        );
+
+        javax.swing.GroupLayout pnlBackgroundLayout = new javax.swing.GroupLayout(pnlBackground);
+        pnlBackground.setLayout(pnlBackgroundLayout);
+        pnlBackgroundLayout.setHorizontalGroup(
+            pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addComponent(jpanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(24, 24, 24)
+                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(28, 28, 28))
+        );
+        pnlBackgroundLayout.setVerticalGroup(
+            pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlBackgroundLayout.createSequentialGroup()
+                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(8, 8, 8)
+                .addGroup(pnlBackgroundLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(jpanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(40, Short.MAX_VALUE))
         );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addGap(70, 70, 70)
-                .addComponent(jpanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(154, 154, 154)
-                .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                .addGap(95, 95, 95))
-            .addComponent(jPanel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel3, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(15, 15, 15)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jpanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-                .addGap(39, 39, 39))
+            .addComponent(pnlBackground, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
-    private void absensiswaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absensiswaMouseClicked
-          bukaFormSiswa();      
-    }//GEN-LAST:event_absensiswaMouseClicked
-
-    private void jpanel1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jpanel1MouseClicked
+    private void btnBukaSiswaActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBukaSiswaActionPerformed
         bukaFormSiswa();
-    }//GEN-LAST:event_jpanel1MouseClicked
+    }//GEN-LAST:event_btnBukaSiswaActionPerformed
 
-    private void absenguruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenguruMouseClicked
+    private void btnBukaGuruActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnBukaGuruActionPerformed
         bukaFormGuru();
-    }//GEN-LAST:event_absenguruMouseClicked
-
-    private void jPanel2MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jPanel2MouseClicked
-        bukaFormGuru();
-    }//GEN-LAST:event_jPanel2MouseClicked
-
-    private void absensiswaMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absensiswaMouseEntered
-       java.awt.Color warnaAsliSiswa = new java.awt.Color(0, 153, 204);    
-        java.awt.Color warnaHoverSiswa = new java.awt.Color(0, 50, 135); 
-        jpanel1.setBackground(warnaHoverSiswa);
-    }//GEN-LAST:event_absensiswaMouseEntered
-
-    private void absenguruMouseEntered(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_absenguruMouseEntered
-    java.awt.Color warnaAsliGuru = new java.awt.Color(0, 102, 204);     
-        java.awt.Color warnaHoverGuru = new java.awt.Color(0, 20, 150);  
-        jPanel2.setBackground(warnaHoverGuru);
-    }//GEN-LAST:event_absenguruMouseEntered
+    }//GEN-LAST:event_btnBukaGuruActionPerformed
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JLabel absenguru;
     private javax.swing.JLabel absensiswa;
+    private javax.swing.JButton btnBukaGuru;
+    private javax.swing.JButton btnBukaSiswa;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jpanel1;
+    private javax.swing.JLabel lblDescGuru;
+    private javax.swing.JLabel lblDescSiswa;
+    private javax.swing.JLabel lblSubtitle;
+    private javax.swing.JLabel lblTitleGuru;
+    private javax.swing.JLabel lblTitleSiswa;
+    private javax.swing.JPanel pnlBackground;
+    private javax.swing.JPanel pnlBadgeGuru;
+    private javax.swing.JPanel pnlBadgeSiswa;
     // End of variables declaration//GEN-END:variables
 }

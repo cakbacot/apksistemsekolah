@@ -1,14 +1,15 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Dialog Pilih Data Guru - Sistem Manajemen Administrasi SMP 259 Jakarta
  */
 package tampilan;
 
+import java.awt.event.KeyEvent;
 import java.sql.Connection;
+import java.util.regex.Pattern;
+import javax.swing.RowFilter;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import koneksi.koneksi;
-import java.awt.Frame;
 
 /**
  *
@@ -16,33 +17,61 @@ import java.awt.Frame;
  */
 public class pop_guru extends javax.swing.JFrame {
 
-    /**
-     * Creates new form pop_guru
-     */
     private javax.swing.JTextField fieldTarget;
+    private TableRowSorter<DefaultTableModel> rowSorter;
+
     public pop_guru(javax.swing.JTextField target) {
+        UITheme.setup();
         initComponents();
+        UITheme.applyWindowIcon(this);
+        applyModernTheme();
         this.fieldTarget = target;
         loadData();
     }
-    
-    public void loadData() {
-    DefaultTableModel model = new DefaultTableModel();
-    model.addColumn("Kode Guru");
-    model.addColumn("Nama Guru");
-    try {
-        String sql = "SELECT kd_guru, nama FROM guru";
-        java.sql.Connection conn = (Connection)koneksi.getConnection();
-        java.sql.Statement stm = conn.createStatement();
-        java.sql.ResultSet res = stm.executeQuery(sql);
-        while(res.next()) {
-            model.addRow(new Object[]{res.getString(1), res.getString(2)});
-        }
-        tbl_guru.setModel(model);
-    } catch (Exception e) {
-        System.out.println("Error : " + e.getMessage());
+
+    public pop_guru() {
+        this(null);
     }
-}
+
+    private void applyModernTheme() {
+        UITheme.styleCard(pnlCard);
+        UITheme.styleTextField(txtcari, "Cari kode atau nama guru...");
+        UITheme.styleActionButton(bcari, "SEARCH", "/resource/ui_act_search.png");
+        UITheme.styleTable(tbl_guru, jScrollPane1);
+    }
+
+    private void filterDataGuru() {
+        if (rowSorter == null) {
+            return;
+        }
+        String keyword = txtcari.getText().trim();
+        if (keyword.isEmpty()) {
+            rowSorter.setRowFilter(null);
+        } else {
+            rowSorter.setRowFilter(RowFilter.regexFilter("(?i)" + Pattern.quote(keyword)));
+        }
+    }
+
+    public void loadData() {
+        DefaultTableModel model = new DefaultTableModel();
+        model.addColumn("Kode Guru");
+        model.addColumn("Nama Guru");
+        try {
+            String sql = "SELECT kd_guru, nama FROM guru";
+            java.sql.Connection conn = (Connection) koneksi.getConnection();
+            java.sql.Statement stm = conn.createStatement();
+            java.sql.ResultSet res = stm.executeQuery(sql);
+            while (res.next()) {
+                model.addRow(new Object[]{res.getString(1), res.getString(2)});
+            }
+            tbl_guru.setModel(model);
+            rowSorter = new TableRowSorter<DefaultTableModel>(model);
+            tbl_guru.setRowSorter(rowSorter);
+            filterDataGuru();
+        } catch (Exception e) {
+            System.out.println("Error : " + e.getMessage());
+        }
+    }
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -53,11 +82,72 @@ public class pop_guru extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
+        pnlHeader = new javax.swing.JPanel();
+        jLabel1 = new javax.swing.JLabel();
+        lblSubtitle = new javax.swing.JLabel();
+        pnlCanvas = new javax.swing.JPanel();
+        pnlCard = new javax.swing.JPanel();
+        txtcari = new javax.swing.JTextField();
+        bcari = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         tbl_guru = new javax.swing.JTable();
-        jLabel1 = new javax.swing.JLabel();
 
-        tbl_guru.setFont(new java.awt.Font("Times New Roman", 0, 14)); // NOI18N
+        setDefaultCloseOperation(javax.swing.WindowConstants.DISPOSE_ON_CLOSE);
+        setTitle("Pilih Data Guru - SMP 259 Jakarta");
+        setBackground(new java.awt.Color(241, 245, 249));
+
+        pnlHeader.setBackground(new java.awt.Color(15, 23, 42));
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 17)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(255, 255, 255));
+        jLabel1.setText("Pilih Data Guru");
+
+        lblSubtitle.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        lblSubtitle.setForeground(new java.awt.Color(148, 163, 184));
+        lblSubtitle.setText("Klik baris pada tabel untuk memilih data");
+
+        javax.swing.GroupLayout pnlHeaderLayout = new javax.swing.GroupLayout(pnlHeader);
+        pnlHeader.setLayout(pnlHeaderLayout);
+        pnlHeaderLayout.setHorizontalGroup(
+            pnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHeaderLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addGroup(pnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jLabel1)
+                    .addComponent(lblSubtitle))
+                .addContainerGap(410, Short.MAX_VALUE))
+        );
+        pnlHeaderLayout.setVerticalGroup(
+            pnlHeaderLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlHeaderLayout.createSequentialGroup()
+                .addGap(8, 8, 8)
+                .addComponent(jLabel1)
+                .addGap(2, 2, 2)
+                .addComponent(lblSubtitle)
+                .addContainerGap(8, Short.MAX_VALUE))
+        );
+
+        pnlCanvas.setBackground(new java.awt.Color(241, 245, 249));
+
+        pnlCard.setBackground(new java.awt.Color(255, 255, 255));
+        pnlCard.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 232, 240), 1, true));
+
+        txtcari.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyPressed(java.awt.event.KeyEvent evt) {
+                txtcariKeyPressed(evt);
+            }
+        });
+
+        bcari.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_act_search.png"))); // NOI18N
+        bcari.setText("Cari");
+        bcari.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bcari.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                bcariActionPerformed(evt);
+            }
+        });
+
+        tbl_guru.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
         tbl_guru.setModel(new javax.swing.table.DefaultTableModel(
             new Object [][] {
                 {null, null, null, null},
@@ -76,76 +166,111 @@ public class pop_guru extends javax.swing.JFrame {
         });
         jScrollPane1.setViewportView(tbl_guru);
 
-        jLabel1.setFont(new java.awt.Font("Times New Roman", 1, 48)); // NOI18N
-        jLabel1.setText("Data Guru");
+        javax.swing.GroupLayout pnlCardLayout = new javax.swing.GroupLayout(pnlCard);
+        pnlCard.setLayout(pnlCardLayout);
+        pnlCardLayout.setHorizontalGroup(
+            pnlCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlCardLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(pnlCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(pnlCardLayout.createSequentialGroup()
+                        .addComponent(txtcari)
+                        .addGap(10, 10, 10)
+                        .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 95, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 604, Short.MAX_VALUE))
+                .addGap(18, 18, 18))
+        );
+        pnlCardLayout.setVerticalGroup(
+            pnlCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlCardLayout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addGroup(pnlCardLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtcari, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(bcari, javax.swing.GroupLayout.PREFERRED_SIZE, 36, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGap(14, 14, 14)
+                .addComponent(jScrollPane1, javax.swing.GroupLayout.DEFAULT_SIZE, 276, Short.MAX_VALUE)
+                .addGap(18, 18, 18))
+        );
+
+        javax.swing.GroupLayout pnlCanvasLayout = new javax.swing.GroupLayout(pnlCanvas);
+        pnlCanvas.setLayout(pnlCanvasLayout);
+        pnlCanvasLayout.setHorizontalGroup(
+            pnlCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlCanvasLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(pnlCard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
+        );
+        pnlCanvasLayout.setVerticalGroup(
+            pnlCanvasLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlCanvasLayout.createSequentialGroup()
+                .addGap(20, 20, 20)
+                .addComponent(pnlCard, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addGap(20, 20, 20))
+        );
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jScrollPane1)
-                .addContainerGap())
-            .addGroup(layout.createSequentialGroup()
-                .addGap(259, 259, 259)
-                .addComponent(jLabel1)
-                .addContainerGap(266, Short.MAX_VALUE))
+            .addComponent(pnlHeader, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(pnlCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 28, Short.MAX_VALUE)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 421, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(pnlHeader, javax.swing.GroupLayout.PREFERRED_SIZE, 58, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(pnlCanvas, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void tbl_guruMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tbl_guruMouseClicked
         int baris = tbl_guru.getSelectedRow();
+        if (baris < 0) {
+            return;
+        }
         String kd = tbl_guru.getValueAt(baris, 0).toString();
-        fieldTarget.setText(kd);
+        if (fieldTarget != null) {
+            fieldTarget.setText(kd);
+        }
         this.dispose();
     }//GEN-LAST:event_tbl_guruMouseClicked
+
+    private void bcariActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bcariActionPerformed
+        filterDataGuru();
+    }//GEN-LAST:event_bcariActionPerformed
+
+    private void txtcariKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtcariKeyPressed
+        if (evt.getKeyCode() == KeyEvent.VK_ENTER) {
+            filterDataGuru();
+        }
+    }//GEN-LAST:event_txtcariKeyPressed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
+        UITheme.setup();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new pop_guru().setVisible(true);
             }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(pop_guru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(pop_guru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(pop_guru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(pop_guru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-
-        /* Create and display the form */
-        
+        });
     }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton bcari;
     private javax.swing.JLabel jLabel1;
     private javax.swing.JScrollPane jScrollPane1;
+    private javax.swing.JLabel lblSubtitle;
+    private javax.swing.JPanel pnlCanvas;
+    private javax.swing.JPanel pnlCard;
+    private javax.swing.JPanel pnlHeader;
     private javax.swing.JTable tbl_guru;
+    private javax.swing.JTextField txtcari;
     // End of variables declaration//GEN-END:variables
 }

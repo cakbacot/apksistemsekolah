@@ -1,211 +1,111 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Dashboard Guru - Sistem Manajemen Administrasi SMP 259 Jakarta
  */
 package tampilan;
-import java.awt.Image;
+
 import java.beans.PropertyVetoException;
-import javax.swing.JOptionPane;
+import javax.swing.BorderFactory;
 import javax.swing.ImageIcon;
+import javax.swing.JButton;
+import javax.swing.JComponent;
+import javax.swing.JFrame;
 import javax.swing.JInternalFrame;
-import koneksi.koneksi;
+import javax.swing.JLabel;
+import javax.swing.JOptionPane;
+
 /**
- *
- * @author User
+ * Shell utama Dashboard Guru & Tenaga Pendidik SMP 259 Jakarta.
  */
 public class dashboardguru extends javax.swing.JFrame {
+
+    private JButton[] navButtons;
 
     /**
      * Creates new form dashboardguru
      */
     public dashboardguru() {
+        UITheme.setup();
         initComponents();
-        this.setExtendedState(javax.swing.JFrame.MAXIMIZED_BOTH);
-        String namaGuru = GuruSession.getNama();
-        if (namaGuru != null && !namaGuru.trim().isEmpty()) {
-            lab_login.setText("SELAMAT DATANG, " + GuruSession.getSapaan() + namaGuru);
-        } else {
-            lab_login.setText("SELAMAT DATANG DI DASHBOARD GURU");
+        this.setExtendedState(JFrame.MAXIMIZED_BOTH);
+        UITheme.applyWindowIcon(this);
+
+        ImageIcon logoIcon = UITheme.getScaledIcon("/resource/logosekolah.png", 42, 48);
+        if (logoIcon != null) {
+            logo.setIcon(logoIcon);
         }
-        setFixedIcon(babsen,"/resource/absen.png");
-        sethome(home,"/resource/home.png");
-        setFixedIcon(bnilai,"/resource/nilai.png");
-        setleave(logout,"/resource/keluar.png");
+
+        jPanel2.setBorder(BorderFactory.createMatteBorder(0, 0, 1, 0, UITheme.BORDER_SOFT));
+        UITheme.styleUserProfileBadge(pnlUserBadge);
+
+        initSidebarStyling();
+        aturSapaanGuru();
         tampilkanHomeAwal();
     }
-    
-    public void tampilkanHomeAwal() {
-    try {
-        desktop.removeAll();
-        
-        homedashboardguru h = new homedashboardguru();
-        
-        h.setBorder(null);
-        ((javax.swing.plaf.basic.BasicInternalFrameUI)h.getUI()).setNorthPane(null);
-        
-        desktop.add(h);
-        h.setVisible(true);
-        try {
-            h.setMaximum(true);
-        } catch (PropertyVetoException ex) {
-            h.setSize(desktop.getWidth(), desktop.getHeight());
+
+    private void initSidebarStyling() {
+        navButtons = new JButton[]{home, babsen, bnilai};
+        UITheme.styleSidebarItem(home, "/resource/home.png", true);
+        UITheme.styleSidebarItem(babsen, "/resource/absen.png", false);
+        UITheme.styleSidebarItem(bnilai, "/resource/nilai.png", false);
+        UITheme.styleSidebarLogout(logout, "/resource/keluar.png");
+    }
+
+    private void aturSapaanGuru() {
+        String namaGuru = GuruSession.getNama();
+        String kelasWali = GuruSession.getKelas();
+        if (namaGuru != null && !namaGuru.trim().isEmpty()) {
+            lab_login.setText(GuruSession.getSapaan() + namaGuru);
+        } else {
+            lab_login.setText("Selamat Datang, Guru");
         }
-        
-        desktop.repaint();
-        desktop.revalidate();
-    } catch (Exception e) {
-        System.err.println("Gagal memuat home awal: " + e.getMessage());
+
+        if (kelasWali != null && !kelasWali.trim().isEmpty()) {
+            lblRoleGuru.setText("WALI KELAS " + kelasWali.toUpperCase());
+        } else {
+            lblRoleGuru.setText("TENAGA PENDIDIK");
+        }
     }
-}
 
-    
-   private void setFixedIcon(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
-
-        btn.setForeground(java.awt.Color.WHITE);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
-        btn.setIconTextGap(20);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setOpaque(true);
-                btn.setBackground(new java.awt.Color(255, 255, 0)); 
-                btn.setForeground(java.awt.Color.BLACK); 
+    private void bukaHalamanInternal(JInternalFrame frame, JButton tombolAktif, String judulHalaman) {
+        try {
+            lblPageTitle.setText(judulHalaman);
+            UITheme.setActiveSidebar(tombolAktif, navButtons);
+            desktop.removeAll();
+            frame.setBorder(null);
+            if (frame.getUI() instanceof javax.swing.plaf.basic.BasicInternalFrameUI) {
+                ((javax.swing.plaf.basic.BasicInternalFrameUI) frame.getUI()).setNorthPane(null);
             }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(false);
-                btn.setOpaque(false);
-                btn.setForeground(java.awt.Color.WHITE);
+            desktop.add(frame);
+            frame.setVisible(true);
+            try {
+                frame.setMaximum(true);
+            } catch (PropertyVetoException ex) {
+                frame.setSize(desktop.getWidth(), desktop.getHeight());
             }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
+            desktop.revalidate();
+            desktop.repaint();
+        } catch (Exception e) {
+            System.err.println("Gagal memuat halaman internal guru: " + e.getMessage());
+        }
     }
-}
-   private void sethome(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(50, 50, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
 
-        btn.setForeground(java.awt.Color.WHITE);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        btn.setMargin(new java.awt.Insets(10, 10, 10, 10));
-        btn.setIconTextGap(10);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setOpaque(true);
-                btn.setBackground(new java.awt.Color(255, 255, 255));
-                btn.setForeground(java.awt.Color.BLACK); 
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(false);
-                btn.setOpaque(false);
-                btn.setForeground(java.awt.Color.WHITE);
-            }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
+    public void tampilkanHomeAwal() {
+        homedashboardguru h = new homedashboardguru();
+        bukaHalamanInternal(h, home, "Beranda Akademik Guru");
     }
-}
-   
-   private void setleave(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
 
-        btn.setForeground(java.awt.Color.WHITE);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
-        btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-        btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
-        btn.setIconTextGap(20);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setOpaque(true);
-                btn.setBackground(new java.awt.Color(255, 0, 0)); 
-                btn.setForeground(java.awt.Color.WHITE); 
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(false);
-                btn.setOpaque(false);
-                btn.setForeground(java.awt.Color.WHITE);
-            }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
-    }
-}
-public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar) {
-    try {
-        java.net.URL imgURL = getClass().getResource(pathGambar);
-        
-        if (imgURL == null) {
-            System.err.println("Gambar TIDAK ditemukan di path: " + pathGambar);
+    public void scaleImage(JComponent komponenTarget, String pathGambar) {
+        ImageIcon ic = UITheme.getScaledIcon(pathGambar, 42, 48);
+        if (ic == null) {
             return;
         }
-        
-        javax.swing.ImageIcon icon = new javax.swing.ImageIcon(imgURL);
-        java.awt.Image img = icon.getImage();
-        
-        int width = komponenTarget.getWidth() > 0 ? (komponenTarget.getWidth() - 6) : 100;
-        int height = komponenTarget.getHeight() > 0 ? (komponenTarget.getHeight() - 6) : 100;
-        
-        java.awt.Image imgScale = img.getScaledInstance(width, height, java.awt.Image.SCALE_SMOOTH);
-        javax.swing.ImageIcon scaledIcon = new javax.swing.ImageIcon(imgScale);
-        
-        if (komponenTarget instanceof javax.swing.JLabel) {
-            ((javax.swing.JLabel) komponenTarget).setIcon(scaledIcon);
-        } else if (komponenTarget instanceof javax.swing.JButton) {
-            ((javax.swing.JButton) komponenTarget).setIcon(scaledIcon);
+        if (komponenTarget instanceof JLabel) {
+            ((JLabel) komponenTarget).setIcon(ic);
+        } else if (komponenTarget instanceof JButton) {
+            ((JButton) komponenTarget).setIcon(ic);
         }
-        
-    } catch (Exception e) {
-        System.out.println("Error scale image: " + e.getMessage());
     }
-}
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -216,36 +116,120 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
     private void initComponents() {
 
         jPanel1 = new javax.swing.JPanel();
+        logo = new javax.swing.JLabel();
+        lblBrandTitle = new javax.swing.JLabel();
+        lblBrandSub = new javax.swing.JLabel();
+        pnlSideDivider = new javax.swing.JPanel();
+        lblSecGuru = new javax.swing.JLabel();
+        home = new javax.swing.JButton();
         babsen = new javax.swing.JButton();
         bnilai = new javax.swing.JButton();
         logout = new javax.swing.JButton();
-        desktop = new javax.swing.JDesktopPane();
         jPanel2 = new javax.swing.JPanel();
+        lblPageTitle = new javax.swing.JLabel();
+        lblHeaderSub = new javax.swing.JLabel();
+        pnlUserBadge = new javax.swing.JPanel();
+        lblRoleGuru = new javax.swing.JLabel();
         lab_login = new javax.swing.JLabel();
-        logo = new javax.swing.JLabel();
-        home = new javax.swing.JButton();
+        desktop = new javax.swing.JDesktopPane();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
-        setBackground(new java.awt.Color(0, 8, 97));
+        setTitle("Dashboard Guru - Sistem Manajemen Administrasi SMP 259 Jakarta");
+        setBackground(new java.awt.Color(15, 23, 42));
 
-        jPanel1.setBackground(new java.awt.Color(0, 8, 97));
+        jPanel1.setBackground(new java.awt.Color(15, 23, 42));
 
-        babsen.setText("absen");
+        logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_logo_46.png"))); // NOI18N
+        logo.addComponentListener(new java.awt.event.ComponentAdapter() {
+            public void componentResized(java.awt.event.ComponentEvent evt) {
+                logoComponentResized(evt);
+            }
+        });
+
+        lblBrandTitle.setFont(new java.awt.Font("Segoe UI", 1, 14)); // NOI18N
+        lblBrandTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblBrandTitle.setText("SMP 259 JAKARTA");
+
+        lblBrandSub.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        lblBrandSub.setForeground(new java.awt.Color(56, 189, 248));
+        lblBrandSub.setText("Portal Tenaga Pendidik");
+
+        pnlSideDivider.setBackground(new java.awt.Color(30, 41, 59));
+        pnlSideDivider.setPreferredSize(new java.awt.Dimension(216, 1));
+
+        javax.swing.GroupLayout pnlSideDividerLayout = new javax.swing.GroupLayout(pnlSideDivider);
+        pnlSideDivider.setLayout(pnlSideDividerLayout);
+        pnlSideDividerLayout.setHorizontalGroup(
+            pnlSideDividerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        pnlSideDividerLayout.setVerticalGroup(
+            pnlSideDividerLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 1, Short.MAX_VALUE)
+        );
+
+        lblSecGuru.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        lblSecGuru.setForeground(new java.awt.Color(100, 116, 139));
+        lblSecGuru.setText("MENU AKADEMIK GURU");
+
+        home.setBackground(new java.awt.Color(37, 99, 235));
+        home.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        home.setForeground(new java.awt.Color(255, 255, 255));
+        home.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_home.png"))); // NOI18N
+        home.setText("Beranda Guru");
+        home.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        home.setFocusPainted(false);
+        home.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        home.setIconTextGap(12);
+        home.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                homeActionPerformed(evt);
+            }
+        });
+
+        babsen.setBackground(new java.awt.Color(15, 23, 42));
+        babsen.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        babsen.setForeground(new java.awt.Color(203, 213, 225));
+        babsen.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_absen.png"))); // NOI18N
+        babsen.setText("Presensi Siswa");
+        babsen.setBorderPainted(false);
+        babsen.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        babsen.setFocusPainted(false);
+        babsen.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        babsen.setIconTextGap(12);
         babsen.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 babsenActionPerformed(evt);
             }
         });
 
-        bnilai.setText("nilai");
+        bnilai.setBackground(new java.awt.Color(15, 23, 42));
+        bnilai.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        bnilai.setForeground(new java.awt.Color(203, 213, 225));
+        bnilai.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_nilai.png"))); // NOI18N
+        bnilai.setText("Penilaian Akademik");
+        bnilai.setBorderPainted(false);
+        bnilai.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        bnilai.setFocusPainted(false);
+        bnilai.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        bnilai.setIconTextGap(12);
         bnilai.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 bnilaiActionPerformed(evt);
             }
         });
 
-        logout.setForeground(new java.awt.Color(255, 0, 0));
-        logout.setText("Log out");
+        logout.setBackground(new java.awt.Color(30, 41, 59));
+        logout.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        logout.setForeground(new java.awt.Color(252, 165, 165));
+        logout.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_sb_logout.png"))); // NOI18N
+        logout.setText("Keluar Akun");
+        logout.setBorderPainted(false);
+        logout.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        logout.setFocusPainted(false);
+        logout.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
+        logout.setIconTextGap(12);
         logout.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 logoutActionPerformed(evt);
@@ -257,26 +241,119 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
         jPanel1Layout.setHorizontalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
+                .addGap(16, 16, 16)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(12, 12, 12)
+                        .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(lblBrandTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)
+                            .addComponent(lblBrandSub, javax.swing.GroupLayout.DEFAULT_SIZE, 158, Short.MAX_VALUE)))
+                    .addComponent(pnlSideDivider, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(lblSecGuru, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(home, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(babsen, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(bnilai, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(logout, javax.swing.GroupLayout.DEFAULT_SIZE, 155, Short.MAX_VALUE))
-                .addContainerGap())
+                    .addComponent(logout, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
         );
         jPanel1Layout.setVerticalGroup(
             jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel1Layout.createSequentialGroup()
-                .addContainerGap()
-                .addComponent(babsen, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(18, 18, 18)
-                .addComponent(bnilai, javax.swing.GroupLayout.PREFERRED_SIZE, 76, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 365, Short.MAX_VALUE)
-                .addComponent(logout)
-                .addGap(25, 25, 25))
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 48, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addGroup(jPanel1Layout.createSequentialGroup()
+                        .addComponent(lblBrandTitle)
+                        .addGap(2, 2, 2)
+                        .addComponent(lblBrandSub)))
+                .addGap(16, 16, 16)
+                .addComponent(pnlSideDivider, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(16, 16, 16)
+                .addComponent(lblSecGuru)
+                .addGap(8, 8, 8)
+                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addComponent(babsen, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addComponent(bnilai, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 328, Short.MAX_VALUE)
+                .addComponent(logout, javax.swing.GroupLayout.PREFERRED_SIZE, 38, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(18, 18, 18))
         );
 
-        desktop.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+        jPanel2.setBorder(javax.swing.BorderFactory.createLineBorder(new java.awt.Color(226, 232, 240)));
+
+        lblPageTitle.setFont(new java.awt.Font("Segoe UI", 1, 19)); // NOI18N
+        lblPageTitle.setForeground(new java.awt.Color(15, 23, 42));
+        lblPageTitle.setText("Beranda Akademik Guru");
+
+        lblHeaderSub.setFont(new java.awt.Font("Segoe UI", 0, 12)); // NOI18N
+        lblHeaderSub.setForeground(new java.awt.Color(100, 116, 139));
+        lblHeaderSub.setText("Sistem Manajemen Administrasi SMP 259 Jakarta");
+
+        pnlUserBadge.setBackground(new java.awt.Color(248, 250, 252));
+        pnlUserBadge.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(226, 232, 240), 1, true));
+
+        lblRoleGuru.setFont(new java.awt.Font("Segoe UI", 1, 10)); // NOI18N
+        lblRoleGuru.setForeground(new java.awt.Color(37, 99, 235));
+        lblRoleGuru.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lblRoleGuru.setText("TENAGA PENDIDIK");
+
+        lab_login.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        lab_login.setForeground(new java.awt.Color(15, 23, 42));
+        lab_login.setHorizontalAlignment(javax.swing.SwingConstants.RIGHT);
+        lab_login.setText("Selamat Datang, Guru");
+
+        javax.swing.GroupLayout pnlUserBadgeLayout = new javax.swing.GroupLayout(pnlUserBadge);
+        pnlUserBadge.setLayout(pnlUserBadgeLayout);
+        pnlUserBadgeLayout.setHorizontalGroup(
+            pnlUserBadgeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlUserBadgeLayout.createSequentialGroup()
+                .addGap(16, 16, 16)
+                .addGroup(pnlUserBadgeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                    .addComponent(lblRoleGuru, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE)
+                    .addComponent(lab_login, javax.swing.GroupLayout.DEFAULT_SIZE, 210, Short.MAX_VALUE))
+                .addGap(16, 16, 16))
+        );
+        pnlUserBadgeLayout.setVerticalGroup(
+            pnlUserBadgeLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(pnlUserBadgeLayout.createSequentialGroup()
+                .addGap(6, 6, 6)
+                .addComponent(lblRoleGuru)
+                .addGap(1, 1, 1)
+                .addComponent(lab_login)
+                .addContainerGap(6, Short.MAX_VALUE))
+        );
+
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(28, 28, 28)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(lblPageTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 540, Short.MAX_VALUE)
+                    .addComponent(lblHeaderSub, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addGap(18, 18, 18)
+                .addComponent(pnlUserBadge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(12, 12, 12)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addGroup(jPanel2Layout.createSequentialGroup()
+                        .addComponent(lblPageTitle)
+                        .addGap(2, 2, 2)
+                        .addComponent(lblHeaderSub))
+                    .addComponent(pnlUserBadge, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addContainerGap(12, Short.MAX_VALUE))
+        );
+
+        desktop.setBackground(new java.awt.Color(241, 245, 249));
         desktop.addComponentListener(new java.awt.event.ComponentAdapter() {
             public void componentResized(java.awt.event.ComponentEvent evt) {
                 desktopComponentResized(evt);
@@ -287,124 +364,79 @@ public void scaleImage(javax.swing.JComponent komponenTarget, String pathGambar)
         desktop.setLayout(desktopLayout);
         desktopLayout.setHorizontalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 0, Short.MAX_VALUE)
+            .addGap(0, 1032, Short.MAX_VALUE)
         );
         desktopLayout.setVerticalGroup(
             desktopLayout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGap(0, 0, Short.MAX_VALUE)
         );
 
-        jPanel2.setBackground(new java.awt.Color(0, 8, 97));
-
-        lab_login.setFont(new java.awt.Font("Rockwell Extra Bold", 1, 22)); // NOI18N
-        lab_login.setForeground(new java.awt.Color(255, 255, 255));
-
-        logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/logo.png"))); // NOI18N
-        logo.addComponentListener(new java.awt.event.ComponentAdapter() {
-            public void componentResized(java.awt.event.ComponentEvent evt) {
-                logoComponentResized(evt);
-            }
-        });
-
-        home.setText("home");
-        home.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                homeActionPerformed(evt);
-            }
-        });
-
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGap(19, 19, 19)
-                .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(75, 75, 75)
-                .addComponent(lab_login, javax.swing.GroupLayout.DEFAULT_SIZE, 786, Short.MAX_VALUE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 152, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap())
-        );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel2Layout.createSequentialGroup()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addContainerGap()
-                        .addComponent(logo, javax.swing.GroupLayout.PREFERRED_SIZE, 90, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGap(22, 22, 22)
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(home, javax.swing.GroupLayout.PREFERRED_SIZE, 66, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addComponent(lab_login, javax.swing.GroupLayout.PREFERRED_SIZE, 37, javax.swing.GroupLayout.PREFERRED_SIZE))))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 248, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addGap(0, 0, 0)
-                .addComponent(desktop))
+                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(desktop)))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
             .addGroup(layout.createSequentialGroup()
                 .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(desktop)))
+                .addGap(0, 0, 0)
+                .addComponent(desktop))
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void babsenActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_babsenActionPerformed
-    desktop.removeAll();
-    
-    panel_absen pa = new panel_absen(desktop);
-    
-    desktop.add(pa);
-    pa.setVisible(true);
-    
-    try {
-        pa.setMaximum(true);
-    } catch (java.beans.PropertyVetoException e) {
-        System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-    }   
+        lblPageTitle.setText("Presensi Kehadiran Siswa");
+        UITheme.setActiveSidebar(babsen, navButtons);
+        desktop.removeAll();
+        panel_absen pa = new panel_absen(desktop);
+        pa.setBorder(null);
+        if (pa.getUI() instanceof javax.swing.plaf.basic.BasicInternalFrameUI) {
+            ((javax.swing.plaf.basic.BasicInternalFrameUI) pa.getUI()).setNorthPane(null);
+        }
+        desktop.add(pa);
+        pa.setVisible(true);
+        try {
+            pa.setMaximum(true);
+        } catch (PropertyVetoException e) {
+            pa.setSize(desktop.getWidth(), desktop.getHeight());
+        }
+        desktop.revalidate();
+        desktop.repaint();
     }//GEN-LAST:event_babsenActionPerformed
 
     private void desktopComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_desktopComponentResized
-for (JInternalFrame frame : desktop.getAllFrames()) {
-        try {
-            frame.setMaximum(true);
-        } catch (PropertyVetoException e) {
-            System.err.println("Gagal resize internal frame: " + e.getMessage());
+        for (JInternalFrame frame : desktop.getAllFrames()) {
+            try {
+                frame.setMaximum(true);
+            } catch (PropertyVetoException e) {
+            }
+            frame.setBounds(0, 0, desktop.getWidth(), desktop.getHeight());
+            frame.revalidate();
         }
-    }
     }//GEN-LAST:event_desktopComponentResized
 
     private void logoutActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_logoutActionPerformed
-
-    int pilih = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin logout?", "Konfirmasi", JOptionPane.YES_NO_OPTION);
-    
-    if (pilih == JOptionPane.YES_OPTION) {
-        GuruSession.clear();
-        UserSession.clear();
-        
-        this.dispose(); 
-        
-        new loginguru().setVisible(true);
-    }
+        int pilih = JOptionPane.showConfirmDialog(this, "Apakah Anda yakin ingin keluar dari sesi saat ini?", "Konfirmasi Keluar", JOptionPane.YES_NO_OPTION);
+        if (pilih == JOptionPane.YES_OPTION) {
+            GuruSession.clear();
+            UserSession.clear();
+            this.dispose();
+            new loginguru().setVisible(true);
+        }
     }//GEN-LAST:event_logoutActionPerformed
 
     private void logoComponentResized(java.awt.event.ComponentEvent evt) {//GEN-FIRST:event_logoComponentResized
-        scaleImage(logo, "/resource/logo.png");
     }//GEN-LAST:event_logoComponentResized
 
     private void homeActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_homeActionPerformed
@@ -412,31 +444,17 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     }//GEN-LAST:event_homeActionPerformed
 
     private void bnilaiActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_bnilaiActionPerformed
-    desktop.removeAll();
-    menu_nilai mn = new menu_nilai();
-
-    desktop.add(mn);
-    mn.setVisible(true);
-    try {
-        mn.setMaximum(true);
-        } catch (java.beans.PropertyVetoException e) {
-            System.err.println("Gagal memaksimalkan Internal Frame: " + e.getMessage());
-        }
+        bukaHalamanInternal(new menu_nilai(), bnilai, "Penilaian Akademik Siswa");
     }//GEN-LAST:event_bnilaiActionPerformed
 
-  public static void main(String args[]) {
-    try {
-        com.formdev.flatlaf.FlatLightLaf.setup();
-    } catch (Exception ex) {
-        System.err.println("Gagal memuat tema FlatLaf");
+    public static void main(String args[]) {
+        UITheme.setup();
+        java.awt.EventQueue.invokeLater(new Runnable() {
+            public void run() {
+                new dashboardguru().setVisible(true);
+            }
+        });
     }
-
-    java.awt.EventQueue.invokeLater(new Runnable() {
-        public void run() {
-            new dashboardguru().setVisible(true);
-        }
-    });
-}
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton babsen;
@@ -446,7 +464,15 @@ for (JInternalFrame frame : desktop.getAllFrames()) {
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JLabel lab_login;
+    private javax.swing.JLabel lblBrandSub;
+    private javax.swing.JLabel lblBrandTitle;
+    private javax.swing.JLabel lblHeaderSub;
+    private javax.swing.JLabel lblPageTitle;
+    private javax.swing.JLabel lblRoleGuru;
+    private javax.swing.JLabel lblSecGuru;
     private javax.swing.JLabel logo;
     private javax.swing.JButton logout;
+    private javax.swing.JPanel pnlSideDivider;
+    private javax.swing.JPanel pnlUserBadge;
     // End of variables declaration//GEN-END:variables
 }

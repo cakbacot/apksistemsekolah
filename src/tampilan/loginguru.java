@@ -1,100 +1,45 @@
 /*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
+ * Login Guru & Pengajar - Sistem Informasi Sekolah
  */
 package tampilan;
 
-import java.awt.Image;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import javax.swing.ImageIcon;
-import javax.swing.JFrame;
 import javax.swing.JOptionPane;
 import koneksi.koneksi;
-import tampilan.GuruSession;
+import running.dashboardRunning;
+
 /**
- *
- * @author ACER
+ * Halaman autentikasi Guru & Tenaga Pengajar.
  */
 public class loginguru extends javax.swing.JFrame {
+
+    Connection con = koneksi.getConnection();
+    PreparedStatement pet;
+    ResultSet rs;
 
     /**
      * Creates new form loginguru
      */
-   Connection con=koneksi.getConnection();
-   
-    PreparedStatement pet;
-    ResultSet rs;
     public loginguru() {
+        UITheme.setup();
         initComponents();
-        setExtendedState(JFrame.MAXIMIZED_HORIZ);
-           setVisible(true);
-           setResizable(false);
-           scaleImage();
-           setFixedIcon(login, "/resource/login2.png");
-           setFixedIcon(kembali,"/resource/kembali.png");
+        applyModernStyling();
     }
 
-    
-    private void scaleImage() {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource("/resource/loginguru.png"));
-        Image imgLama = iconAwal.getImage();
-
-        int width = lbl_logo.getWidth();
-        int height = lbl_logo.getHeight();
-        
-        if (width > 0 && height > 0) {
-            Image imgBaru = imgLama.getScaledInstance(width, height, Image.SCALE_SMOOTH);
-            lbl_logo.setIcon(new ImageIcon(imgBaru));
+    private void applyModernStyling() {
+        UITheme.applyWindowIcon(this);
+        javax.swing.ImageIcon brandLogo = UITheme.getScaledIcon("/resource/logosekolah.png", 132, 146);
+        if (brandLogo != null) {
+            lbl_logo.setIcon(brandLogo);
         }
-    } catch (Exception e) {
-        System.err.println("Error logo: " + e.getMessage());
+        UITheme.styleTextField(nip, "Masukkan NIP Guru");
+        UITheme.stylePasswordField(pass, "Masukkan kata sandi");
+        UITheme.stylePrimaryButton(login);
+        UITheme.styleSecondaryButton(kembali);
+        nip.requestFocusInWindow();
     }
-}
-    
-    private void setFixedIcon(javax.swing.JButton btn, String path) {
-    try {
-        ImageIcon iconAwal = new ImageIcon(getClass().getResource(path));
-        Image imgBaru = iconAwal.getImage().getScaledInstance(30, 30, Image.SCALE_SMOOTH);
-        btn.setIcon(new ImageIcon(imgBaru));
-        btn.setForeground(java.awt.Color.BLACK);
-        btn.setFont(new java.awt.Font("Segoe UI", java.awt.Font.BOLD, 14));
- btn.setContentAreaFilled(false);
-        btn.setBorderPainted(false);
-        btn.setFocusPainted(false);
-       btn.setOpaque(false);
-        btn.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
-        
-        btn.setHorizontalAlignment(javax.swing.SwingConstants.LEFT);
-        btn.setMargin(new java.awt.Insets(10, 20, 10, 10));
-        btn.setIconTextGap(20);
-
-        btn.addMouseListener(new java.awt.event.MouseAdapter() {
-            @Override
-            public void mouseEntered(java.awt.event.MouseEvent evt) {
-                btn.setContentAreaFilled(true);
-                btn.setOpaque(true); 
-                btn.setBackground(new java.awt.Color(10, 161, 12)); // Hijau
-                btn.setForeground(java.awt.Color.WHITE);;
-                
-            }
-
-            @Override
-            public void mouseExited(java.awt.event.MouseEvent evt) {
-                // Saat mouse keluar: Kembali ke semula (transparan & teks putih)
-               btn.setContentAreaFilled(false);
-                btn.setOpaque(false);
-                btn.setForeground(java.awt.Color.BLACK);
-            }
-        });
-
-    } catch (Exception e) {
-        System.err.println("Gagal set hover: " + e.getMessage());
-    }
-}
 
     /**
      * This method is called from within the constructor to initialize the form.
@@ -105,143 +50,205 @@ public class loginguru extends javax.swing.JFrame {
     // <editor-fold defaultstate="collapsed" desc="Generated Code">//GEN-BEGIN:initComponents
     private void initComponents() {
 
-        jPanel2 = new javax.swing.JPanel();
-        jLabel3 = new javax.swing.JLabel();
-        nip = new javax.swing.JTextField();
-        jLabel1 = new javax.swing.JLabel();
-        jLabel2 = new javax.swing.JLabel();
-        login = new javax.swing.JButton();
         jPanel1 = new javax.swing.JPanel();
+        lblBrandTag = new javax.swing.JLabel();
         lbl_logo = new javax.swing.JLabel();
+        lblBrandTitle = new javax.swing.JLabel();
+        lblBrandDesc = new javax.swing.JLabel();
+        lblBrandFooter = new javax.swing.JLabel();
+        jPanel2 = new javax.swing.JPanel();
+        lblRoleBadge = new javax.swing.JLabel();
+        jLabel3 = new javax.swing.JLabel();
+        lblSubtitle = new javax.swing.JLabel();
+        jLabel1 = new javax.swing.JLabel();
+        nip = new javax.swing.JTextField();
+        jLabel2 = new javax.swing.JLabel();
         pass = new javax.swing.JPasswordField();
+        login = new javax.swing.JButton();
         kembali = new javax.swing.JButton();
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Login Guru - Sistem Manajemen Administrasi SMP 259 Jakarta");
+        setBackground(new java.awt.Color(255, 255, 255));
+        setResizable(false);
 
-        jLabel3.setFont(new java.awt.Font("Palatino Linotype", 1, 24)); // NOI18N
-        jLabel3.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
-        jLabel3.setText("LOGIN GURU");
-        jLabel3.setHorizontalTextPosition(javax.swing.SwingConstants.CENTER);
+        jPanel1.setBackground(new java.awt.Color(15, 23, 42));
 
-        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
-        jPanel2.setLayout(jPanel2Layout);
-        jPanel2Layout.setHorizontalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 298, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(43, 43, 43)
-                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addGap(43, 43, 43)))
+        lblBrandTag.setFont(new java.awt.Font("Segoe UI", 1, 12)); // NOI18N
+        lblBrandTag.setForeground(new java.awt.Color(56, 189, 248));
+        lblBrandTag.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBrandTag.setText("SMP 259 JAKARTA");
+
+        lbl_logo.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lbl_logo.setIcon(new javax.swing.ImageIcon(getClass().getResource("/resource/ui_logo_128.png"))); // NOI18N
+
+        lblBrandTitle.setFont(new java.awt.Font("Segoe UI", 1, 20)); // NOI18N
+        lblBrandTitle.setForeground(new java.awt.Color(255, 255, 255));
+        lblBrandTitle.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBrandTitle.setText("<html><div style='text-align:center;'>Sistem Manajemen<br>Administrasi</div></html>");
+
+        lblBrandDesc.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblBrandDesc.setForeground(new java.awt.Color(148, 163, 184));
+        lblBrandDesc.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBrandDesc.setText("<html><div style='text-align:center;'>Portal akademik jadwal mengajar, presensi kelas,<br>dan penilaian siswa SMP 259 Jakarta.</div></html>");
+
+        lblBrandFooter.setFont(new java.awt.Font("Segoe UI", 0, 11)); // NOI18N
+        lblBrandFooter.setForeground(new java.awt.Color(100, 116, 139));
+        lblBrandFooter.setHorizontalAlignment(javax.swing.SwingConstants.CENTER);
+        lblBrandFooter.setText("\u00a9 SMP 259 Jakarta \u2014 Portal Tenaga Pendidik");
+
+        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
+        jPanel1.setLayout(jPanel1Layout);
+        jPanel1Layout.setHorizontalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(36, 36, 36)
+                .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.CENTER)
+                    .addComponent(lblBrandTag, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(lblBrandTitle, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .addComponent(lblBrandDesc, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE)
+                    .addComponent(lblBrandFooter, javax.swing.GroupLayout.DEFAULT_SIZE, 308, Short.MAX_VALUE))
+                .addGap(36, 36, 36))
         );
-        jPanel2Layout.setVerticalGroup(
-            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGap(0, 107, Short.MAX_VALUE)
-            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                .addGroup(jPanel2Layout.createSequentialGroup()
-                    .addGap(37, 37, 37)
-                    .addComponent(jLabel3)
-                    .addContainerGap(37, Short.MAX_VALUE)))
+        jPanel1Layout.setVerticalGroup(
+            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel1Layout.createSequentialGroup()
+                .addGap(50, 50, 50)
+                .addComponent(lblBrandTag)
+                .addGap(36, 36, 36)
+                .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 148, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(24, 24, 24)
+                .addComponent(lblBrandTitle, javax.swing.GroupLayout.PREFERRED_SIZE, 54, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(10, 10, 10)
+                .addComponent(lblBrandDesc, javax.swing.GroupLayout.PREFERRED_SIZE, 46, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 129, Short.MAX_VALUE)
+                .addComponent(lblBrandFooter)
+                .addGap(29, 29, 29))
         );
 
-        nip.setFont(new java.awt.Font("Times New Roman", 1, 12)); // NOI18N
+        jPanel2.setBackground(new java.awt.Color(255, 255, 255));
+
+        lblRoleBadge.setFont(new java.awt.Font("Segoe UI", 1, 11)); // NOI18N
+        lblRoleBadge.setForeground(new java.awt.Color(37, 99, 235));
+        lblRoleBadge.setText("PORTAL GURU & PENGAJAR");
+
+        jLabel3.setFont(new java.awt.Font("Segoe UI", 1, 26)); // NOI18N
+        jLabel3.setForeground(new java.awt.Color(15, 23, 42));
+        jLabel3.setText("Masuk ke Akun Guru");
+
+        lblSubtitle.setFont(new java.awt.Font("Segoe UI", 0, 13)); // NOI18N
+        lblSubtitle.setForeground(new java.awt.Color(100, 116, 139));
+        lblSubtitle.setText("Masukkan NIP Guru dan kata sandi untuk mengakses kelas.");
+
+        jLabel1.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        jLabel1.setForeground(new java.awt.Color(51, 65, 85));
+        jLabel1.setText("Nomor Induk Pegawai (NIP Guru)");
+
+        nip.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        nip.setForeground(new java.awt.Color(15, 23, 42));
         nip.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 nipKeyPressed(evt);
             }
         });
 
-        jLabel1.setFont(new java.awt.Font("Palatino Linotype", 1, 18)); // NOI18N
-        jLabel1.setText("Masukan NIP");
+        jLabel2.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        jLabel2.setForeground(new java.awt.Color(51, 65, 85));
+        jLabel2.setText("Kata Sandi");
 
-        jLabel2.setFont(new java.awt.Font("Palatino Linotype", 1, 18)); // NOI18N
-        jLabel2.setText("Masukan Password");
-
-        login.setText("Login");
-        login.setBorderPainted(false);
-        login.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(java.awt.event.ActionEvent evt) {
-                loginActionPerformed(evt);
-            }
-        });
-
-        jPanel1.setBackground(new java.awt.Color(0, 8, 97));
-        jPanel1.setBorder(javax.swing.BorderFactory.createBevelBorder(javax.swing.border.BevelBorder.LOWERED));
-
-        javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
-        jPanel1.setLayout(jPanel1Layout);
-        jPanel1Layout.setHorizontalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel1Layout.createSequentialGroup()
-                .addContainerGap(69, Short.MAX_VALUE)
-                .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(58, 58, 58))
-        );
-        jPanel1Layout.setVerticalGroup(
-            jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(jPanel1Layout.createSequentialGroup()
-                .addGap(115, 115, 115)
-                .addComponent(lbl_logo, javax.swing.GroupLayout.PREFERRED_SIZE, 300, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
-        );
-
+        pass.setFont(new java.awt.Font("Segoe UI", 0, 14)); // NOI18N
+        pass.setForeground(new java.awt.Color(15, 23, 42));
         pass.addKeyListener(new java.awt.event.KeyAdapter() {
             public void keyPressed(java.awt.event.KeyEvent evt) {
                 passKeyPressed(evt);
             }
         });
 
-        kembali.setText("Kembali");
-        kembali.setBorderPainted(false);
+        login.setBackground(new java.awt.Color(37, 99, 235));
+        login.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        login.setForeground(new java.awt.Color(255, 255, 255));
+        login.setText("Masuk ke Dashboard Guru");
+        login.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        login.setFocusPainted(false);
+        login.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(java.awt.event.ActionEvent evt) {
+                loginActionPerformed(evt);
+            }
+        });
+
+        kembali.setBackground(new java.awt.Color(255, 255, 255));
+        kembali.setFont(new java.awt.Font("Segoe UI", 1, 13)); // NOI18N
+        kembali.setForeground(new java.awt.Color(51, 65, 85));
+        kembali.setText("\u2190  Kembali ke Pilihan Portal");
+        kembali.setBorder(new javax.swing.border.LineBorder(new java.awt.Color(203, 213, 225), 1, true));
+        kembali.setCursor(new java.awt.Cursor(java.awt.Cursor.HAND_CURSOR));
+        kembali.setFocusPainted(false);
         kembali.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
                 kembaliActionPerformed(evt);
             }
         });
 
+        javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
+        jPanel2.setLayout(jPanel2Layout);
+        jPanel2Layout.setHorizontalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(75, 75, 75)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
+                    .addComponent(lblRoleBadge, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(jLabel3, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(lblSubtitle, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(nip, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(pass, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(login, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE)
+                    .addComponent(kembali, javax.swing.GroupLayout.DEFAULT_SIZE, 390, Short.MAX_VALUE))
+                .addContainerGap(75, Short.MAX_VALUE))
+        );
+        jPanel2Layout.setVerticalGroup(
+            jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGroup(jPanel2Layout.createSequentialGroup()
+                .addGap(64, 64, 64)
+                .addComponent(lblRoleBadge)
+                .addGap(6, 6, 6)
+                .addComponent(jLabel3, javax.swing.GroupLayout.PREFERRED_SIZE, 34, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(6, 6, 6)
+                .addComponent(lblSubtitle)
+                .addGap(32, 32, 32)
+                .addComponent(jLabel1)
+                .addGap(8, 8, 8)
+                .addComponent(nip, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(20, 20, 20)
+                .addComponent(jLabel2)
+                .addGap(8, 8, 8)
+                .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 42, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(28, 28, 28)
+                .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(12, 12, 12)
+                .addComponent(kembali, javax.swing.GroupLayout.PREFERRED_SIZE, 40, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addContainerGap(105, Short.MAX_VALUE))
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, layout.createSequentialGroup()
-                        .addGap(0, 0, Short.MAX_VALUE)
-                        .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
-                    .addGroup(layout.createSequentialGroup()
-                        .addGap(61, 61, 61)
-                        .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                            .addComponent(kembali, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)
-                            .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                                .addComponent(nip)
-                                .addComponent(jLabel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                                .addComponent(jLabel2, javax.swing.GroupLayout.DEFAULT_SIZE, 211, Short.MAX_VALUE)
-                                .addComponent(pass)
-                                .addComponent(login, javax.swing.GroupLayout.Alignment.TRAILING, javax.swing.GroupLayout.PREFERRED_SIZE, 156, javax.swing.GroupLayout.PREFERRED_SIZE)))
-                        .addContainerGap())))
+            .addGroup(layout.createSequentialGroup()
+                .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, 380, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(0, 0, 0)
+                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, 540, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addGroup(layout.createSequentialGroup()
-                .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(104, 104, 104)
-                .addComponent(jLabel1)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(nip, javax.swing.GroupLayout.PREFERRED_SIZE, 29, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addGap(37, 37, 37)
-                .addComponent(jLabel2)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(pass, javax.swing.GroupLayout.PREFERRED_SIZE, 27, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(login, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(kembali, javax.swing.GroupLayout.PREFERRED_SIZE, 47, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(75, Short.MAX_VALUE))
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
+            .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, 560, Short.MAX_VALUE)
         );
 
         pack();
+        setLocationRelativeTo(null);
     }// </editor-fold>//GEN-END:initComponents
 
     private void nipKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_nipKeyPressed
@@ -251,39 +258,52 @@ public class loginguru extends javax.swing.JFrame {
     }//GEN-LAST:event_nipKeyPressed
 
     private void loginActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_loginActionPerformed
-        nip.requestFocus();
-try {
-String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
-            "FROM guru g " +
-            "LEFT JOIN tbl_kelas k ON g.kd_guru = k.kd_guru " +
-            "WHERE g.nip_g = ? AND g.password = ?";
-    java.sql.Connection conn = new koneksi().getConnection();
-    java.sql.PreparedStatement pst = conn.prepareStatement(sql);
-    pst.setString(1, nip.getText());
-    pst.setString(2, pass.getText());
+        String nipInput = nip.getText().trim();
+        String passInput = new String(pass.getPassword());
 
-    java.sql.ResultSet rs = pst.executeQuery();
-   if (rs.next()) {
-            UserSession.clear();
-            GuruSession.setKdGuru(rs.getString("kd_guru"));
-            GuruSession.setNip(rs.getString("nip_g"));
-            GuruSession.setNama(rs.getString("nama"));
-            GuruSession.setJkel(rs.getString("jkel")); 
-            GuruSession.setKelas(rs.getString("kelas"));
-            
-            JOptionPane.showMessageDialog(null, "Login Berhasil!\nSelamat Datang, "
-                    + GuruSession.getSapaan() + GuruSession.getNama());
-            
-            dashboardguru menu = new dashboardguru(); 
-            menu.setVisible(true);
-            
-            this.dispose(); 
-        } else {
-            JOptionPane.showMessageDialog(null, "NIP atau Password salah!", "Gagal Login", JOptionPane.ERROR_MESSAGE);
+        if (nipInput.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Silakan masukkan NIP Guru terlebih dahulu.", "Validasi Login", JOptionPane.WARNING_MESSAGE);
+            nip.requestFocus();
+            return;
         }
-} catch (Exception e) {
-    JOptionPane.showMessageDialog(this, "Error: " + e.getMessage());
-}
+        if (passInput.isEmpty()) {
+            JOptionPane.showMessageDialog(this, "Silakan masukkan kata sandi terlebih dahulu.", "Validasi Login", JOptionPane.WARNING_MESSAGE);
+            pass.requestFocus();
+            return;
+        }
+
+        try {
+            String sql = "SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas "
+                    + "FROM guru g "
+                    + "LEFT JOIN tbl_kelas k ON g.kd_guru = k.kd_guru "
+                    + "WHERE g.nip_g = ? AND g.password = ?";
+            java.sql.Connection conn = new koneksi().getConnection();
+            java.sql.PreparedStatement pst = conn.prepareStatement(sql);
+            pst.setString(1, nipInput);
+            pst.setString(2, passInput);
+
+            java.sql.ResultSet rs = pst.executeQuery();
+            if (rs.next()) {
+                UserSession.clear();
+                GuruSession.setKdGuru(rs.getString("kd_guru"));
+                GuruSession.setNip(rs.getString("nip_g"));
+                GuruSession.setNama(rs.getString("nama"));
+                GuruSession.setJkel(rs.getString("jkel"));
+                GuruSession.setKelas(rs.getString("kelas"));
+
+                JOptionPane.showMessageDialog(this, "Login Berhasil!\nSelamat Datang, "
+                        + GuruSession.getSapaan() + GuruSession.getNama());
+
+                dashboardguru menu = new dashboardguru();
+                menu.setVisible(true);
+                this.dispose();
+            } else {
+                JOptionPane.showMessageDialog(this, "NIP atau kata sandi salah!", "Gagal Login", JOptionPane.ERROR_MESSAGE);
+                pass.requestFocus();
+            }
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(this, "Error koneksi: " + e.getMessage(), "Kesalahan Sistem", JOptionPane.ERROR_MESSAGE);
+        }
     }//GEN-LAST:event_loginActionPerformed
 
     private void passKeyPressed(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_passKeyPressed
@@ -293,43 +313,16 @@ String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
     }//GEN-LAST:event_passKeyPressed
 
     private void kembaliActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_kembaliActionPerformed
-        running.dashboardRunning dr = new running.dashboardRunning();
-    kembali.setVisible(true);
-    this.dispose(); 
+        dashboardRunning dr = new dashboardRunning();
+        dr.setVisible(true);
+        this.dispose();
     }//GEN-LAST:event_kembaliActionPerformed
 
     /**
      * @param args the command line arguments
      */
     public static void main(String args[]) {
-        /* Set the Nimbus look and feel */
-        //<editor-fold defaultstate="collapsed" desc=" Look and feel setting code (optional) ">
-        /* If Nimbus (introduced in Java SE 6) is not available, stay with the default look and feel.
-         * For details see http://download.oracle.com/javase/tutorial/uiswing/lookandfeel/plaf.html 
-         */
-        try {
-            for (javax.swing.UIManager.LookAndFeelInfo info : javax.swing.UIManager.getInstalledLookAndFeels()) {
-                if ("Nimbus".equals(info.getName())) {
-                    javax.swing.UIManager.setLookAndFeel(info.getClassName());
-                    break;
-                }
-            }
-        } catch (ClassNotFoundException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (InstantiationException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (IllegalAccessException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        } catch (javax.swing.UnsupportedLookAndFeelException ex) {
-            java.util.logging.Logger.getLogger(loginguru.class.getName()).log(java.util.logging.Level.SEVERE, null, ex);
-        }
-        //</editor-fold>
-    try {
-        com.formdev.flatlaf.FlatLightLaf.setup();
-    } catch (Exception ex) {
-    System.err.println("Gagal memuat tema FlatLaf");
-}
-        /* Create and display the form */
+        UITheme.setup();
         java.awt.EventQueue.invokeLater(new Runnable() {
             public void run() {
                 new loginguru().setVisible(true);
@@ -344,6 +337,12 @@ String sql ="SELECT g.nip_g, g.nama, g.kd_guru, g.jkel, k.kelas " +
     private javax.swing.JPanel jPanel1;
     private javax.swing.JPanel jPanel2;
     private javax.swing.JButton kembali;
+    private javax.swing.JLabel lblBrandDesc;
+    private javax.swing.JLabel lblBrandFooter;
+    private javax.swing.JLabel lblBrandTag;
+    private javax.swing.JLabel lblBrandTitle;
+    private javax.swing.JLabel lblRoleBadge;
+    private javax.swing.JLabel lblSubtitle;
     private javax.swing.JLabel lbl_logo;
     private javax.swing.JButton login;
     private javax.swing.JTextField nip;
