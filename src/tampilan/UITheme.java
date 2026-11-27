@@ -427,12 +427,23 @@ public final class UITheme {
     /**
      * Menyiapkan JInternalFrame tanpa border/titlebar bawaan dengan latar abu-abu lembut.
      */
-    public static void prepareInternalFrame(JInternalFrame frame) {
+        public static void prepareInternalFrame(JInternalFrame frame) {
         if (frame == null) {
             return;
         }
         frame.setBorder(null);
-        frame.getContentPane().setBackground(BG_MAIN);
+        Container content = frame.getContentPane();
+        content.setBackground(BG_MAIN);
+
+        if (!(content instanceof JScrollPane)) {
+            JScrollPane scrollUtama = new JScrollPane(content);
+            scrollUtama.setBorder(null);
+            scrollUtama.getVerticalScrollBar().setUnitIncrement(16);
+            scrollUtama.getHorizontalScrollBar().setUnitIncrement(16);
+            scrollUtama.getViewport().setBackground(BG_MAIN);
+            frame.setContentPane(scrollUtama);
+        }
+
         if (frame.getUI() instanceof javax.swing.plaf.basic.BasicInternalFrameUI) {
             ((javax.swing.plaf.basic.BasicInternalFrameUI) frame.getUI()).setNorthPane(null);
         }
@@ -732,3 +743,4 @@ public final class UITheme {
         return cp;
     }
 }
+
