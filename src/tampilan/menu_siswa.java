@@ -6,9 +6,11 @@
 package tampilan;
 
 import com.google.zxing.BarcodeFormat;
+import com.google.zxing.EncodeHintType;
 import com.google.zxing.client.j2se.MatrixToImageWriter;
 import com.google.zxing.common.BitMatrix;
-import com.google.zxing.oned.Code128Writer;
+import com.google.zxing.qrcode.QRCodeWriter;
+import com.google.zxing.qrcode.decoder.ErrorCorrectionLevel;
 import java.awt.Color;
 import java.awt.Desktop;
 import java.awt.Graphics2D;
@@ -125,15 +127,19 @@ public class menu_siswa extends javax.swing.JInternalFrame {
                 return;
             }
 
-            // Buat gambar barcode Code128 resolusi tinggi menggunakan ZXing
-            BitMatrix bitMatrix = new Code128Writer().encode(nis, BarcodeFormat.CODE_128, 600, 105);
-            BufferedImage barcodeImg = MatrixToImageWriter.toBufferedImage(bitMatrix);
+            // Buat gambar QR Code resolusi tinggi menggunakan ZXing
+            HashMap<EncodeHintType, Object> qrHints = new HashMap<EncodeHintType, Object>();
+            qrHints.put(EncodeHintType.ERROR_CORRECTION, ErrorCorrectionLevel.M);
+            qrHints.put(EncodeHintType.MARGIN, 1);
+            BitMatrix bitMatrix = new QRCodeWriter().encode(nis, BarcodeFormat.QR_CODE, 400, 400, qrHints);
+            BufferedImage qrCodeImg = MatrixToImageWriter.toBufferedImage(bitMatrix);
 
             InputStream logoStream = getClass().getResourceAsStream("/resource/logosekolah.jpeg");
 
             HashMap<String, Object> parameter = new HashMap<String, Object>();
             parameter.put("nisn", nis);
-            parameter.put("barcode", barcodeImg);
+            parameter.put("qrcode", qrCodeImg);
+            parameter.put("barcode", qrCodeImg);
             parameter.put("logo", logoStream);
 
             Connection conn = koneksi.getConnection();

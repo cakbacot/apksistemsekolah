@@ -6,6 +6,7 @@
 	<parameter name="nisn" class="java.lang.String" isForPrompting="false">
 		<defaultValueExpression><![CDATA[""]]></defaultValueExpression>
 	</parameter>
+	<parameter name="qrcode" class="java.awt.Image" isForPrompting="false"/>
 	<parameter name="barcode" class="java.awt.Image" isForPrompting="false"/>
 	<parameter name="logo" class="java.io.InputStream" isForPrompting="false"/>
 	<queryString>
@@ -58,96 +59,108 @@ WHERE s.nisn = $P{nisn}]]>
 				</graphicElement>
 			</line>
 			<staticText>
-				<reportElement x="10" y="34" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e383e"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="10" y="46" width="37" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e383e"/>
+				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[NISN]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="51" y="34" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3831"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="47" y="46" width="5" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3831"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[:]]></text>
 			</staticText>
 			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="34" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e1"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="53" y="46" width="94" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e1"/>
+				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
 			</textField>
 			<staticText>
-				<reportElement x="10" y="47" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3832"/>
-				<textElement verticalAlignment="Middle">
+				<reportElement x="10" y="64" width="37" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3832"/>
+				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[Nama]]></text>
 			</staticText>
 			<staticText>
-				<reportElement x="51" y="47" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3833"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
+				<reportElement x="47" y="64" width="5" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3833"/>
+				<textElement textAlignment="Center" verticalAlignment="Top">
 					<font fontName="SansSerif" size="8" isBold="true"/>
 				</textElement>
 				<text><![CDATA[:]]></text>
 			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="47" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33ec"/>
-				<textElement verticalAlignment="Middle">
+			<textField isStretchWithOverflow="true" isBlankWhenNull="true">
+				<reportElement x="53" y="64" width="94" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33ec"/>
+				<textElement verticalAlignment="Top">
 					<font fontName="SansSerif" size="8" isBold="false"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nama}]]></textFieldExpression>
 			</textField>
-			<staticText>
-				<reportElement x="10" y="60" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3834"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Kelas]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="51" y="60" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3835"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="60" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e2"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{nama_kelas}]]></textFieldExpression>
-			</textField>
-			<staticText>
-				<reportElement x="10" y="73" width="41" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3836"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[Jurusan]]></text>
-			</staticText>
-			<staticText>
-				<reportElement x="51" y="73" width="6" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3837"/>
-				<textElement textAlignment="Center" verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="true"/>
-				</textElement>
-				<text><![CDATA[:]]></text>
-			</staticText>
-			<textField isBlankWhenNull="true">
-				<reportElement x="58" y="73" width="165" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e3"/>
-				<textElement verticalAlignment="Middle">
-					<font fontName="SansSerif" size="8" isBold="false"/>
-				</textElement>
-				<textFieldExpression><![CDATA[$F{jurusan}]]></textFieldExpression>
-			</textField>
+			<frame>
+				<reportElement positionType="Float" x="10" y="82" width="137" height="12" uuid="8a31f4e2-910b-4e82-9a11-719234bc2001"/>
+				<staticText>
+					<reportElement x="0" y="0" width="37" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3834"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Kelas]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="37" y="0" width="5" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3835"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="43" y="0" width="94" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e2"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="SansSerif" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{nama_kelas}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<frame>
+				<reportElement positionType="Float" x="10" y="100" width="137" height="12" uuid="8a31f4e2-910b-4e82-9a11-719234bc2002"/>
+				<staticText>
+					<reportElement x="0" y="0" width="37" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3836"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[Jurusan]]></text>
+				</staticText>
+				<staticText>
+					<reportElement x="37" y="0" width="5" height="12" forecolor="#334155" uuid="d62b7ecc-a535-4e97-ab58-d2431b9e3837"/>
+					<textElement textAlignment="Center" verticalAlignment="Top">
+						<font fontName="SansSerif" size="8" isBold="true"/>
+					</textElement>
+					<text><![CDATA[:]]></text>
+				</staticText>
+				<textField isBlankWhenNull="true">
+					<reportElement x="43" y="0" width="94" height="12" forecolor="#0F172A" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e3"/>
+					<textElement verticalAlignment="Top">
+						<font fontName="SansSerif" size="8" isBold="false"/>
+					</textElement>
+					<textFieldExpression><![CDATA[$F{jurusan}]]></textFieldExpression>
+				</textField>
+			</frame>
+			<rectangle radius="4">
+				<reportElement x="152" y="39" width="71" height="89" forecolor="#E2E8F0" backcolor="#F8FAFC" uuid="9b42e5f3-120c-4a91-8b22-829345cd3001"/>
+				<graphicElement>
+					<pen lineWidth="0.5"/>
+				</graphicElement>
+			</rectangle>
 			<image scaleImage="RetainShape" hAlign="Center" vAlign="Middle" isUsingCache="true" onErrorType="Blank">
-				<reportElement x="18" y="89" width="195" height="33" uuid="a480f0b0-4731-45b0-9a3f-7a3a8df9c419"/>
-				<imageExpression><![CDATA[$P{barcode}]]></imageExpression>
+				<reportElement x="156" y="43" width="63" height="63" uuid="a480f0b0-4731-45b0-9a3f-7a3a8df9c419"/>
+				<imageExpression><![CDATA[$P{qrcode} != null ? $P{qrcode} : ($P{barcode} != null ? $P{barcode} : (this.getClass().getClassLoader().getResource("com/google/zxing/qrcode/QRCodeWriter.class") != null ? Class.forName("com.google.zxing.client.j2se.MatrixToImageWriter").getMethod("toBufferedImage", Class.forName("com.google.zxing.common.BitMatrix")).invoke(null, Class.forName("com.google.zxing.qrcode.QRCodeWriter").newInstance().encode(($F{nisn} != null && !$F{nisn}.trim().isEmpty() ? $F{nisn} : "0000000000"), Enum.valueOf(Class.forName("com.google.zxing.BarcodeFormat"), "QR_CODE"), 300, 300, [(Enum.valueOf(Class.forName("com.google.zxing.EncodeHintType"), "MARGIN")): 1])) : null))]]></imageExpression>
 			</image>
 			<textField isBlankWhenNull="true">
-				<reportElement x="18" y="123" width="195" height="11" forecolor="#334155" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e4"/>
-				<textElement textAlignment="Center" verticalAlignment="Top">
+				<reportElement x="154" y="109" width="67" height="12" forecolor="#334155" uuid="173a8a73-ce2a-4f49-9a80-ef89b98c33e4"/>
+				<textElement textAlignment="Center" verticalAlignment="Middle">
 					<font fontName="SansSerif" size="7" isBold="true"/>
 				</textElement>
 				<textFieldExpression><![CDATA[$F{nisn}]]></textFieldExpression>
